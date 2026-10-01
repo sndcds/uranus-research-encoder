@@ -1,0 +1,77 @@
+{
+  "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
+  "onnx_parser_version": "1.23.1",
+  "sha256": {
+    "onnx/model.onnx": "836322cc5d78f0047dbb336d0049b087fd81e164505c347a313cd44a772f34cc",
+    "onnx/model.onnx_data": "022b369faa8015add1d036a72927ed64f8c8196435bc37a4fc9d36fc8ebc5cc2"
+  },
+  "producer": [
+    "pytorch",
+    "2.2.1"
+  ],
+  "ir_version": 10,
+  "opsets": {
+    "": 16
+  },
+  "inputs": {
+    "input_ids": "INT64, batch_sizexsequence_length",
+    "attention_mask": "INT64, batch_sizexsequence_length",
+    "task_id": "INT64, scalar"
+  },
+  "outputs": {
+    "text_embeds": "FLOAT, batch_sizexsequence_lengthx1024",
+    "13049": "FLOAT, batch_sizex1024"
+  },
+  "nodes": 3734,
+  "initializers": 3003,
+  "operator_counts": {
+    "Shape": 145,
+    "Gather": 514,
+    "Cast": 1,
+    "MatMul": 195,
+    "Reshape": 363,
+    "Unsqueeze": 409,
+    "Mul": 316,
+    "ConstantOfShape": 25,
+    "Add": 438,
+    "Transpose": 96,
+    "ReduceMean": 98,
+    "Sub": 49,
+    "Pow": 49,
+    "Sqrt": 49,
+    "Div": 121,
+    "Concat": 216,
+    "Slice": 288,
+    "Neg": 48,
+    "Expand": 96,
+    "Split": 24,
+    "Squeeze": 72,
+    "Einsum": 48,
+    "Where": 24,
+    "Softmax": 24,
+    "Erf": 24,
+    "Gemm": 1,
+    "Tanh": 1
+  },
+  "task_gathers": 198,
+  "external_initializers": 493,
+  "adapters": {
+    "retrieval_query": {
+      "bank": 0,
+      "tensors": 294,
+      "max_absolute_difference": 0.0,
+      "exact_tensors": 294
+    },
+    "retrieval_passage": {
+      "bank": 1,
+      "tensors": 294,
+      "max_absolute_difference": 0.0,
+      "exact_tensors": 294
+    }
+  },
+  "base_weights": {
+    "tensors": 294,
+    "max_absolute_difference": 0.0,
+    "exact_tensors": 294
+  }
+}

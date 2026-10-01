@@ -5,13 +5,14 @@ import argparse
 import os
 from pathlib import Path
 
-from uranus_research_encoder.model_artifacts import MODEL_ALLOW_PATTERNS
+from uranus_research_encoder.model_artifacts import artifact_patterns
 from uranus_research_encoder.version import MODEL_REPOSITORY, MODEL_REVISION
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-root", required=True, type=Path)
+    parser.add_argument("--backend", choices=("torch", "onnx", "all"), default="torch")
     args = parser.parse_args()
     if os.environ.get("JINA_NONCOMMERCIAL") != "1":
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")
@@ -23,7 +24,7 @@ def main() -> None:
         repo_id=MODEL_REPOSITORY,
         revision=MODEL_REVISION,
         cache_dir=str(args.model_root),
-        allow_patterns=MODEL_ALLOW_PATTERNS,
+        allow_patterns=artifact_patterns(args.backend),
     )
     if Path(snapshot).name != MODEL_REVISION:
         raise RuntimeError("unexpected model revision")

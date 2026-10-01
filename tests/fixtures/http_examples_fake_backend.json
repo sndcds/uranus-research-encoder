@@ -7,7 +7,10 @@
     "model": "jina-v3",
     "dimensions": 1024,
     "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
-    "contract_version": "uranus-research-encoder-v1"
+    "contract_version": "uranus-research-encoder-v1",
+    "backend": "fake",
+    "runtime": "deterministic-test-backend",
+    "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28"
   },
   "/version": {
     "service_version": "0.1.0",
@@ -17,7 +20,9 @@
     "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
     "dimensions": 1024,
     "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
-    "chunk_version": "sections-480-overlap64-v2"
+    "chunk_version": "sections-480-overlap64-v2",
+    "backend": "fake",
+    "runtime": "deterministic-test-backend"
   },
   "/chunks": {
     "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",

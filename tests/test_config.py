@@ -38,8 +38,26 @@ def test_file_preferred_and_no_dotenv(tmp_path, monkeypatch):
         {"model_revision": "main"},
         {"max_concurrent_requests": 0},
         {"max_concurrent_requests": 9},
+        {"backend": "cuda"},
+        {"onnx_intra_op_threads": 0},
+        {"onnx_intra_op_threads": 9},
+        {"onnx_inter_op_threads": 0},
     ],
 )
 def test_invalid_config(change):
     with pytest.raises(ValidationError):
         Settings(**({"api_key": KEY, "jina_noncommercial": True} | change))
+
+
+def test_backend_environment_is_explicit(monkeypatch):
+    monkeypatch.delenv("ENCODER_API_KEY_FILE", raising=False)
+    monkeypatch.setenv("ENCODER_API_KEY", KEY)
+    monkeypatch.setenv("JINA_NONCOMMERCIAL", "1")
+    monkeypatch.delenv("ENCODER_BACKEND", raising=False)
+    assert Settings.from_env().backend == "torch"
+    monkeypatch.setenv("ENCODER_BACKEND", "onnx")
+    monkeypatch.setenv("ENCODER_ONNX_INTRA_OP_THREADS", "2")
+    settings = Settings.from_env()
+    assert settings.backend == "onnx"
+    assert settings.onnx_intra_op_threads == 2
+    assert settings.onnx_inter_op_threads == 1

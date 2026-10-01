@@ -9,12 +9,15 @@ dependencies = [
   "uvicorn>=0.34,<1",
   "pydantic>=2.11,<3",
   "transformers==5.17.0",
-  "torch==2.11.0",
-  "peft>=0.17,<1",
 ]
 
 [dependency-groups]
-dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.12,<1"]
+runtime-torch = ["torch==2.11.0", "peft>=0.17,<1"]
+runtime-onnx = ["onnxruntime==1.30.0"]
+dev = ["pytest>=8,<10", "httpx>=0.28,<1", "ruff>=0.12,<1", "onnx==1.23.1"]
+
+[tool.uv]
+default-groups = ["dev", "runtime-torch", "runtime-onnx"]
 
 [build-system]
 requires = ["hatchling>=1.27,<2"]
@@ -30,8 +33,11 @@ explicit = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-addopts = "-m 'not integration'"
-markers = ["integration: explicitly opted-in tests of locally cached Jina weights"]
+addopts = "-m 'not integration and not benchmark'"
+markers = [
+  "integration: explicitly opted-in tests of locally cached Jina weights",
+  "benchmark: explicitly invoked CPU measurements, never normal CI",
+]
 
 [tool.ruff]
 target-version = "py313"

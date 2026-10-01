@@ -22,7 +22,8 @@ from .contracts import (
     EmbedResponse,
 )
 from .errors import error, event
-from .model import Backend, JinaBackend
+from .model import Backend, TorchBackend, runtime_name
+from .onnx_backend import OnnxBackend
 from .version import (
     CONTRACT_VERSION,
     DIMENSIONS,
@@ -41,8 +42,17 @@ def create_app(settings: Settings | None = None, backend: Backend | None = None)
         except Exception:
             event("configuration_invalid")
         if app.state.settings is not None:
-            app.state.backend = backend or JinaBackend(app.state.settings.model_root)
             try:
+                current_settings = app.state.settings
+                app.state.backend = backend or (
+                    OnnxBackend(
+                        current_settings.model_root,
+                        intra_op_threads=current_settings.onnx_intra_op_threads,
+                        inter_op_threads=current_settings.onnx_inter_op_threads,
+                    )
+                    if current_settings.backend == "onnx"
+                    else TorchBackend(current_settings.model_root)
+                )
                 await run_in_threadpool(app.state.backend.load)
                 event("model_loaded")
             except Exception:
@@ -111,11 +121,20 @@ def create_app(settings: Settings | None = None, backend: Backend | None = None)
             "dimensions": DIMENSIONS,
             "embedding_version": EMBEDDING_VERSION,
             "contract_version": CONTRACT_VERSION,
+            "model_revision": MODEL_REVISION,
+            "backend": app.state.backend.backend,
+            "runtime": app.state.backend.runtime,
         }
 
     @app.get("/version")
     async def version():
-        return JSONResponse(metadata())
+        current = app.state.backend
+        name = current.backend if current else app.state.settings.backend
+        try:
+            runtime = current.runtime if current else runtime_name(name)
+        except Exception:
+            runtime = "unavailable"
+        return JSONResponse(metadata() | {"backend": name, "runtime": runtime})
 
     @app.post("/chunks", response_model=ChunkResponse)
     async def chunks(request: ChunkRequest):
