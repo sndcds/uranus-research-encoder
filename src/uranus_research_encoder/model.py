@@ -33,8 +33,8 @@ def offline_environment() -> None:
     os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
 
 
-def runtime_name(backend: BackendName) -> str:
-    if backend == "onnx":
+def runtime_name(backend: str) -> str:
+    if backend in ("onnx", "onnx-merged"):
         return f"onnxruntime-{version('onnxruntime')}-cpu"
     return f"torch-{version('torch')}-transformers-{version('transformers')}-cpu"
 

@@ -212,7 +212,10 @@ export ENCODER_MAX_CONCURRENT_REQUESTS=2
 uv run --no-sync python -m uranus_research_encoder
 ```
 
-`ENCODER_BACKEND` accepts `torch` (the default/reference) or `onnx` (CPU only).
+`ENCODER_BACKEND` accepts `torch` (the default/reference), `onnx` (upstream CPU),
+or experimental `onnx-merged` (locally exported CPU graphs). The last requires
+`ENCODER_MERGED_ONNX_ROOT` pointing to a separate export directory; see
+[MERGED_ONNX_VALIDATION.md](MERGED_ONNX_VALIDATION.md) before using it.
 Both `/ready` and `/version` report the backend, runtime, pinned model revision,
 dimensions, embedding version, and contract version. HTTP request and chunk/EvidenceContext
 schemas are unchanged. `/ready` and `/version` add backend/runtime metadata.
@@ -356,3 +359,11 @@ Operators must explicitly set `JINA_NONCOMMERCIAL=1` to acknowledge non-commerci
 Jina use before either prefetch or runtime loading. That flag does not grant permission
 for commercial use. Obtain appropriate authorization from Jina AI when needed.
 Dependencies retain their own licenses; the service license does not relicense weights.
+## Experimental locally merged ONNX
+
+`onnx-merged` is an explicit experimental backend using two locally exported,
+task-free float32 graphs. Torch remains the production default. Export requires
+an existing pinned native cache, the noncommercial acknowledgement, and an
+isolated output directory; it never downloads model weights. See
+[MERGED_ONNX_VALIDATION.md](MERGED_ONNX_VALIDATION.md) for the export contract,
+artifact integrity checks, three-backend parity gate, measurements and limitations.

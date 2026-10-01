@@ -42,6 +42,9 @@ def test_file_preferred_and_no_dotenv(tmp_path, monkeypatch):
         {"onnx_intra_op_threads": 0},
         {"onnx_intra_op_threads": 9},
         {"onnx_inter_op_threads": 0},
+        {"backend": "onnx-merged"},
+        {"backend": "onnx-merged", "merged_onnx_root": "relative"},
+        {"backend": "onnx-merged", "merged_onnx_root": "/derived", "onnx_inter_op_threads": 2},
     ],
 )
 def test_invalid_config(change):

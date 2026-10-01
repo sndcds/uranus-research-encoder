@@ -14,6 +14,8 @@ from pathlib import Path
 
 import numpy as np
 
+from uranus_research_encoder.merged_artifacts import digest
+from uranus_research_encoder.merged_onnx_backend import MergedOnnxBackend
 from uranus_research_encoder.model import TorchBackend
 from uranus_research_encoder.onnx_backend import OnnxBackend
 from uranus_research_encoder.version import MODEL_REVISION
@@ -39,9 +41,15 @@ def representative_text(backend, target: int) -> str:
 
 
 def worker(args) -> None:
+    if args.worker == "torch":
+        import torch
+
+        torch.set_num_interop_threads(1)
     backend = (
         TorchBackend(args.model_root)
         if args.worker == "torch"
+        else MergedOnnxBackend(args.merged_root, intra_op_threads=args.threads)
+        if args.worker == "onnx-merged"
         else OnnxBackend(args.model_root, intra_op_threads=args.threads)
     )
     start = time.perf_counter()
@@ -52,10 +60,12 @@ def worker(args) -> None:
         "load_seconds": time.perf_counter() - start,
         "intra_op_threads": 1 if args.worker == "torch" else args.threads,
         "inter_op_threads": 1
-        if args.worker == "onnx"
+        if args.worker != "torch"
         else __import__("torch").get_num_interop_threads(),
         "cases": [],
     }
+    if args.worker == "onnx-merged":
+        result["manifest_sha256"] = digest(args.merged_root / "manifest.json")
     # Model-load measurement is process-cold; the OS page cache is not flushed.
     for length in args.lengths:
         text = representative_text(backend, length)
@@ -95,44 +105,73 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--merged-root", type=Path)
     parser.add_argument(
-        "--backends", nargs="+", choices=("torch", "onnx"), default=["torch", "onnx"]
+        "--backends", nargs="+", choices=("torch", "onnx", "onnx-merged"), default=["torch", "onnx"]
     )
     parser.add_argument(
         "--lengths",
         nargs="+",
         type=int,
         choices=(32, 128, 480, 1024, 4096, 8192),
-        default=[32, 128, 480, 1024, 4096],
+        default=[32, 128, 480, 1024],
     )
-    parser.add_argument(
-        "--batch-sizes", nargs="+", type=int, choices=(1, 4, 16), default=[1, 4, 16]
-    )
+    parser.add_argument("--batch-sizes", nargs="+", type=int, choices=(1, 4, 16), default=[1, 4])
     parser.add_argument("--warmups", type=int, default=2)
     parser.add_argument("--samples", type=int, default=5)
     parser.add_argument("--threads", type=int, choices=range(1, 9), default=1)
-    parser.add_argument("--worker", choices=("torch", "onnx"), help=argparse.SUPPRESS)
+    parser.add_argument(
+        "--thread-sweep",
+        nargs="+",
+        type=int,
+        choices=(1, 2, 4, 8),
+        help="intra-op sweep for onnx-merged; --threads controls upstream ONNX",
+    )
+    parser.add_argument(
+        "--worker", choices=("torch", "onnx", "onnx-merged"), help=argparse.SUPPRESS
+    )
     args = parser.parse_args()
     if os.environ.get("JINA_NONCOMMERCIAL") != "1":
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")
     if not args.model_root.is_absolute():
         parser.error("--model-root must be absolute")
-    if args.warmups < 1 or args.samples < 3:
-        parser.error("at least one warmup and three measured samples are required")
+    if args.warmups < 2 or args.samples < 5:
+        parser.error("at least two warmups and five measured samples are required")
+    if ("onnx-merged" in args.backends or args.worker == "onnx-merged") and not args.merged_root:
+        parser.error("--merged-root is required for onnx-merged")
     if args.worker:
         worker(args)
         return
     report = {
         "model_revision": MODEL_REVISION,
-        "machine": {"platform": platform.platform(), "processor": platform.processor()},
+        "machine": {
+            "platform": platform.platform(),
+            "processor": platform.processor(),
+            "cpu_count": os.cpu_count(),
+            "cpu_affinity": sorted(os.sched_getaffinity(0)),
+            "cpuinfo": Path("/proc/cpuinfo").read_text().split("\n\n")[0],
+        },
         "load_measurement": "fresh process; operating-system file cache not flushed",
-        "batch_behavior": "both service backends process texts sequentially per request",
+        "batch_behavior": "all service backends process texts sequentially per request",
+        "thread_comparison": "Torch production reference uses one intra-op thread; "
+        "ONNX thread sweep is separately labeled",
         "rss_measurement": "process lifetime high-water mark; Linux ru_maxrss",
         "results": [],
     }
     with tempfile.TemporaryDirectory(prefix="jina-benchmark-") as directory:
-        for name in args.backends:
-            output = Path(directory) / f"{name}.json"
+        runs = [
+            (name, threads)
+            for name in args.backends
+            for threads in (
+                (args.thread_sweep or [args.threads])
+                if name == "onnx-merged"
+                else [args.threads]
+                if name == "onnx"
+                else [1]
+            )
+        ]
+        for name, threads in runs:
+            output = Path(directory) / f"{name}-{threads}.json"
             command = [
                 sys.executable,
                 str(Path(__file__).resolve()),
@@ -141,7 +180,7 @@ def main() -> None:
                 "--output",
                 str(output),
                 "--threads",
-                str(args.threads),
+                str(threads),
                 "--worker",
                 name,
                 "--warmups",
@@ -152,11 +191,12 @@ def main() -> None:
                 *map(str, args.lengths),
                 "--batch-sizes",
                 *map(str, args.batch_sizes),
+                *(["--merged-root", str(args.merged_root)] if args.merged_root else []),
             ]
             process = subprocess.run(
                 command,
                 check=False,
-                env=os.environ | ({"USE_TORCH": "0"} if name == "onnx" else {}),
+                env=os.environ | ({"USE_TORCH": "0"} if name != "torch" else {}),
             )
             result = (
                 json.loads(output.read_text())

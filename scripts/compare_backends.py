@@ -14,6 +14,8 @@ from pathlib import Path
 
 import numpy as np
 
+from uranus_research_encoder.merged_artifacts import digest
+from uranus_research_encoder.merged_onnx_backend import MergedOnnxBackend
 from uranus_research_encoder.model import TorchBackend
 from uranus_research_encoder.onnx_backend import OnnxBackend
 from uranus_research_encoder.version import EMBEDDING_VERSION, MODEL_REVISION
@@ -83,28 +85,36 @@ def worker(args) -> None:
     backend = (
         TorchBackend(args.model_root)
         if args.worker == "torch"
+        else MergedOnnxBackend(args.merged_root, intra_op_threads=args.threads)
+        if args.worker == "onnx-merged"
         else OnnxBackend(args.model_root, intra_op_threads=args.threads)
     )
     started = time.perf_counter()
     backend.load()
     load_seconds = time.perf_counter() - started
+    print(f"{args.worker}: loaded in {load_seconds:.3f}s", flush=True)
     result = {
         "backend": args.worker,
         "runtime": backend.runtime,
         "load_seconds": load_seconds,
         "token_counts": [backend.count(text) for text in TEXTS],
+        "intra_op_threads": 1 if args.worker == "torch" else args.threads,
     }
+    if args.worker == "onnx-merged":
+        result["manifest_sha256"] = digest(args.merged_root / "manifest.json")
     for kind in ("query", "passage"):
         vectors = backend.embed(TEXTS, kind)
         result[kind] = vectors
         # Stability and request-batching invariance are part of the contract.
         result[kind + "_stable"] = vectors[0] == backend.embed([TEXTS[0]], kind)[0]
         result[kind + "_batch_stable"] = vectors[:2] == backend.embed(TEXTS[:2], kind)
+        print(f"{args.worker}: {kind} corpus and stability checks complete", flush=True)
     result["peak_rss_mib"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
     args.output.write_text(json.dumps(result))
 
 
 def compare(reference: dict, candidate: dict) -> dict:
+    candidate_name = candidate.get("backend", "onnx")
     metrics = []
     for kind in ("query", "passage"):
         left, right = np.asarray(reference[kind]), np.asarray(candidate[kind])
@@ -126,12 +136,14 @@ def compare(reference: dict, candidate: dict) -> dict:
                 }
             )
     rankings = {}
-    for name, result in (("torch", reference), ("onnx", candidate)):
+    for name, result in (("torch", reference), (candidate_name, candidate)):
         query = np.asarray(result["query"][: len(QUERIES)])
         passage = np.asarray(result["passage"][len(QUERIES) : len(QUERIES) + len(PASSAGES)])
         scores = query @ passage.T
         rankings[name] = np.argsort(-scores, axis=1, kind="stable").tolist()
     return {
+        "candidate_backend": candidate.get("backend", "onnx"),
+        "manifest_sha256": candidate.get("manifest_sha256"),
         "model_revision": MODEL_REVISION,
         "embedding_version": EMBEDDING_VERSION,
         "machine": {"platform": platform.platform(), "processor": platform.processor()},
@@ -140,7 +152,7 @@ def compare(reference: dict, candidate: dict) -> dict:
         "min_cosine_similarity": min(row["cosine_similarity"] for row in metrics),
         "max_absolute_difference": max(row["max_absolute_difference"] for row in metrics),
         "rankings": rankings,
-        "rankings_identical": rankings["torch"] == rankings["onnx"],
+        "rankings_identical": rankings["torch"] == rankings[candidate_name],
         "task_specific": all(
             a != b
             for result in (reference, candidate)
@@ -154,7 +166,7 @@ def compare(reference: dict, candidate: dict) -> dict:
         ),
         "runtime_measurements": {
             name: {key: result[key] for key in ("runtime", "load_seconds", "peak_rss_mib")}
-            for name, result in (("torch", reference), ("onnx", candidate))
+            for name, result in (("torch", reference), (candidate_name, candidate))
         },
     }
 
@@ -163,8 +175,11 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--merged-root", type=Path)
     parser.add_argument("--threads", type=int, choices=range(1, 9), default=1)
-    parser.add_argument("--worker", choices=("torch", "onnx"), help=argparse.SUPPRESS)
+    parser.add_argument(
+        "--worker", choices=("torch", "onnx", "onnx-merged"), help=argparse.SUPPRESS
+    )
     args = parser.parse_args()
     if os.environ.get("JINA_NONCOMMERCIAL") != "1":
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")
@@ -175,7 +190,7 @@ def main() -> None:
         return
     with tempfile.TemporaryDirectory(prefix="jina-parity-") as directory:
         results = []
-        for backend in ("torch", "onnx"):
+        for backend in ["torch", "onnx", "onnx-merged"] if args.merged_root else ["torch", "onnx"]:
             output = Path(directory) / f"{backend}.json"
             subprocess.run(
                 [
@@ -189,21 +204,32 @@ def main() -> None:
                     str(args.threads),
                     "--worker",
                     backend,
+                    *(["--merged-root", str(args.merged_root)] if args.merged_root else []),
                 ],
                 check=True,
-                env=os.environ | ({"USE_TORCH": "0"} if backend == "onnx" else {}),
+                env=os.environ | ({"USE_TORCH": "0"} if backend != "torch" else {}),
             )
             results.append(json.loads(output.read_text()))
-        report = compare(*results)
-    acceptance(report)
+        reports = [compare(results[0], candidate) for candidate in results[1:]]
+    for report in reports:
+        acceptance(report)
+    report = (
+        reports[0]
+        if len(reports) == 1
+        else {"comparisons": reports, "passed": all(row["passed"] for row in reports)}
+    )
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     print("kind     text  tokens  cosine similarity  max abs difference")
-    for row in report["metrics"]:
+    for row in reports[-1]["metrics"]:
         print(
             f"{row['kind']:8} {row['text_index']:4} {row['tokens']:7} "
             f"{row['cosine_similarity']:.12f} {row['max_absolute_difference']:.9g}"
         )
-    print(f"Identical rankings: {report['rankings_identical']}; stable: {report['stable']}")
+    for comparison in reports:
+        print(
+            f"{comparison['candidate_backend']}: passed={comparison['passed']}; "
+            f"rankings={comparison['rankings_identical']}; stable={comparison['stable']}"
+        )
     if not report["passed"]:
         raise SystemExit("Torch/ONNX parity failed; do not change the production backend")
 
