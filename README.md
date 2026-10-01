@@ -224,9 +224,18 @@ JINA_NONCOMMERCIAL=1 uv run --no-sync python scripts/prefetch_model.py \
 
 This tool accepts no repository or revision override. It downloads the pinned native
 safetensors, tokenizer/config files, and the two retrieval adapters, excluding Python
-remote code and other model formats. Transfer the **entire** Hugging Face cache tree,
-including `blobs` and snapshot symlinks. Mount that tree read-only at `/models`. Files
-must be readable by container UID/GID 10001, including the separately mounted key.
+remote code, ONNX, unrelated adapters, and other model formats. The production cache
+is an intentionally **filtered Hugging Face snapshot**. Provisioning and runtime
+snapshot validation both use `MODEL_ALLOW_PATTERNS` in
+`src/uranus_research_encoder/model_artifacts.py` as the canonical reviewed allowlist.
+The cached repository tree may list excluded files such as `.gitattributes`,
+`custom_st.py`, and `onnx/model.onnx`; these need not be present. Required allowlisted
+files must still be present for offline loading to succeed.
+
+Transfer the **entire provisioned cache directory**, including `blobs`, snapshot
+symlinks, and cached `trees` metadata; do not download the complete repository.
+Mount that tree read-only at `/models`. Files must be readable by container UID/GID
+10001, including the separately mounted key.
 Treat the provisioned cache as trusted immutable artifacts; it is not a substitute for
 operator provenance/integrity controls. A matching snapshot directory name alone is
 not a cryptographic attestation of locally modified bytes.
