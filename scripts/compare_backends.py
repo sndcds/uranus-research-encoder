@@ -87,7 +87,11 @@ def worker(args) -> None:
     backend = (
         TorchBackend(args.model_root)
         if args.worker == "torch"
-        else MergedOnnxBackend(args.merged_root, intra_op_threads=args.threads)
+        else MergedOnnxBackend(
+            args.merged_root,
+            intra_op_threads=args.threads,
+            optimization=args.merged_optimization,
+        )
         if args.worker == "onnx-merged"
         else OnnxBackend(args.model_root, intra_op_threads=args.threads)
     )
@@ -104,6 +108,7 @@ def worker(args) -> None:
     }
     if args.worker == "onnx-merged":
         result["manifest_sha256"] = digest(args.merged_root / "manifest.json")
+        result["graph_optimization"] = args.merged_optimization
     padded = args.worker == "onnx-merged" and args.padded_batching
     result["inference_batching"] = "padded groups of 4" if padded else "sequential"
     result["rss_scope"] = "shared sequential/padded parity worker" if padded else "single mode"
@@ -192,6 +197,7 @@ def compare(reference: dict, candidate: dict) -> dict:
         "rss_scope": candidate.get("rss_scope", "single mode"),
         "manifest_sha256": candidate.get("manifest_sha256"),
         "intra_op_threads": candidate.get("intra_op_threads", 1),
+        "graph_optimization": candidate.get("graph_optimization", "existing_backend_default"),
         "request_size_metrics": {
             kind: candidate[kind + "_request_size_metrics"]
             for kind in ("query", "passage")
@@ -229,6 +235,7 @@ def main() -> None:
     parser.add_argument("--model-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--merged-root", type=Path)
+    parser.add_argument("--merged-optimization", choices=("disabled", "basic"), default="disabled")
     parser.add_argument(
         "--padded-batching",
         action="store_true",
@@ -262,6 +269,8 @@ def main() -> None:
                     str(output),
                     "--threads",
                     str(args.threads),
+                    "--merged-optimization",
+                    args.merged_optimization,
                     "--worker",
                     backend,
                     *(["--merged-root", str(args.merged_root)] if args.merged_root else []),

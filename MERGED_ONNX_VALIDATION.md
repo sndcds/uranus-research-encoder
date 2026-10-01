@@ -31,8 +31,9 @@ both random float32 results against an independent float64 reference using the
 standard dot-product/scaling/addition rounding bound. This does not change any
 embedding parity threshold. Embedding audit hashes certify the specified blocked
 formula; linear audit hashes independently certify PEFT's same-shape merge.
-Every target is audited, including the unused native pooler, then each adapter
-wrapper is replaced by its plain base layer. Parameters are frozen.
+Every target is audited: 145 linear matrices and two embedding tables per task,
+including the unused native pooler. Each adapter wrapper is then replaced by its
+plain base layer. Parameters are frozen.
 
 The first full-table merge attempt was killed with exit 137 on this host;
 row-block embedding merge completed. This is an export-memory observation, not
@@ -51,6 +52,17 @@ dynamic batch and sequence dimensions (capture bounds batch 1–16, sequence
 passes are enabled in the initial backend. CPU execution is sequential, inter-op
 is fixed at 1, intra-op is explicitly configurable from 1 to 8. Spinning,
 CPU memory arenas, and memory patterns are disabled for the baseline.
+
+After completing the one-thread baseline benchmark, structural inspection found
+144 transposes of constant weight initializers in each export. A separate
+`--merged-optimization basic` experiment enables `ORT_ENABLE_BASIC` at session
+initialization. [ORT documents this level](https://onnxruntime.ai/docs/performance/model-optimizations/graph-optimizations.html)
+as constant folding and other basic semantics-preserving rewrites. It does not
+enable the extended transformer/GELU/attention fusion levels. The stored graphs
+and manifest remain unchanged. The runtime setting is recorded in each new
+parity/benchmark report, and must pass the same real-model parity gate before
+benchmarking. The baseline default is still `disabled`; the running thread sweep
+continues with that setting.
 
 ## Layout and provenance
 
@@ -148,6 +160,8 @@ Experimental service selection is explicit:
 `ENCODER_ONNX_INTRA_OP_THREADS=1`, `ENCODER_ONNX_INTER_OP_THREADS=1` and the existing
 license acknowledgement. The original `onnx` backend still loads the upstream
 scalar-task graph from the HF cache.
+`ENCODER_MERGED_ONNX_OPTIMIZATION=basic` explicitly selects the separately gated
+basic-pass experiment; leaving it unset preserves the unoptimized baseline.
 
 ## Results and release decision
 
@@ -174,6 +188,12 @@ The host is an Intel Core i5-8265U with 8 logical CPUs and about 14 GiB RAM.
 These local measurements must not be presented as new measurements on the
 user's deployment server. Both task graphs remain resident in the baseline,
 so duplicated float32 backbone weights are a likely memory cost to measure.
+This is a shared development laptop, with other applications active; raw timing
+variation and p95 matter. Fresh workers isolate each backend's process memory,
+but do not isolate CPU scheduling, thermal behavior or the operating-system
+file cache. A production decision still needs a repeat on the actual server.
+The corpus touches only part of the vocabulary: measured RSS is not an upper
+bound for every future workload or for all externally stored tensor pages.
 
 The full three-backend semantic comparison passed; raw per-text metrics and
 rankings are in [merged-onnx-parity.json](validation/merged-onnx-parity.json).

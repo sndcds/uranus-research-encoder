@@ -83,8 +83,11 @@ def merged_cache(onnx_cache, tmp_path):  # noqa: F811
     return root
 
 
-def test_tasks_pooling_and_request_invariance(merged_cache, monkeypatch):
-    backend = MergedOnnxBackend(merged_cache, intra_op_threads=2)
+@pytest.mark.parametrize("optimization", ["disabled", "basic"])
+def test_tasks_pooling_and_request_invariance(merged_cache, monkeypatch, optimization):
+    import onnxruntime as ort
+
+    backend = MergedOnnxBackend(merged_cache, intra_op_threads=2, optimization=optimization)
     backend.load()
     assert backend.count("hello world") == 4
     query = backend.embed(["hello world"], "query")
@@ -97,6 +100,12 @@ def test_tasks_pooling_and_request_invariance(merged_cache, monkeypatch):
     for session in backend._sessions.values():
         assert {item.name for item in session.get_inputs()} == {"input_ids", "attention_mask"}
         assert session.get_session_options().intra_op_num_threads == 2
+        expected_level = (
+            ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
+            if optimization == "basic"
+            else ort.GraphOptimizationLevel.ORT_DISABLE_ALL
+        )
+        assert session.get_session_options().graph_optimization_level == expected_level
     tokenizer = backend._tokenizer
 
     def masked(*args, **kwargs):
@@ -218,15 +227,21 @@ def test_tiny_native_merge_export_and_dynamic_shapes(tmp_path, task):
         np.testing.assert_allclose(reference, actual, rtol=0, atol=1e-6)
 
 
-def test_http_merged_selection(merged_cache, settings, auth):
+@pytest.mark.parametrize("optimization", ["disabled", "basic"])
+def test_http_merged_selection(merged_cache, settings, auth, optimization):
     from fastapi.testclient import TestClient
 
     from uranus_research_encoder.app import create_app
 
     configured = settings.model_copy(
-        update={"backend": "onnx-merged", "merged_onnx_root": merged_cache}
+        update={
+            "backend": "onnx-merged",
+            "merged_onnx_root": merged_cache,
+            "merged_onnx_optimization": optimization,
+        }
     )
     with TestClient(create_app(configured)) as client:
+        assert client.app.state.backend.optimization == optimization
         assert client.get("/ready", headers=auth).status_code == 200
         assert client.get("/version", headers=auth).json()["backend"] == "onnx-merged"
         response = client.post(

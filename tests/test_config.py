@@ -45,6 +45,7 @@ def test_file_preferred_and_no_dotenv(tmp_path, monkeypatch):
         {"backend": "onnx-merged"},
         {"backend": "onnx-merged", "merged_onnx_root": "relative"},
         {"backend": "onnx-merged", "merged_onnx_root": "/derived", "onnx_inter_op_threads": 2},
+        {"merged_onnx_optimization": "extended"},
     ],
 )
 def test_invalid_config(change):
@@ -64,3 +65,8 @@ def test_backend_environment_is_explicit(monkeypatch):
     assert settings.backend == "onnx"
     assert settings.onnx_intra_op_threads == 2
     assert settings.onnx_inter_op_threads == 1
+    monkeypatch.setenv("ENCODER_BACKEND", "onnx-merged")
+    monkeypatch.setenv("ENCODER_MERGED_ONNX_ROOT", "/derived")
+    assert Settings.from_env().merged_onnx_optimization == "disabled"
+    monkeypatch.setenv("ENCODER_MERGED_ONNX_OPTIMIZATION", "basic")
+    assert Settings.from_env().merged_onnx_optimization == "basic"

@@ -50,7 +50,11 @@ def worker(args) -> None:
     backend = (
         TorchBackend(args.model_root)
         if args.worker == "torch"
-        else MergedOnnxBackend(args.merged_root, intra_op_threads=args.threads)
+        else MergedOnnxBackend(
+            args.merged_root,
+            intra_op_threads=args.threads,
+            optimization=args.merged_optimization,
+        )
         if args.worker == "onnx-merged"
         else OnnxBackend(args.model_root, intra_op_threads=args.threads)
     )
@@ -70,6 +74,7 @@ def worker(args) -> None:
     }
     if args.worker == "onnx-merged":
         result["manifest_sha256"] = digest(args.merged_root / "manifest.json")
+        result["graph_optimization"] = args.merged_optimization
     # Model-load measurement is process-cold; the OS page cache is not flushed.
     for length in args.lengths:
         text = representative_text(backend, length)
@@ -110,6 +115,7 @@ def main() -> None:
     parser.add_argument("--model-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--merged-root", type=Path)
+    parser.add_argument("--merged-optimization", choices=("disabled", "basic"), default="disabled")
     parser.add_argument(
         "--padded-batching",
         action="store_true",
@@ -197,6 +203,8 @@ def main() -> None:
                 str(output),
                 "--threads",
                 str(threads),
+                "--merged-optimization",
+                args.merged_optimization,
                 "--worker",
                 name,
                 "--warmups",
@@ -223,11 +231,12 @@ def main() -> None:
             result["exit_code"] = process.returncode
             report["results"].append(result)
             args.output.write_text(json.dumps(report, indent=2) + "\n")
-    print("backend kind     tokens batch    p50 ms    p95 ms   texts/s  peak RSS MiB")
+    print("backend     threads kind     tokens batch    p50 ms    p95 ms   texts/s  peak RSS MiB")
     for result in report["results"]:
         for case in result["cases"]:
             print(
-                f"{result['backend']:7} {case['kind']:8} {case['actual_tokens']:6} "
+                f"{result['backend']:11} {result['intra_op_threads']:7} "
+                f"{case['kind']:8} {case['actual_tokens']:6} "
                 f"{case['batch_size']:5} {case['p50_ms']:9.2f} {case['p95_ms']:9.2f} "
                 f"{case['texts_per_second']:9.3f} {case['peak_rss_mib']:12.1f}"
             )

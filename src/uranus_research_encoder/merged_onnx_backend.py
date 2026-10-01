@@ -13,12 +13,22 @@ class MergedOnnxBackend:
     backend = "onnx-merged"
     max_tokens = 8192
 
-    def __init__(self, root: Path, *, intra_op_threads: int = 1, inter_op_threads: int = 1):
+    def __init__(
+        self,
+        root: Path,
+        *,
+        intra_op_threads: int = 1,
+        inter_op_threads: int = 1,
+        optimization: str = "disabled",
+    ):
         if not 1 <= intra_op_threads <= 8 or inter_op_threads != 1:
             raise ValueError("invalid_thread_count")
+        if optimization not in ("disabled", "basic"):
+            raise ValueError("invalid_graph_optimization")
         self.root = root
         self.intra_op_threads = intra_op_threads
         self.inter_op_threads = inter_op_threads
+        self.optimization = optimization
         self.loaded = False
         self.tokenizer_available = False
         self.revision = ""
@@ -46,8 +56,13 @@ class MergedOnnxBackend:
             options.intra_op_num_threads = self.intra_op_threads
             options.inter_op_num_threads = 1
             options.execution_mode = ort.ExecutionMode.ORT_SEQUENTIAL
-            # Baseline: no optional ORT graph passes until parity and timing exist.
-            options.graph_optimization_level = ort.GraphOptimizationLevel.ORT_DISABLE_ALL
+            # Keep the measured baseline explicit. Basic constant folding is a
+            # separate experiment with its own unchanged semantic acceptance gate.
+            options.graph_optimization_level = (
+                ort.GraphOptimizationLevel.ORT_ENABLE_BASIC
+                if self.optimization == "basic"
+                else ort.GraphOptimizationLevel.ORT_DISABLE_ALL
+            )
             options.enable_cpu_mem_arena = False
             options.enable_mem_pattern = False
             options.add_session_config_entry("session.intra_op.allow_spinning", "0")
