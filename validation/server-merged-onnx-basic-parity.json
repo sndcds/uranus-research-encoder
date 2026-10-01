@@ -1,0 +1,853 @@
+{
+  "comparisons": [
+    {
+      "candidate_backend": "onnx",
+      "inference_batching": "sequential",
+      "rss_scope": "single mode",
+      "manifest_sha256": null,
+      "intra_op_threads": 8,
+      "graph_optimization": "existing_backend_default",
+      "request_size_metrics": {},
+      "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
+      "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+      "machine": {
+        "platform": "Linux-6.12.107+deb13-amd64-x86_64-with-glibc2.36",
+        "processor": ""
+      },
+      "token_counts_match": true,
+      "metrics": [
+        {
+          "text_index": 0,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 1.0000000471692196,
+          "onnx_norm": 1.000000023681093,
+          "cosine_similarity": 0.9999999999978435,
+          "max_absolute_difference": 2.60770320892334e-07
+        },
+        {
+          "text_index": 1,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 8,
+          "torch_norm": 1.0000000417976052,
+          "onnx_norm": 0.9999999496096561,
+          "cosine_similarity": 0.9999999999976824,
+          "max_absolute_difference": 2.5815097615122795e-07
+        },
+        {
+          "text_index": 2,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 1.0000000691638196,
+          "onnx_norm": 0.9999999704636207,
+          "cosine_similarity": 0.9999999999986038,
+          "max_absolute_difference": 2.0116567611694336e-07
+        },
+        {
+          "text_index": 3,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 6,
+          "torch_norm": 0.9999999971057679,
+          "onnx_norm": 1.0000000354076912,
+          "cosine_similarity": 0.999999999998658,
+          "max_absolute_difference": 2.086162567138672e-07
+        },
+        {
+          "text_index": 4,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 5,
+          "torch_norm": 0.9999999801310867,
+          "onnx_norm": 1.0000000308348846,
+          "cosine_similarity": 0.9999999999981921,
+          "max_absolute_difference": 2.4586915969848633e-07
+        },
+        {
+          "text_index": 5,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999999448992505,
+          "onnx_norm": 1.000000021971486,
+          "cosine_similarity": 0.9999999999975048,
+          "max_absolute_difference": 2.7567148208618164e-07
+        },
+        {
+          "text_index": 6,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 46,
+          "torch_norm": 1.0000000385713557,
+          "onnx_norm": 0.9999999644293855,
+          "cosine_similarity": 0.9999999999982112,
+          "max_absolute_difference": 2.682209014892578e-07
+        },
+        {
+          "text_index": 7,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999999955050312,
+          "onnx_norm": 0.9999999505033234,
+          "cosine_similarity": 0.9999999999932306,
+          "max_absolute_difference": 5.252659320831299e-07
+        },
+        {
+          "text_index": 8,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999998948747915,
+          "onnx_norm": 0.9999999739288392,
+          "cosine_similarity": 0.9999999999981342,
+          "max_absolute_difference": 2.644956111907959e-07
+        },
+        {
+          "text_index": 9,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999999264915971,
+          "onnx_norm": 0.9999999737015537,
+          "cosine_similarity": 0.9999999999981255,
+          "max_absolute_difference": 2.4959444999694824e-07
+        },
+        {
+          "text_index": 10,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 35,
+          "torch_norm": 0.99999991258133,
+          "onnx_norm": 0.9999999818147677,
+          "cosine_similarity": 0.9999999999975728,
+          "max_absolute_difference": 2.477318048477173e-07
+        },
+        {
+          "text_index": 11,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 36,
+          "torch_norm": 0.9999999430169435,
+          "onnx_norm": 0.9999999396531123,
+          "cosine_similarity": 0.999999999998602,
+          "max_absolute_difference": 2.0489096641540527e-07
+        },
+        {
+          "text_index": 12,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 912,
+          "torch_norm": 0.9999999751807749,
+          "onnx_norm": 1.0000000158559252,
+          "cosine_similarity": 0.9999999999963289,
+          "max_absolute_difference": 3.427267074584961e-07
+        },
+        {
+          "text_index": 0,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 1.0000000206133957,
+          "onnx_norm": 1.0000000519958863,
+          "cosine_similarity": 0.9999999999980229,
+          "max_absolute_difference": 2.4586915969848633e-07
+        },
+        {
+          "text_index": 1,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 8,
+          "torch_norm": 0.9999999023490393,
+          "onnx_norm": 1.0000000783392229,
+          "cosine_similarity": 0.9999999999979311,
+          "max_absolute_difference": 2.2724270820617676e-07
+        },
+        {
+          "text_index": 2,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 0.9999999901320146,
+          "onnx_norm": 1.0000000294863842,
+          "cosine_similarity": 0.9999999999978866,
+          "max_absolute_difference": 2.4028122425079346e-07
+        },
+        {
+          "text_index": 3,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 6,
+          "torch_norm": 1.000000014167763,
+          "onnx_norm": 1.000000054215191,
+          "cosine_similarity": 0.9999999999984037,
+          "max_absolute_difference": 2.2910535335540771e-07
+        },
+        {
+          "text_index": 4,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 5,
+          "torch_norm": 0.9999999533472179,
+          "onnx_norm": 0.9999999758013894,
+          "cosine_similarity": 0.9999999999976882,
+          "max_absolute_difference": 2.6635825634002686e-07
+        },
+        {
+          "text_index": 5,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999999211491769,
+          "onnx_norm": 1.0000000490954157,
+          "cosine_similarity": 0.9999999999979998,
+          "max_absolute_difference": 2.3096799850463867e-07
+        },
+        {
+          "text_index": 6,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 46,
+          "torch_norm": 0.9999999965592479,
+          "onnx_norm": 0.9999999665395991,
+          "cosine_similarity": 0.999999999997917,
+          "max_absolute_difference": 2.2351741790771484e-07
+        },
+        {
+          "text_index": 7,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999998922682306,
+          "onnx_norm": 0.9999999746155744,
+          "cosine_similarity": 0.9999999999967267,
+          "max_absolute_difference": 3.762543201446533e-07
+        },
+        {
+          "text_index": 8,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999999049129065,
+          "onnx_norm": 0.999999962176386,
+          "cosine_similarity": 0.9999999999980669,
+          "max_absolute_difference": 2.3748725652694702e-07
+        },
+        {
+          "text_index": 9,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999999275231423,
+          "onnx_norm": 1.0000000140047578,
+          "cosine_similarity": 0.9999999999980981,
+          "max_absolute_difference": 2.6635825634002686e-07
+        },
+        {
+          "text_index": 10,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 35,
+          "torch_norm": 1.0000000365348283,
+          "onnx_norm": 1.000000037625608,
+          "cosine_similarity": 0.9999999999983096,
+          "max_absolute_difference": 2.086162567138672e-07
+        },
+        {
+          "text_index": 11,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 36,
+          "torch_norm": 1.000000018552839,
+          "onnx_norm": 0.9999999610841868,
+          "cosine_similarity": 0.9999999999981252,
+          "max_absolute_difference": 2.2351741790771484e-07
+        },
+        {
+          "text_index": 12,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 912,
+          "torch_norm": 0.9999999991042507,
+          "onnx_norm": 1.0000000288566415,
+          "cosine_similarity": 0.9999999999951377,
+          "max_absolute_difference": 3.4458935260772705e-07
+        }
+      ],
+      "min_cosine_similarity": 0.9999999999932306,
+      "max_absolute_difference": 5.252659320831299e-07,
+      "rankings": {
+        "torch": [
+          [
+            0,
+            1,
+            3,
+            5,
+            2,
+            4,
+            6
+          ],
+          [
+            1,
+            4,
+            6,
+            3,
+            0,
+            2,
+            5
+          ],
+          [
+            4,
+            2,
+            1,
+            3,
+            0,
+            5,
+            6
+          ],
+          [
+            3,
+            0,
+            1,
+            4,
+            2,
+            5,
+            6
+          ],
+          [
+            4,
+            2,
+            1,
+            6,
+            3,
+            0,
+            5
+          ]
+        ],
+        "onnx": [
+          [
+            0,
+            1,
+            3,
+            5,
+            2,
+            4,
+            6
+          ],
+          [
+            1,
+            4,
+            6,
+            3,
+            0,
+            2,
+            5
+          ],
+          [
+            4,
+            2,
+            1,
+            3,
+            0,
+            5,
+            6
+          ],
+          [
+            3,
+            0,
+            1,
+            4,
+            2,
+            5,
+            6
+          ],
+          [
+            4,
+            2,
+            1,
+            6,
+            3,
+            0,
+            5
+          ]
+        ]
+      },
+      "rankings_identical": true,
+      "task_specific": true,
+      "stable": true,
+      "runtime_measurements": {
+        "torch": {
+          "runtime": "torch-2.11.0+cpu-transformers-5.17.0-cpu",
+          "load_seconds": 10.27417305787094,
+          "peak_rss_mib": 3888.5546875
+        },
+        "onnx": {
+          "runtime": "onnxruntime-1.30.0-cpu",
+          "load_seconds": 13.117135203909129,
+          "peak_rss_mib": 4955.26171875
+        }
+      },
+      "thresholds": {
+        "max_absolute_difference": 1e-06,
+        "min_cosine_similarity": 0.99999999999,
+        "norm_absolute_tolerance": 1e-06,
+        "ranking": "identical full ordering"
+      },
+      "passed": true
+    },
+    {
+      "candidate_backend": "onnx-merged",
+      "inference_batching": "sequential",
+      "rss_scope": "single mode",
+      "manifest_sha256": "aff3546a806a98ac8d730be33f24db43874e3c26ca37f94b3ab9dca85959fd1c",
+      "intra_op_threads": 8,
+      "graph_optimization": "basic",
+      "request_size_metrics": {},
+      "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
+      "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+      "machine": {
+        "platform": "Linux-6.12.107+deb13-amd64-x86_64-with-glibc2.36",
+        "processor": ""
+      },
+      "token_counts_match": true,
+      "metrics": [
+        {
+          "text_index": 0,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 1.0000000471692196,
+          "onnx_norm": 1.0000000113207,
+          "cosine_similarity": 0.9999999999980234,
+          "max_absolute_difference": 2.6635825634002686e-07
+        },
+        {
+          "text_index": 1,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 8,
+          "torch_norm": 1.0000000417976052,
+          "onnx_norm": 0.999999991053594,
+          "cosine_similarity": 0.9999999999981792,
+          "max_absolute_difference": 2.4586915969848633e-07
+        },
+        {
+          "text_index": 2,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 1.0000000691638196,
+          "onnx_norm": 1.0000000044184227,
+          "cosine_similarity": 0.9999999999985743,
+          "max_absolute_difference": 2.4586915969848633e-07
+        },
+        {
+          "text_index": 3,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 6,
+          "torch_norm": 0.9999999971057679,
+          "onnx_norm": 1.0000000080890383,
+          "cosine_similarity": 0.999999999998689,
+          "max_absolute_difference": 2.123415470123291e-07
+        },
+        {
+          "text_index": 4,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 5,
+          "torch_norm": 0.9999999801310867,
+          "onnx_norm": 0.9999999407001654,
+          "cosine_similarity": 0.9999999999984651,
+          "max_absolute_difference": 2.086162567138672e-07
+        },
+        {
+          "text_index": 5,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999999448992505,
+          "onnx_norm": 0.9999999597807568,
+          "cosine_similarity": 0.9999999999979264,
+          "max_absolute_difference": 2.4959444999694824e-07
+        },
+        {
+          "text_index": 6,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 46,
+          "torch_norm": 1.0000000385713557,
+          "onnx_norm": 0.999999999582884,
+          "cosine_similarity": 0.9999999999981866,
+          "max_absolute_difference": 2.2258609533309937e-07
+        },
+        {
+          "text_index": 7,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999999955050312,
+          "onnx_norm": 0.9999999625986647,
+          "cosine_similarity": 0.999999999996495,
+          "max_absolute_difference": 3.7904828786849976e-07
+        },
+        {
+          "text_index": 8,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999998948747915,
+          "onnx_norm": 0.9999999716336728,
+          "cosine_similarity": 0.9999999999974265,
+          "max_absolute_difference": 3.0174851417541504e-07
+        },
+        {
+          "text_index": 9,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999999264915971,
+          "onnx_norm": 1.0000000280797086,
+          "cosine_similarity": 0.9999999999981736,
+          "max_absolute_difference": 2.5704503059387207e-07
+        },
+        {
+          "text_index": 10,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 35,
+          "torch_norm": 0.99999991258133,
+          "onnx_norm": 1.0000000084403105,
+          "cosine_similarity": 0.9999999999969039,
+          "max_absolute_difference": 2.682209014892578e-07
+        },
+        {
+          "text_index": 11,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 36,
+          "torch_norm": 0.9999999430169435,
+          "onnx_norm": 1.0000000357903485,
+          "cosine_similarity": 0.9999999999987816,
+          "max_absolute_difference": 1.9744038581848145e-07
+        },
+        {
+          "text_index": 12,
+          "context": "request",
+          "kind": "query",
+          "dimensions": 1024,
+          "tokens": 912,
+          "torch_norm": 0.9999999751807749,
+          "onnx_norm": 1.0000000269847655,
+          "cosine_similarity": 0.999999999995989,
+          "max_absolute_difference": 3.948807716369629e-07
+        },
+        {
+          "text_index": 0,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 1.0000000206133957,
+          "onnx_norm": 1.0000000745787212,
+          "cosine_similarity": 0.9999999999977807,
+          "max_absolute_difference": 2.8312206268310547e-07
+        },
+        {
+          "text_index": 1,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 8,
+          "torch_norm": 0.9999999023490393,
+          "onnx_norm": 0.9999999986375839,
+          "cosine_similarity": 0.9999999999982713,
+          "max_absolute_difference": 2.5704503059387207e-07
+        },
+        {
+          "text_index": 2,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 10,
+          "torch_norm": 0.9999999901320146,
+          "onnx_norm": 1.000000028084021,
+          "cosine_similarity": 0.9999999999981544,
+          "max_absolute_difference": 2.5704503059387207e-07
+        },
+        {
+          "text_index": 3,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 6,
+          "torch_norm": 1.000000014167763,
+          "onnx_norm": 1.0000000422809177,
+          "cosine_similarity": 0.9999999999986604,
+          "max_absolute_difference": 2.5797635316848755e-07
+        },
+        {
+          "text_index": 4,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 5,
+          "torch_norm": 0.9999999533472179,
+          "onnx_norm": 1.0000000222449759,
+          "cosine_similarity": 0.9999999999977457,
+          "max_absolute_difference": 2.6263296604156494e-07
+        },
+        {
+          "text_index": 5,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999999211491769,
+          "onnx_norm": 1.0000000446157593,
+          "cosine_similarity": 0.9999999999980452,
+          "max_absolute_difference": 2.4959444999694824e-07
+        },
+        {
+          "text_index": 6,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 46,
+          "torch_norm": 0.9999999965592479,
+          "onnx_norm": 0.9999999785340609,
+          "cosine_similarity": 0.9999999999980054,
+          "max_absolute_difference": 2.4400651454925537e-07
+        },
+        {
+          "text_index": 7,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 39,
+          "torch_norm": 0.9999998922682306,
+          "onnx_norm": 1.0000000308504693,
+          "cosine_similarity": 0.9999999999975971,
+          "max_absolute_difference": 2.7567148208618164e-07
+        },
+        {
+          "text_index": 8,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999999049129065,
+          "onnx_norm": 0.999999982895342,
+          "cosine_similarity": 0.9999999999979297,
+          "max_absolute_difference": 2.5331974029541016e-07
+        },
+        {
+          "text_index": 9,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 33,
+          "torch_norm": 0.9999999275231423,
+          "onnx_norm": 1.0000000095876098,
+          "cosine_similarity": 0.9999999999984065,
+          "max_absolute_difference": 2.3096799850463867e-07
+        },
+        {
+          "text_index": 10,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 35,
+          "torch_norm": 1.0000000365348283,
+          "onnx_norm": 1.0000000031030873,
+          "cosine_similarity": 0.99999999999801,
+          "max_absolute_difference": 2.3096799850463867e-07
+        },
+        {
+          "text_index": 11,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 36,
+          "torch_norm": 1.000000018552839,
+          "onnx_norm": 1.0000000285005863,
+          "cosine_similarity": 0.9999999999983287,
+          "max_absolute_difference": 2.4959444999694824e-07
+        },
+        {
+          "text_index": 12,
+          "context": "request",
+          "kind": "passage",
+          "dimensions": 1024,
+          "tokens": 912,
+          "torch_norm": 0.9999999991042507,
+          "onnx_norm": 1.000000009234502,
+          "cosine_similarity": 0.999999999995232,
+          "max_absolute_difference": 3.7997961044311523e-07
+        }
+      ],
+      "min_cosine_similarity": 0.999999999995232,
+      "max_absolute_difference": 3.948807716369629e-07,
+      "rankings": {
+        "torch": [
+          [
+            0,
+            1,
+            3,
+            5,
+            2,
+            4,
+            6
+          ],
+          [
+            1,
+            4,
+            6,
+            3,
+            0,
+            2,
+            5
+          ],
+          [
+            4,
+            2,
+            1,
+            3,
+            0,
+            5,
+            6
+          ],
+          [
+            3,
+            0,
+            1,
+            4,
+            2,
+            5,
+            6
+          ],
+          [
+            4,
+            2,
+            1,
+            6,
+            3,
+            0,
+            5
+          ]
+        ],
+        "onnx-merged": [
+          [
+            0,
+            1,
+            3,
+            5,
+            2,
+            4,
+            6
+          ],
+          [
+            1,
+            4,
+            6,
+            3,
+            0,
+            2,
+            5
+          ],
+          [
+            4,
+            2,
+            1,
+            3,
+            0,
+            5,
+            6
+          ],
+          [
+            3,
+            0,
+            1,
+            4,
+            2,
+            5,
+            6
+          ],
+          [
+            4,
+            2,
+            1,
+            6,
+            3,
+            0,
+            5
+          ]
+        ]
+      },
+      "rankings_identical": true,
+      "task_specific": true,
+      "stable": true,
+      "runtime_measurements": {
+        "torch": {
+          "runtime": "torch-2.11.0+cpu-transformers-5.17.0-cpu",
+          "load_seconds": 10.27417305787094,
+          "peak_rss_mib": 3888.5546875
+        },
+        "onnx-merged": {
+          "runtime": "onnxruntime-1.30.0-cpu",
+          "load_seconds": 25.79872717615217,
+          "peak_rss_mib": 3764.4296875
+        }
+      },
+      "thresholds": {
+        "max_absolute_difference": 1e-06,
+        "min_cosine_similarity": 0.99999999999,
+        "norm_absolute_tolerance": 1e-06,
+        "ranking": "identical full ordering"
+      },
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -362,6 +362,7 @@ Operators must explicitly set `JINA_NONCOMMERCIAL=1` to acknowledge non-commerci
 Jina use before either prefetch or runtime loading. That flag does not grant permission
 for commercial use. Obtain appropriate authorization from Jina AI when needed.
 Dependencies retain their own licenses; the service license does not relicense weights.
+
 ## Experimental locally merged ONNX
 
 `onnx-merged` is an explicit experimental backend using two locally exported,
@@ -374,3 +375,10 @@ The `runtime-onnx-merged` Docker target shares the minimal ONNX runtime dependen
 and expects the exported directory mounted read-only at `/merged`. It contains no
 Torch, PEFT or exporter packages. Building this target does not change the default
 Torch image or deploy a service.
+
+On the tested eight-vCPU server, the separately validated `basic` optimization
+with eight threads beats Torch at the same thread count: 36.6% lower aggregate
+p50, 68.8% higher throughput and 3.9% lower peak RSS for the representative
+32–480-token cases. The unoptimized merge alone does not meet that performance
+target. See the validation report for exact settings, complete raw results and
+the separate batching tradeoff; this does not change the production default.

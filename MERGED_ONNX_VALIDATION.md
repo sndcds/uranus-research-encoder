@@ -4,6 +4,16 @@ Torch remains the production default. These graphs are local derived artifacts,
 not the upstream Jina ONNX release. No deployment or live-cache changes are part
 of this experiment. The public HTTP schemas and embedding version are unchanged.
 
+The eight-vCPU server validation qualifies **`onnx-merged` with ORT `basic`, eight
+intra-op threads and one inter-op thread** as the recommended configuration for a
+future production change on this tested host: semantic/ranking parity passes,
+representative p50 falls 36.6%, throughput rises 68.8%, and peak RSS falls 3.9%
+against Torch using the same eight threads. The straightforward merge without
+`basic` does not meet the performance target. Keep request processing sequential;
+padded batching has a separate memory/throughput tradeoff. This PR does not switch
+the production default or deploy anything. See [server results](#server-results).
+
+
 ## Export contract
 
 `jina-v3-merged-f32-v1`, exporter `1`, opset **18**. Source:
@@ -88,6 +98,11 @@ external data, tokenizer files, paths, and every listed digest before creating
 sessions. The manifest is the operator's trust root, not a signed upstream
 release; replacing both manifest and files requires operator review. Local
 artifact digests are never compiled into the application.
+The deterministic contract specifies the export method and acceptance rules;
+it does not promise byte-identical serialization or float32 results across CPU
+platforms. Each independently generated artifact set has its own manifest and
+must pass the same audits and parity gate. The server evidence therefore uses
+the server manifest rather than the development-host artifact hashes.
 
 Export uses a sibling staging directory, publishes the manifest only after both
 tasks complete, and verifies source hashes again before publication. Failure
@@ -210,7 +225,8 @@ so duplicated float32 backbone weights are a likely memory cost to measure.
 This is a shared development laptop, with other applications active; raw timing
 variation and p95 matter. Fresh workers isolate each backend's process memory,
 but do not isolate CPU scheduling, thermal behavior or the operating-system
-file cache. A production decision still needs a repeat on the actual server.
+file cache. These local data alone cannot justify a production decision; the
+separate server repeat is reported below.
 The corpus touches only part of the vocabulary: measured RSS is not an upper
 bound for every future workload or for all externally stored tensor pages.
 
@@ -353,8 +369,9 @@ sequential request-size stability pass.
 |---|---:|---:|---:|
 | upstream ONNX | 5.252659e-7 | 0.9999999999932306 | 7.833922e-8 |
 | locally merged ONNX, disabled optimization | 4.712492e-7 | 0.9999999999949032 | 7.673905e-8 |
+| locally merged ONNX, basic optimization | 3.948808e-7 | 0.9999999999952320 | 7.457872e-8 |
 
-All 48 server baseline cases completed successfully; the optional basic/padded stages are still running. These measurements are separate from the laptop results.
+All **80 server timing cases** completed successfully: 48 baseline, 16 basic-pass and 16 padded-batch cases. Each stage exited successfully; see the [stage completion record](validation/server-experiment-state.json). These measurements are separate from the laptop results.
 The benchmark uses eight threads for Torch as well as both ONNX backends;
 `--torch-threads 8` is a benchmark-only override. Semantic reference comparisons
 continue to use the unchanged production Torch configuration.
@@ -383,40 +400,42 @@ All backends use eight intra-op threads and one inter-op thread. Each case has t
 | torch | 9.130 | 3889.04 | 16/16 |
 | upstream | 11.907 | 5227.55 | 16/16 |
 | merged disabled | 18.011 | 4211.81 | 16/16 |
+| merged basic | 22.065 | 3736.18 | 16/16 |
+| merged basic padded | 29.581 | 4294.60 | 16/16 |
 
 #### p50 / p95 request latency, milliseconds
 
-| Tokens | Kind | Request size | torch | upstream | merged disabled |
-|---:|---|---:|---:|---:|---:|
-| 32 | query | 1 | 320.95 / 356.96 | 768.13 / 840.25 | 358.12 / 405.52 |
-| 32 | query | 4 | 1152.32 / 2017.47 | 2873.33 / 2973.64 | 1455.97 / 1498.17 |
-| 32 | passage | 1 | 334.01 / 565.40 | 696.06 / 709.57 | 336.66 / 353.09 |
-| 32 | passage | 4 | 1210.96 / 1315.06 | 2849.13 / 2941.94 | 1438.06 / 1483.39 |
-| 128 | query | 1 | 750.70 / 2014.42 | 1090.51 / 1150.43 | 702.96 / 766.54 |
-| 128 | query | 4 | 2400.68 / 3576.67 | 4136.65 / 4675.09 | 2581.08 / 2718.99 |
-| 128 | passage | 1 | 630.61 / 741.02 | 1071.42 / 1108.02 | 663.08 / 673.36 |
-| 128 | passage | 4 | 2530.51 / 2848.29 | 4021.68 / 4175.05 | 2812.13 / 2829.62 |
-| 478 | query | 1 | 2686.65 / 3413.94 | 2615.62 / 2687.97 | 1886.99 / 2649.43 |
-| 478 | query | 4 | 9311.42 / 10270.31 | 10397.87 / 11351.14 | 7486.78 / 7894.83 |
-| 478 | passage | 1 | 2231.92 / 2791.70 | 2602.39 / 2766.30 | 1884.04 / 1898.10 |
-| 478 | passage | 4 | 9821.66 / 10295.41 | 10251.09 / 10726.77 | 7310.15 / 7806.26 |
-| 1023 | query | 1 | 5396.74 / 6762.99 | 5918.60 / 6349.32 | 4289.44 / 4369.61 |
-| 1023 | query | 4 | 22744.38 / 23469.55 | 23425.85 / 23755.89 | 16672.07 / 17172.44 |
-| 1023 | passage | 1 | 6004.76 / 6724.18 | 6095.09 / 6196.56 | 4484.86 / 4806.88 |
-| 1023 | passage | 4 | 22907.95 / 24266.60 | 23318.18 / 24136.09 | 17064.38 / 17678.09 |
+| Tokens | Kind | Request size | torch | upstream | merged disabled | merged basic | merged basic padded |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 32 | query | 1 | 320.95 / 356.96 | 768.13 / 840.25 | 358.12 / 405.52 | 168.80 / 176.09 | 134.32 / 148.72 |
+| 32 | query | 4 | 1152.32 / 2017.47 | 2873.33 / 2973.64 | 1455.97 / 1498.17 | 802.58 / 847.48 | 474.30 / 516.43 |
+| 32 | passage | 1 | 334.01 / 565.40 | 696.06 / 709.57 | 336.66 / 353.09 | 154.09 / 166.08 | 157.24 / 177.58 |
+| 32 | passage | 4 | 1210.96 / 1315.06 | 2849.13 / 2941.94 | 1438.06 / 1483.39 | 624.85 / 700.31 | 457.27 / 478.31 |
+| 128 | query | 1 | 750.70 / 2014.42 | 1090.51 / 1150.43 | 702.96 / 766.54 | 466.43 / 522.93 | 444.23 / 463.68 |
+| 128 | query | 4 | 2400.68 / 3576.67 | 4136.65 / 4675.09 | 2581.08 / 2718.99 | 1810.81 / 1928.29 | 1559.81 / 1703.10 |
+| 128 | passage | 1 | 630.61 / 741.02 | 1071.42 / 1108.02 | 663.08 / 673.36 | 478.89 / 497.06 | 478.84 / 600.16 |
+| 128 | passage | 4 | 2530.51 / 2848.29 | 4021.68 / 4175.05 | 2812.13 / 2829.62 | 1826.51 / 1875.75 | 1631.88 / 1728.68 |
+| 478 | query | 1 | 2686.65 / 3413.94 | 2615.62 / 2687.97 | 1886.99 / 2649.43 | 1589.26 / 1705.09 | 1628.59 / 1716.07 |
+| 478 | query | 4 | 9311.42 / 10270.31 | 10397.87 / 11351.14 | 7486.78 / 7894.83 | 6142.42 / 6731.58 | 6063.47 / 6234.31 |
+| 478 | passage | 1 | 2231.92 / 2791.70 | 2602.39 / 2766.30 | 1884.04 / 1898.10 | 1642.05 / 1716.14 | 1513.68 / 1562.83 |
+| 478 | passage | 4 | 9821.66 / 10295.41 | 10251.09 / 10726.77 | 7310.15 / 7806.26 | 6403.34 / 6753.23 | 6156.86 / 6278.37 |
+| 1023 | query | 1 | 5396.74 / 6762.99 | 5918.60 / 6349.32 | 4289.44 / 4369.61 | 3572.47 / 3837.91 | 3280.84 / 3525.80 |
+| 1023 | query | 4 | 22744.38 / 23469.55 | 23425.85 / 23755.89 | 16672.07 / 17172.44 | 15577.27 / 16059.72 | 13840.42 / 14296.42 |
+| 1023 | passage | 1 | 6004.76 / 6724.18 | 6095.09 / 6196.56 | 4484.86 / 4806.88 | 3791.81 / 4020.93 | 3694.38 / 3809.92 |
+| 1023 | passage | 4 | 22907.95 / 24266.60 | 23318.18 / 24136.09 | 17064.38 / 17678.09 | 15039.25 / 15567.03 | 14325.79 / 15236.59 |
 
 #### Throughput, texts/second, request size four
 
-| Tokens | Kind | torch | upstream | merged disabled |
-|---:|---|---:|---:|---:|
-| 32 | query | 2.932 | 1.400 | 2.743 |
-| 32 | passage | 3.289 | 1.433 | 2.829 |
-| 128 | query | 1.453 | 0.941 | 1.532 |
-| 128 | passage | 1.580 | 0.986 | 1.449 |
-| 478 | query | 0.421 | 0.377 | 0.530 |
-| 478 | passage | 0.417 | 0.390 | 0.540 |
-| 1023 | query | 0.175 | 0.171 | 0.240 |
-| 1023 | passage | 0.176 | 0.171 | 0.236 |
+| Tokens | Kind | torch | upstream | merged disabled | merged basic | merged basic padded |
+|---:|---|---:|---:|---:|---:|---:|
+| 32 | query | 2.932 | 1.400 | 2.743 | 5.324 | 8.519 |
+| 32 | passage | 3.289 | 1.433 | 2.829 | 6.316 | 8.613 |
+| 128 | query | 1.453 | 0.941 | 1.532 | 2.194 | 2.498 |
+| 128 | passage | 1.580 | 0.986 | 1.449 | 2.210 | 2.477 |
+| 478 | query | 0.421 | 0.377 | 0.530 | 0.639 | 0.677 |
+| 478 | passage | 0.417 | 0.390 | 0.540 | 0.620 | 0.654 |
+| 1023 | query | 0.175 | 0.171 | 0.240 | 0.260 | 0.290 |
+| 1023 | passage | 0.176 | 0.171 | 0.236 | 0.267 | 0.278 |
 
 #### Equally weighted 32–480-token comparisons against Torch 8
 
@@ -424,13 +443,53 @@ All backends use eight intra-op threads and one inter-op thread. Each case has t
 |---|---:|---:|---:|
 | upstream | 1.5903 | 0.6708 | 1.3442 |
 | merged disabled | 0.9712 | 1.0868 | 1.0830 |
+| merged basic | 0.6337 | 1.6880 | 0.9607 |
+| merged basic padded | 0.5608 | 1.8954 | 1.1043 |
 
 These geometric means weight both tasks and request sizes 1/4 equally; they do not represent production traffic. Raw reports retain every sample and metadata. Only eight threads was measured on this server at the operator’s request; the 1/2/4/8 sweep above belongs to the development host.
 
 
-The straightforward merged export does **not** meet the material-improvement gate on this server: only 2.9% lower aggregate p50 and 8.7% higher throughput, with 8.3% higher peak RSS than Torch at the same eight threads. It improves long texts but regresses on several short-text cases. The basic-pass experiment must establish its own semantic and performance results.
+The straightforward merged export does **not** meet the material-improvement gate on this server: only 2.9% lower aggregate p50 and 8.7% higher throughput, with 8.3% higher peak RSS than Torch at the same eight threads. It improves long texts but regresses on several short-text cases.
 
-Raw baseline data: [server-merged-onnx-benchmark.json](validation/server-merged-onnx-benchmark.json). Execution constraints: [server-execution-context.json](validation/server-execution-context.json). Graph signatures and initializer audit: [server-merged-graph-audit.json](validation/server-merged-graph-audit.json).
+The separately validated **basic-pass** variant meets the target: 36.6% lower aggregate p50, 68.8% higher throughput, and 3.9% lower peak RSS versus Torch 8. Every one of the twelve representative matched cases improves p50 by at least 24%. Loading is slower (22.07 seconds versus 9.13 seconds), and both task graphs require about 4.17 GiB of artifact storage. The fixed backend's Python pooling and sequential request processing remain unchanged.
+
+Raw evidence: [baseline benchmark](validation/server-merged-onnx-benchmark.json), [basic-pass parity](validation/server-merged-onnx-basic-parity.json), [basic-pass benchmark](validation/server-merged-onnx-basic-benchmark.json), [execution constraints](validation/server-execution-context.json), [graph signatures and initializer audit](validation/server-merged-graph-audit.json).
+
+### Real padded-batch semantics
+
+The [server padded-batch comparison](validation/server-merged-onnx-padded-parity.json)
+passes the original gate, including all rankings, equal token counts, task
+separation and exact repeats. It includes the ordinary groups of four and the
+short/912-token pair. Both query and passage request-size comparisons have
+maximum component difference **0.0**; minimum cosine is 0.9999999999999998
+(float64 comparison rounding). Against Torch, maximum component difference is
+3.948808e-7, minimum cosine 0.9999999999952320 and maximum norm error 7.457872e-8.
+Padded-batch latency and RSS are measured in a separate fresh worker, not inferred
+from the shared sequential/padded parity process. The [raw padded benchmark](validation/server-merged-onnx-padded-benchmark.json)
+contains all 16 cases. Relative to basic sequential inference, the six matched
+32–480-token, request-size-four cases show 17.5% lower p50 and **20.8% more
+throughput** by geometric mean. Across all eight request-size-four cases,
+including 1023 tokens, those figures are 15.2% and 17.5%.
+
+The gain is concentrated in short texts: 32-token query throughput rises from
+5.324 to 8.519 texts/sec, whereas the 478-token query rises from 0.639 to 0.677.
+Peak RSS rises from 3736.18 to **4294.60 MiB** (+14.9% versus basic sequential,
++10.4% versus Torch). Single-item controls also vary between these fresh runs;
+not every timing difference can be attributed solely to batching on a shared
+host. Timing batches contain equal-length texts; mixed-length correctness passes,
+but real mixed-length traffic and padding overhead are not performance-validated.
+Keep batching a separately measured experiment rather than enabling it in the
+HTTP backend in this PR.
+
+### Embedding compatibility
+
+The validated sequential basic-pass configuration preserves the existing
+`embedding_version`: it still describes the pinned native retrieval embedding
+contract, not the execution backend. Model revision, adapters, dimensions,
+tokenization, pooling, normalization and chunking are unchanged, and the frozen
+semantic/ranking gate passes. **No reindex is required** for this validated
+configuration. The experimental batching path also passes that semantic gate,
+but remains outside the service's HTTP inference path.
 
 ## Limits of this experiment
 
@@ -438,9 +497,24 @@ Real-model semantic validation includes up to 912 tokens; the timing grid reache
 1023 actual tokens. The exported shape contract allows 8192 tokens, but this run
 does not establish latency, memory capacity or semantic measurements at that
 maximum. Dynamic batch capture supports up to 16, while the separate real batching
-experiment uses groups of four. No new production traffic distribution or server
-performance measurement is implied by the equally weighted local summaries.
+experiment uses groups of four. The equal weighting in the comparison is not a
+production traffic distribution. Only eight threads was tested on the server,
+as requested; the development-host 1/2/4/8 sweep does not establish a server thread
+optimum. The recommended eight-thread setting is the validated server setting.
+No request size 16 performance run or maximum-context capacity claim is made.
 
+
+## Tests and completion
+
+CI passes **204 tests**, with three real-model integration tests
+excluded from normal CI. Ruff passes. Generated tests cover native adapter merge
+and tiny-model export, dynamic query/passage graphs without task selection,
+pooling/normalization, task separation, manifest and tamper failures, padded
+batch invariance, and failed/incomplete benchmark workers. Real-model parity and
+all 80 server timing cases were run separately against the existing read-only
+test cache. The runtime image was built and import-tested offline, with its
+unneeded-package absence verified. The completed server experiment container
+exited; derived artifacts and raw evidence remain in the isolated workspace.
 
 ## API references
 
