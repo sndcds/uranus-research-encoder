@@ -176,6 +176,12 @@ validation. No weights are baked into the image. Torch, PEFT, ONNX and ONNXScrip
 belong only to export/development dependencies. The default final Docker target
 remains `runtime-torch`; no deployment or registry publication is part of this PR.
 
+The locally built dedicated image is **436,338,984 bytes (416.13 MiB)**,
+excluding mounted model artifacts. An offline, read-only container import check
+confirmed that Torch, PEFT, ONNX and ONNXScript are absent, while the merged
+backend imports successfully with ORT 1.30.0 and Transformers 5.17.0. Its runtime
+user is `10001:10001`. See [image evidence](validation/merged-runtime-image.json).
+
 ## Results and release decision
 
 Both native adapter merges passed before ONNX export:
@@ -324,7 +330,32 @@ workspace holds code, dependencies, exports and results. Benchmark workers use
 all eight intra-op threads, including a benchmark-only Torch override; production
 Torch remains unchanged. Containers have all eight CPUs available and a 7 GiB
 memory limit with container swap disabled. Model runs have networking disabled.
-Server measurements are pending and must be reported separately from this laptop.
+The server export completed successfully using the same pinned dependencies.
+All 147 matrices per adapter passed their exact formula/hash audit; 146 differ
+between tasks. Native merge maximum component errors are 1.601875e-7 (query)
+and 1.266599e-7 (passage), with minimum cosines 0.9999999999991226 and
+0.9999999999995227. See the [server manifest](validation/server-merged-export-manifest.json),
+[query audit](validation/server-merged-query-weight-audit.json) and
+[passage audit](validation/server-merged-passage-weight-audit.json).
+Each server graph is 6,350,470 bytes plus 2,233,278,464 bytes of external tensors
+(2135.88 MiB per task). The graph protobufs have identical hashes because their
+structure is identical; the external tensor hashes differ, as expected for the
+independently merged adapters. Artifact identity includes both files.
+The [server three-way semantic comparison](validation/server-merged-onnx-parity.json)
+passed with eight ONNX intra-op threads and the unchanged production Torch
+semantic reference. All 26 task/text vectors are finite and 1024-dimensional;
+token counts, all full ranking orders, task distinction, exact repeats and
+sequential request-size stability pass.
+
+| Server candidate vs Torch | Max component difference | Minimum cosine | Max norm error |
+|---|---:|---:|---:|
+| upstream ONNX | 5.252659e-7 | 0.9999999999932306 | 7.833922e-8 |
+| locally merged ONNX, disabled optimization | 4.712492e-7 | 0.9999999999949032 | 7.673905e-8 |
+
+Server performance measurements are running separately from the laptop results.
+The benchmark uses eight threads for Torch as well as both ONNX backends;
+`--torch-threads 8` is a benchmark-only override. Semantic reference comparisons
+continue to use the unchanged production Torch configuration.
 
 
 ### Limits of this experiment

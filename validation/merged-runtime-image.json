@@ -1,0 +1,23 @@
+{
+  "image": "uranus-research-encoder:onnx-merged-experimental",
+  "image_id": "sha256:2091a4f9469e478a8418fa4f3ca6ad1cb3ba332f0011169d65ac9547bcec603b",
+  "published": false,
+  "size_bytes": 436338984,
+  "size_mib": 416.12528228759766,
+  "user": "10001:10001",
+  "validation": {
+    "absent_packages": {
+      "onnx": true,
+      "onnxscript": true,
+      "peft": true,
+      "torch": true
+    },
+    "available_providers": [
+      "AzureExecutionProvider",
+      "CPUExecutionProvider"
+    ],
+    "onnxruntime": "1.30.0",
+    "transformers": "5.17.0"
+  },
+  "weights_in_image": false
+}
