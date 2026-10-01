@@ -61,8 +61,8 @@ as constant folding and other basic semantics-preserving rewrites. It does not
 enable the extended transformer/GELU/attention fusion levels. The stored graphs
 and manifest remain unchanged. The runtime setting is recorded in each new
 parity/benchmark report, and must pass the same real-model parity gate before
-benchmarking. The baseline default is still `disabled`; the running thread sweep
-continues with that setting.
+benchmarking. The baseline default is still `disabled`; the completed baseline thread sweep
+used that setting.
 
 ## Layout and provenance
 
@@ -163,6 +163,19 @@ scalar-task graph from the HF cache.
 `ENCODER_MERGED_ONNX_OPTIMIZATION=basic` explicitly selects the separately gated
 basic-pass experiment; leaving it unset preserves the unoptimized baseline.
 
+The dedicated `runtime-onnx-merged` image inherits the existing minimal ONNX
+runtime, with `ENCODER_BACKEND=onnx-merged` and `/merged` as its artifact root:
+
+```sh
+docker build --target runtime-onnx-merged -f deploy/Dockerfile \
+  -t uranus-research-encoder:onnx-merged-experimental .
+```
+
+Mount the complete export directory read-only at `/merged` for isolated
+validation. No weights are baked into the image. Torch, PEFT, ONNX and ONNXScript
+belong only to export/development dependencies. The default final Docker target
+remains `runtime-torch`; no deployment or registry publication is part of this PR.
+
 ## Results and release decision
 
 Both native adapter merges passed before ONNX export:
@@ -209,6 +222,10 @@ All 26 task/text combinations are finite 1024-dimensional vectors. Full ordering
 of all seven passages is identical for every query. Query and passage embeddings
 differ for all 13 texts, and each separately matches its Torch adapter. Repeats
 and request-size checks are exact. The largest corpus item has 912 tokens.
+After completing the baseline thread sweep, the full comparison was repeated at
+the selected eight-thread setting. It passed with the same recorded maximum
+component error and minimum cosine for both ONNX candidates; see
+[eight-thread parity](validation/merged-onnx-threads8-parity.json).
 
 | Backend | Process-cold load seconds | Parity-process peak RSS MiB |
 |---|---:|---:|
@@ -220,7 +237,105 @@ These RSS figures are from parity, not the warmed latency benchmark. Graph file
 size is not resident-memory size. The manifest is immutable export-time
 provenance; its release-parity reminder points to the independent report.
 
-Latency, throughput, thread sweep and final decision are pending the benchmark.
+### Sequential baseline benchmark
+
+All 96 cases completed successfully in six fresh processes. Each case used two warmups and five measured requests. All merged rows below have optional ORT optimization **disabled**. Column numbers are intra-op threads; inter-op is 1. The Torch reference uses its production one-thread setting.
+
+The [raw benchmark JSON](validation/merged-onnx-benchmark.json) retains every duration, p95, throughput, process load time, peak RSS, CPU/affinity and runtime metadata. The target lengths 480/1024 produced 478/1023 actual tokens. Request size 4 still means four sequential forwards.
+
+| Backend | Intra-op | Load seconds | Peak RSS MiB |
+|---|---:|---:|---:|
+| torch | 1 | 7.694 | 3863.86 |
+| onnx | 1 | 17.829 | 4944.04 |
+| onnx-merged | 1 | 28.051 | 4110.49 |
+| onnx-merged | 2 | 26.323 | 4167.95 |
+| onnx-merged | 4 | 23.294 | 4175.33 |
+| onnx-merged | 8 | 23.183 | 4173.43 |
+
+#### p50 request latency (milliseconds)
+
+| Tokens | Kind | Request size | Torch 1 | Upstream 1 | Merged 1 | Merged 2 | Merged 4 | Merged 8 |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|
+| 32 | query | 1 | 373.15 | 4412.48 | 1101.55 | 794.56 | 536.90 | 461.35 |
+| 32 | query | 4 | 1496.83 | 9807.66 | 4614.90 | 3186.52 | 1908.73 | 1675.24 |
+| 32 | passage | 1 | 383.85 | 2381.69 | 1178.72 | 784.26 | 465.45 | 414.25 |
+| 32 | passage | 4 | 1561.08 | 9210.86 | 4664.18 | 3091.46 | 1939.07 | 1712.99 |
+| 128 | query | 1 | 1183.86 | 3053.12 | 1817.53 | 1171.66 | 808.18 | 788.90 |
+| 128 | query | 4 | 4668.56 | 14009.32 | 7293.89 | 4799.47 | 3410.72 | 3134.81 |
+| 128 | passage | 1 | 1182.76 | 3057.44 | 1793.16 | 1154.27 | 829.05 | 785.11 |
+| 128 | passage | 4 | 5219.16 | 23742.83 | 7622.71 | 4788.17 | 3220.52 | 3122.43 |
+| 478 | query | 1 | 5070.12 | 7337.22 | 5079.99 | 3742.58 | 2611.52 | 2474.44 |
+| 478 | query | 4 | 22251.78 | 29428.23 | 21957.69 | 13855.61 | 10301.22 | 9984.74 |
+| 478 | passage | 1 | 5108.08 | 6666.24 | 5154.98 | 3626.83 | 2525.66 | 2503.18 |
+| 478 | passage | 4 | 20940.79 | 28363.53 | 21497.66 | 13737.47 | 10187.54 | 10111.79 |
+| 1023 | query | 1 | 14060.41 | 17617.30 | 11750.44 | 8278.81 | 6155.91 | 6068.69 |
+| 1023 | query | 4 | 59264.25 | 67183.42 | 51040.67 | 32223.46 | 24120.81 | 24061.35 |
+| 1023 | passage | 1 | 15575.62 | 16604.45 | 13841.03 | 8079.01 | 5884.62 | 5961.08 |
+| 1023 | passage | 4 | 62609.54 | 78381.90 | 84001.33 | 32304.70 | 23751.07 | 23917.82 |
+
+#### Throughput (texts/second), request size 4
+
+| Tokens | Kind | Request size | Torch 1 | Upstream 1 | Merged 1 | Merged 2 | Merged 4 | Merged 8 |
+|---:|---|---:|---:|---:|---:|---:|---:|---:|
+| 32 | query | 4 | 2.67 | 0.39 | 0.87 | 1.25 | 2.05 | 2.33 |
+| 32 | passage | 4 | 2.53 | 0.44 | 0.85 | 1.29 | 2.02 | 2.36 |
+| 128 | query | 4 | 0.86 | 0.27 | 0.54 | 0.84 | 1.16 | 1.26 |
+| 128 | passage | 4 | 0.76 | 0.19 | 0.53 | 0.83 | 1.17 | 1.27 |
+| 478 | query | 4 | 0.18 | 0.14 | 0.18 | 0.29 | 0.39 | 0.40 |
+| 478 | passage | 4 | 0.19 | 0.14 | 0.19 | 0.29 | 0.39 | 0.37 |
+| 1023 | query | 4 | 0.07 | 0.06 | 0.08 | 0.12 | 0.17 | 0.17 |
+| 1023 | passage | 4 | 0.06 | 0.05 | 0.04 | 0.12 | 0.17 | 0.17 |
+
+Eight threads was the fastest tested baseline setting by the equally weighted geometric mean of the 12 matched 32–480-token p50 ratios (both tasks, request sizes 1/4). Against Torch, the ratio was 0.7051 (29.5% lower); the corresponding throughput-ratio geometric mean was 1.4121 (41.2% higher). Four threads produced ratios 0.7548 and 1.3081. One-thread merged ONNX was slower overall: ratios 1.6651 and 0.6018. These aggregates are not weighted by production traffic and do not erase the short-text regressions shown above.
+
+The eight-thread peak RSS was 8.0% above Torch and 15.6% below upstream ONNX. The one-thread long passage request-size-four samples ranged from 58.62 to 212.32 seconds (p95 189.45 seconds). No outliers were removed. This shared-host variability limits causal performance conclusions.
+
+### Basic optimization
+
+The separate [basic-pass parity report](validation/merged-onnx-basic-parity.json)
+passes at eight intra-op threads: maximum component difference
+3.911554813e-07, minimum cosine
+0.9999999999954965, maximum norm error 7.457872120e-08.
+Dimensions, finiteness, tokens, full ranking order, task separation, repeats and
+sequential request-size stability all pass the original gate. The stored graph
+files and their hashes are unchanged; optimization occurs during ORT session
+initialization. No extended optimizer, quantization, FP16 or approximation is
+used.
+
+The [local basic-pass benchmark](validation/merged-onnx-basic-benchmark.json)
+is **incomplete**. The requested run order was 1, 2, 4, 8 threads. The first three
+workers exited with SIGKILL (-9); the kernel recorded global out-of-memory kills
+during the run, with host swap exhausted. One thread preserved 11 of 12 cases;
+two and four threads produced no case file (their historical fallback records
+lack the thread field). Eight threads completed all 12 representative cases.
+That completed run had 3865.97 MiB peak RSS and a 46.41-second load, with aggregate
+p50/throughput ratios of 0.5710/1.7411 versus the local one-thread Torch reference.
+Those results do not establish a reliable optimum across the failed sweep.
+No samples were fabricated or removed. The runner now stops immediately after a
+failed or incomplete worker and preserves its requested thread count.
+
+Further local model runs were stopped. Real padded batching and the optimized
+1024-token workload were not validated locally. The generated padded-batch tests
+pass, but that is not a substitute for real-model validation.
+
+At the operator's request, validation is moving to the actual eight-vCPU server
+using an existing separate native/ONNX test cache mounted read-only. A new isolated
+workspace holds code, dependencies, exports and results. Benchmark workers use
+all eight intra-op threads, including a benchmark-only Torch override; production
+Torch remains unchanged. Containers have all eight CPUs available and a 7 GiB
+memory limit with container swap disabled. Model runs have networking disabled.
+Server measurements are pending and must be reported separately from this laptop.
+
+
+### Limits of this experiment
+
+Real-model semantic validation includes up to 912 tokens; the timing grid reaches
+1023 actual tokens. The exported shape contract allows 8192 tokens, but this run
+does not establish latency, memory capacity or semantic measurements at that
+maximum. Dynamic batch capture supports up to 16, while the separate real batching
+experiment uses groups of four. No new production traffic distribution or server
+performance measurement is implied by the equally weighted local summaries.
+
 
 ## API references
 

@@ -60,12 +60,15 @@ def worker(args) -> None:
     )
     start = time.perf_counter()
     backend.load()
+    if args.worker == "torch":
+        # Benchmark-only override: never change TorchBackend's production default.
+        torch.set_num_threads(args.threads)
     embed = partial(embed_padded, backend) if args.padded_batching else backend.embed
     result = {
         "backend": args.worker,
         "runtime": backend.runtime,
         "load_seconds": time.perf_counter() - start,
-        "intra_op_threads": 1 if args.worker == "torch" else args.threads,
+        "intra_op_threads": args.threads,
         "inter_op_threads": 1
         if args.worker != "torch"
         else __import__("torch").get_num_interop_threads(),
@@ -136,6 +139,13 @@ def main() -> None:
     parser.add_argument("--samples", type=int, default=5)
     parser.add_argument("--threads", type=int, choices=range(1, 9), default=1)
     parser.add_argument(
+        "--torch-threads",
+        type=int,
+        choices=range(1, 9),
+        default=1,
+        help="benchmark-only Torch intra-op override; production remains one thread",
+    )
+    parser.add_argument(
         "--thread-sweep",
         nargs="+",
         type=int,
@@ -175,8 +185,8 @@ def main() -> None:
         "batch_behavior": "padded groups of four (benchmark-only)"
         if args.padded_batching
         else "all service backends process texts sequentially per request",
-        "thread_comparison": "Torch production reference uses one intra-op thread; "
-        "ONNX thread sweep is separately labeled",
+        "thread_comparison": f"Torch benchmark uses {args.torch_threads} intra-op threads; "
+        "production Torch remains one thread. ONNX settings are separately labeled",
         "rss_measurement": "process lifetime high-water mark; Linux ru_maxrss",
         "results": [],
     }
@@ -189,7 +199,7 @@ def main() -> None:
                 if name == "onnx-merged"
                 else [args.threads]
                 if name == "onnx"
-                else [1]
+                else [args.torch_threads]
             )
         ]
         for name, threads in runs:
@@ -226,11 +236,20 @@ def main() -> None:
             result = (
                 json.loads(output.read_text())
                 if output.exists()
-                else {"backend": name, "cases": []}
+                else {"backend": name, "intra_op_threads": threads, "cases": []}
             )
+            result["requested_intra_op_threads"] = threads
             result["exit_code"] = process.returncode
+            result["expected_cases"] = len(args.lengths) * 2 * len(args.batch_sizes)
+            result["complete"] = (
+                process.returncode == 0 and len(result["cases"]) == result["expected_cases"]
+            )
             report["results"].append(result)
             args.output.write_text(json.dumps(report, indent=2) + "\n")
+            if not result["complete"]:
+                # In particular, do not keep allocating real-model workers after
+                # an OOM kill. Preserve completed samples and stop the experiment.
+                break
     print("backend     threads kind     tokens batch    p50 ms    p95 ms   texts/s  peak RSS MiB")
     for result in report["results"]:
         for case in result["cases"]:
@@ -240,7 +259,7 @@ def main() -> None:
                 f"{case['batch_size']:5} {case['p50_ms']:9.2f} {case['p95_ms']:9.2f} "
                 f"{case['texts_per_second']:9.3f} {case['peak_rss_mib']:12.1f}"
             )
-    if any(result["exit_code"] for result in report["results"]):
+    if any(not result["complete"] for result in report["results"]):
         raise SystemExit("benchmark incomplete; see recorded worker exit codes")
 
 

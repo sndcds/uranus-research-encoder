@@ -220,13 +220,15 @@ Both `/ready` and `/version` report the backend, runtime, pinned model revision,
 dimensions, embedding version, and contract version. HTTP request and chunk/EvidenceContext
 schemas are unchanged. `/ready` and `/version` add backend/runtime metadata.
 
-ONNX uses `ENCODER_ONNX_INTRA_OP_THREADS` and `ENCODER_ONNX_INTER_OP_THREADS`, both
-defaulting to 1 and bounded to 1–8. Graph execution is sequential (inter-op threads
-are consequently inactive), graph optimization is explicitly enabled, and spinning
-is disabled. The CPU memory arena and memory-pattern retention are disabled because
-the upstream graph creates large temporary vocabulary-sized LoRA matrices. Both
-backends serialize inference and process each text separately to preserve request
-batching invariance. No graph export or model download happens at startup.
+The ONNX backends use `ENCODER_ONNX_INTRA_OP_THREADS` and
+`ENCODER_ONNX_INTER_OP_THREADS`, defaulting to 1 and bounded to 1–8; merged ONNX
+requires inter-op 1. Graph execution is sequential and spinning is disabled.
+Upstream ONNX explicitly enables graph optimization. Merged ONNX defaults to
+disabled optimization; `ENCODER_MERGED_ONNX_OPTIMIZATION=basic` selects a separately
+gated experiment. The CPU memory arena and memory-pattern retention are
+disabled. The service backends serialize inference and process each text separately
+to preserve request batching invariance. No graph export or model download happens
+at startup.
 
 See [ONNX_VALIDATION.md](ONNX_VALIDATION.md) for the pinned artifact investigation,
 compatibility evidence, benchmark results, and release limitations. Do not infer
@@ -295,7 +297,8 @@ latency/memory. Fake-model HTTP tests do not establish real-model numerical qual
 
 ## Container and deployment boundary
 
-The Dockerfile exposes `runtime-torch` and `runtime-onnx` targets. The default final
+The Dockerfile exposes `runtime-torch`, `runtime-onnx`, and experimental
+`runtime-onnx-merged` targets. The default final
 target remains Torch. The ONNX target contains tokenizer support and CPU ONNX Runtime,
 but no Torch, PEFT, ONNX exporter, or development tools. Select it explicitly with
 `docker build --target runtime-onnx -f deploy/Dockerfile -t encoder-onnx .` only after
@@ -367,3 +370,7 @@ an existing pinned native cache, the noncommercial acknowledgement, and an
 isolated output directory; it never downloads model weights. See
 [MERGED_ONNX_VALIDATION.md](MERGED_ONNX_VALIDATION.md) for the export contract,
 artifact integrity checks, three-backend parity gate, measurements and limitations.
+The `runtime-onnx-merged` Docker target shares the minimal ONNX runtime dependencies
+and expects the exported directory mounted read-only at `/merged`. It contains no
+Torch, PEFT or exporter packages. Building this target does not change the default
+Torch image or deploy a service.
