@@ -1,0 +1,77 @@
+{
+  "/health": {
+    "status": "ok"
+  },
+  "/ready": {
+    "status": "ready",
+    "model": "jina-v3",
+    "dimensions": 1024,
+    "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+    "contract_version": "uranus-research-encoder-v1"
+  },
+  "/version": {
+    "service_version": "0.1.0",
+    "contract_version": "uranus-research-encoder-v1",
+    "model": "jina-v3",
+    "model_repository": "jinaai/jina-embeddings-v3-hf",
+    "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
+    "dimensions": 1024,
+    "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+    "chunk_version": "sections-480-overlap64-v2"
+  },
+  "/chunks": {
+    "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+    "documents": [
+      {
+        "entity_id": "019d5f3a-de7e-780a-9fa0-dc24e5545e2e",
+        "chunks": [
+          {
+            "chunk_index": 0,
+            "chunk_kind": "content",
+            "contexts": [
+              {
+                "scope": "event",
+                "venue_id": null,
+                "space_id": null,
+                "occurrence_id": null
+              }
+            ],
+            "text": "Titel: Communitytreffen...",
+            "content_hash": "173cbc1aaf69c33d4474194b8a44f7564262327c46eb6ac84df6199b8de31dea",
+            "token_count": 28
+          },
+          {
+            "chunk_index": 1,
+            "chunk_kind": "tickets",
+            "contexts": [
+              {
+                "scope": "event",
+                "venue_id": null,
+                "space_id": null,
+                "occurrence_id": null
+              }
+            ],
+            "text": "Preisart: kostenlos...",
+            "content_hash": "2f803ed201ea36cd2b3cbacebb22c4cbee6df35559448c436e80036727ff320d",
+            "token_count": 24
+          },
+          {
+            "chunk_index": 2,
+            "chunk_kind": "location_context",
+            "contexts": [
+              {
+                "scope": "venue",
+                "venue_id": "019d9b4e-b7ca-7b1f-8d19-56ca89e33ce7",
+                "space_id": null,
+                "occurrence_id": null
+              }
+            ],
+            "text": "Ort: Aktivitetshuset\n\nGemeinden / Kommunen: Flensburg",
+            "content_hash": "f3104d3390acc6fbf28d6b513f2a1027b7cf795c6682c0e81e8e4b2ff1c8d9ad",
+            "token_count": 55
+          }
+        ]
+      }
+    ]
+  }
+}

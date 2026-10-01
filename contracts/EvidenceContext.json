@@ -1,0 +1,59 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "occurrence_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Occurrence Id"
+    },
+    "scope": {
+      "enum": [
+        "event",
+        "venue",
+        "space",
+        "occurrence"
+      ],
+      "title": "Scope",
+      "type": "string"
+    },
+    "space_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Space Id"
+    },
+    "venue_id": {
+      "anyOf": [
+        {
+          "format": "uuid",
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Venue Id"
+    }
+  },
+  "required": [
+    "scope"
+  ],
+  "title": "EvidenceContext",
+  "type": "object"
+}

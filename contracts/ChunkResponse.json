@@ -1,0 +1,170 @@
+{
+  "$defs": {
+    "Chunk": {
+      "additionalProperties": false,
+      "properties": {
+        "chunk_index": {
+          "exclusiveMaximum": 1000,
+          "minimum": 0,
+          "title": "Chunk Index",
+          "type": "integer"
+        },
+        "chunk_kind": {
+          "enum": [
+            "content",
+            "participation",
+            "accessibility",
+            "tickets",
+            "additional",
+            "facilities",
+            "location_context",
+            "activities",
+            "categories"
+          ],
+          "title": "Chunk Kind",
+          "type": "string"
+        },
+        "content_hash": {
+          "pattern": "^[0-9a-f]{64}$",
+          "title": "Content Hash",
+          "type": "string"
+        },
+        "contexts": {
+          "items": {
+            "$ref": "#/$defs/EvidenceContext"
+          },
+          "maxItems": 1000,
+          "title": "Contexts",
+          "type": "array"
+        },
+        "text": {
+          "maxLength": 200000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "token_count": {
+          "maximum": 480,
+          "minimum": 1,
+          "title": "Token Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "chunk_index",
+        "chunk_kind",
+        "text",
+        "content_hash",
+        "token_count"
+      ],
+      "title": "Chunk",
+      "type": "object"
+    },
+    "ChunkResult": {
+      "additionalProperties": false,
+      "properties": {
+        "chunks": {
+          "items": {
+            "$ref": "#/$defs/Chunk"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Chunks",
+          "type": "array"
+        },
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "entity_id",
+        "chunks"
+      ],
+      "title": "ChunkResult",
+      "type": "object"
+    },
+    "EvidenceContext": {
+      "additionalProperties": false,
+      "properties": {
+        "occurrence_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Occurrence Id"
+        },
+        "scope": {
+          "enum": [
+            "event",
+            "venue",
+            "space",
+            "occurrence"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "space_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Space Id"
+        },
+        "venue_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Venue Id"
+        }
+      },
+      "required": [
+        "scope"
+      ],
+      "title": "EvidenceContext",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/ChunkResult"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "title": "Documents",
+      "type": "array"
+    },
+    "embedding_version": {
+      "title": "Embedding Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "embedding_version",
+    "documents"
+  ],
+  "title": "ChunkResponse",
+  "type": "object"
+}

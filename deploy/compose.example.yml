@@ -1,0 +1,35 @@
+services:
+  encoder:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    ports:
+      - "127.0.0.1:6335:8080"
+    environment:
+      ENCODER_API_KEY_FILE: /run/secrets/embedding.key
+      ENCODER_MODEL_ROOT: /models
+      ENCODER_MODEL: jina-v3
+      JINA_NONCOMMERCIAL: "1"
+      ENCODER_MAX_CONCURRENT_REQUESTS: "2"
+    volumes:
+      - type: bind
+        source: ${ENCODER_HOST_MODEL_ROOT:?Set an absolute path to the prefetched cache}
+        target: /models
+        read_only: true
+      - type: bind
+        source: ${ENCODER_HOST_KEY_FILE:?Set an absolute path to the key file}
+        target: /run/secrets/embedding.key
+        read_only: true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=256m,mode=1777
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 8g
+    cpus: 2.0
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 60s

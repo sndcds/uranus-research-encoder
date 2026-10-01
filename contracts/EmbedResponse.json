@@ -1,0 +1,57 @@
+{
+  "$defs": {
+    "EmbedMetrics": {
+      "additionalProperties": false,
+      "properties": {
+        "text_count": {
+          "maximum": 64,
+          "minimum": 1,
+          "title": "Text Count",
+          "type": "integer"
+        },
+        "token_count": {
+          "minimum": 1,
+          "title": "Token Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "text_count",
+        "token_count"
+      ],
+      "title": "EmbedMetrics",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "embedding_version": {
+      "title": "Embedding Version",
+      "type": "string"
+    },
+    "metrics": {
+      "$ref": "#/$defs/EmbedMetrics"
+    },
+    "vectors": {
+      "items": {
+        "items": {
+          "type": "number"
+        },
+        "maxItems": 1024,
+        "minItems": 1024,
+        "type": "array"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "title": "Vectors",
+      "type": "array"
+    }
+  },
+  "required": [
+    "embedding_version",
+    "vectors",
+    "metrics"
+  ],
+  "title": "EmbedResponse",
+  "type": "object"
+}
