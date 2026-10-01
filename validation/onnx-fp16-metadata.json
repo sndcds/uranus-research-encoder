@@ -1,0 +1,15 @@
+{
+  "file": "onnx/model_fp16.onnx",
+  "size": 1147151362,
+  "inspection": "HTTP ranges; tensor payloads skipped",
+  "initializers": 3003,
+  "inline_raw_data_initializers": 3003,
+  "external_initializers": 0,
+  "external_locations": [],
+  "tensor_types": {
+    "FLOAT16": 811,
+    "INT64": 2192
+  },
+  "additional_range_requests": 299,
+  "bytes_read": 5419008
+}

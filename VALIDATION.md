@@ -1,9 +1,14 @@
 # Implementation and validation report
 
 Implemented locally in `sndcds/uranus-research-encoder`. No production deployment,
-SSH access, uranus-admin modification, Qdrant modification, or planner modification
-was performed. No experimental pilot implementation was used. The existing AGPL-3.0
-LICENSE was retained.
+uranus-admin modification, Qdrant modification, or planner modification was performed.
+The ONNX follow-up used explicitly authorized read-only SSH access to copy the pinned
+native artifacts into an isolated local validation cache. The live cache was unchanged.
+No experimental pilot implementation was used. The existing AGPL-3.0 LICENSE was retained.
+
+See [ONNX_VALIDATION.md](ONNX_VALIDATION.md) and `validation/` for the follow-up's
+pinned graph audit, real-model parity, CPU measurements, and ONNX image verification.
+Historical native-backend build checks below remain labeled by their original image.
 
 ## Repository structure
 
@@ -12,7 +17,7 @@ pyproject.toml, uv.lock, .python-version
 README.md, VALIDATION.md, LICENSE, .gitignore, .dockerignore
 src/uranus_research_encoder/
   __init__.py, __main__.py, app.py, config.py, auth.py, contracts.py
-  chunking.py, model.py, model_artifacts.py, errors.py, version.py, schemas.py
+  chunking.py, model.py, onnx_backend.py, model_artifacts.py, errors.py, version.py, schemas.py
 tests/
   contract, context, chunking, authentication, API, configuration, limits
   concurrency, failure, logging, version, schema and native-loader tests
@@ -22,7 +27,8 @@ tests/
 contracts/
   EmbedRequest.json, EmbedResponse.json, ChunkRequest.json, ChunkResponse.json
   EvidenceContext.json, Section.json, Chunk.json
-scripts/prefetch_model.py
+scripts/prefetch_model.py, scripts/audit_onnx.py
+scripts/compare_backends.py, scripts/benchmark_backends.py
 deploy/Dockerfile, deploy/compose.example.yml
 .github/workflows/ci.yml
 ```
@@ -48,7 +54,7 @@ The reviewed admin contract revision is
 chunk kinds, request serialization, response validation and version expectation were
 inspected read-only. There is no runtime import of uranus-admin.
 
-## Executed verification
+## Native implementation and filtered-cache verification (before ONNX follow-up)
 
 | Check | Result |
 | --- | --- |
@@ -173,6 +179,9 @@ backend**, not measurements from production Jina weights. In particular the chun
 ```json
 {
   "status": "ready",
+  "backend": "fake",
+  "runtime": "deterministic-test-backend",
+  "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
   "model": "jina-v3",
   "dimensions": 1024,
   "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
@@ -185,6 +194,8 @@ backend**, not measurements from production Jina weights. In particular the chun
 ```json
 {
   "service_version": "0.1.0",
+  "backend": "fake",
+  "runtime": "deterministic-test-backend",
   "contract_version": "uranus-research-encoder-v1",
   "model": "jina-v3",
   "model_repository": "jinaai/jina-embeddings-v3-hf",

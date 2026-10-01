@@ -2,15 +2,18 @@
 
 import os
 import threading
+from importlib.metadata import version
 from pathlib import Path
 from typing import Protocol
 
 from .contracts import EmbeddingKind
-from .model_artifacts import MODEL_ALLOW_PATTERNS
+from .model_artifacts import BackendName, artifact_patterns
 from .version import DIMENSIONS, MODEL_REPOSITORY, MODEL_REVISION
 
 
 class Backend(Protocol):
+    backend: str
+    runtime: str
     loaded: bool
     tokenizer_available: bool
     revision: str
@@ -21,7 +24,40 @@ class Backend(Protocol):
     def embed(self, texts: list[str], kind: EmbeddingKind) -> list[list[float]]: ...
 
 
-class JinaBackend:
+def offline_environment() -> None:
+    # Set before importing HF libraries; all loads also explicitly enforce offline.
+    os.environ["HF_HUB_OFFLINE"] = "1"
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"
+    os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
+    os.environ["TOKENIZERS_PARALLELISM"] = "false"
+    os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+
+
+def runtime_name(backend: BackendName) -> str:
+    if backend == "onnx":
+        return f"onnxruntime-{version('onnxruntime')}-cpu"
+    return f"torch-{version('torch')}-transformers-{version('transformers')}-cpu"
+
+
+def cached_snapshot(root: Path, backend: BackendName) -> Path:
+    from huggingface_hub import snapshot_download
+
+    snapshot = Path(
+        snapshot_download(
+            MODEL_REPOSITORY,
+            revision=MODEL_REVISION,
+            cache_dir=str(root),
+            allow_patterns=artifact_patterns(backend),
+            local_files_only=True,
+        )
+    )
+    if snapshot.name != MODEL_REVISION:
+        raise ValueError("revision_mismatch")
+    return snapshot
+
+
+class TorchBackend:
+    backend = "torch"
     max_tokens = 8192
 
     def __init__(self, root: Path):
@@ -33,15 +69,13 @@ class JinaBackend:
         self._model = None
         self._tokenizer = None
 
+    @property
+    def runtime(self) -> str:
+        return runtime_name("torch")
+
     def load(self) -> None:
-        # Set before importing HF libraries; all loads also explicitly enforce offline.
-        os.environ["HF_HUB_OFFLINE"] = "1"
-        os.environ["TRANSFORMERS_OFFLINE"] = "1"
-        os.environ["HF_HUB_DISABLE_TELEMETRY"] = "1"
-        os.environ["TOKENIZERS_PARALLELISM"] = "false"
-        os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+        offline_environment()
         import torch
-        from huggingface_hub import snapshot_download
         from transformers import AutoModel, AutoTokenizer
         from transformers.utils import logging as hf_logging
 
@@ -51,17 +85,7 @@ class JinaBackend:
         hf_logging.enable_propagation()
         torch.set_num_threads(1)
         torch.use_deterministic_algorithms(True)
-        snapshot = Path(
-            snapshot_download(
-                MODEL_REPOSITORY,
-                revision=MODEL_REVISION,
-                cache_dir=str(self.root),
-                allow_patterns=MODEL_ALLOW_PATTERNS,
-                local_files_only=True,
-            )
-        )
-        if snapshot.name != MODEL_REVISION:
-            raise ValueError("revision_mismatch")
+        snapshot = cached_snapshot(self.root, "torch")
         tokenizer = AutoTokenizer.from_pretrained(
             snapshot,
             local_files_only=True,
@@ -133,3 +157,7 @@ class JinaBackend:
                     raise RuntimeError("invalid_vector")
                 vectors.append(vector[0].tolist())
         return vectors
+
+
+# Preserve imports used by existing integration clients while naming the reference.
+JinaBackend = TorchBackend

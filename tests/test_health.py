@@ -19,6 +19,8 @@ def test_readiness_and_version(client, auth):
         "dimensions",
         "embedding_version",
         "chunk_version",
+        "backend",
+        "runtime",
     }
 
 

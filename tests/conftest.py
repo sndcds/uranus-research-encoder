@@ -11,6 +11,8 @@ KEY = "test-only-encoder-key-0123456789abcdef"
 
 
 class FakeBackend:
+    backend = "fake"
+    runtime = "deterministic-test-backend"
     max_tokens = 8192
     revision = MODEL_REVISION
     loaded = False

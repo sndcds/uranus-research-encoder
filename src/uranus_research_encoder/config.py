@@ -15,6 +15,9 @@ class Settings(BaseModel):
     model_root: Path = Path("/models")
     model: Literal["jina-v3"] = "jina-v3"
     model_revision: Literal[MODEL_REVISION] = MODEL_REVISION
+    backend: Literal["torch", "onnx"] = "torch"
+    onnx_intra_op_threads: int = Field(default=1, ge=1, le=8)
+    onnx_inter_op_threads: int = Field(default=1, ge=1, le=8)
     jina_noncommercial: bool = False
     max_concurrent_requests: int = Field(default=2, ge=1, le=8)
     enable_docs: bool = False
@@ -58,6 +61,9 @@ class Settings(BaseModel):
             model_root=Path(os.environ.get("ENCODER_MODEL_ROOT", "/models")),
             model=os.environ.get("ENCODER_MODEL", "jina-v3"),
             model_revision=os.environ.get("ENCODER_MODEL_REVISION", MODEL_REVISION),
+            backend=os.environ.get("ENCODER_BACKEND", "torch"),
+            onnx_intra_op_threads=os.environ.get("ENCODER_ONNX_INTRA_OP_THREADS", "1"),
+            onnx_inter_op_threads=os.environ.get("ENCODER_ONNX_INTER_OP_THREADS", "1"),
             jina_noncommercial=os.environ.get("JINA_NONCOMMERCIAL") == "1",
             max_concurrent_requests=os.environ.get("ENCODER_MAX_CONCURRENT_REQUESTS", "2"),
             enable_docs=os.environ.get("ENCODER_ENABLE_DOCS") == "1",
