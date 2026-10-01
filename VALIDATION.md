@@ -12,7 +12,7 @@ pyproject.toml, uv.lock, .python-version
 README.md, VALIDATION.md, LICENSE, .gitignore, .dockerignore
 src/uranus_research_encoder/
   __init__.py, __main__.py, app.py, config.py, auth.py, contracts.py
-  chunking.py, model.py, errors.py, version.py, schemas.py
+  chunking.py, model.py, model_artifacts.py, errors.py, version.py, schemas.py
 tests/
   contract, context, chunking, authentication, API, configuration, limits
   concurrency, failure, logging, version, schema and native-loader tests
@@ -54,9 +54,9 @@ inspected read-only. There is no runtime import of uranus-admin.
 | --- | --- |
 | `uv sync --locked` | Installed successfully after a transient download retry |
 | `uv sync --locked --offline` | Passed against the resolved local cache |
-| `ruff format --check .` | Passed |
-| `ruff check .` | Passed |
-| `pytest -q` | **144 passed, 1 integration test deselected** |
+| `uv run --no-sync ruff format --check .` | Passed: 32 files already formatted |
+| `uv run --no-sync ruff check .` | Passed: all checks passed |
+| `uv run --no-sync pytest -q` | **151 passed, 1 integration test deselected, 10 warnings** (6.56s) |
 | `pytest -q -m integration` | **1 skipped**: real model cache not configured |
 | Seven generated JSON schemas against committed bytes | Passed in suite |
 | Communitytreffen contextual `/chunks` | HTTP **200**, three chunks, contexts preserved |
@@ -66,11 +66,40 @@ inspected read-only. There is no runtime import of uranus-admin.
 | Prefetch and server CLI help | Passed |
 | `git diff --check` | Passed |
 
-The three test warnings are upstream: Starlette deprecates its httpx TestClient
+The ten test warnings are upstream: Starlette deprecates its httpx TestClient
 backend, and PEFT warns when the intentionally separate second adapter is added in
-two generated-model tests. No real model weights were downloaded. TestClient's
+nine generated-model cases. No real model weights were downloaded. TestClient's
 thread/event-loop startup stalled inside the execution sandbox; API tests completed
 outside that sandbox using only local fake/generated models.
+
+## Filtered snapshot regression
+
+The production cache is intentionally a filtered Hugging Face snapshot, containing
+native safetensors, tokenizer/config files, and only the query/passage retrieval
+adapters. `MODEL_ALLOW_PATTERNS` in `src/uranus_research_encoder/model_artifacts.py`
+is the single reviewed allowlist imported by provisioning and runtime validation.
+Runtime retains the pinned revision, `local_files_only=True`, disabled remote code,
+the safetensors requirement, and adapter integrity checks.
+
+The regression fixture generates small native Jina weights and both PEFT adapters
+in a temporary Hub-style cache with blobs, snapshot symlinks, and
+`trees/<revision>.json`. That cached tree also lists absent `.gitattributes`,
+`custom_st.py`, ONNX, unrelated adapters, and other excluded artifacts. An unfiltered
+offline `snapshot_download` reproduces `IncompleteSnapshotError`; the backend loads
+the same cache successfully with the shared allowlist, for both single-file and
+sharded safetensors. Both cases failed at `JinaBackend.load()` before the fix.
+Negative cases remove required config, model, tokenizer, or adapter files and still
+fail offline. Network connections are blocked in these tests; the real Hub,
+Transformers, and PEFT loaders are exercised without mocking them.
+
+No existing model cache was modified and no model artifacts were downloaded for
+this fix. Preserve the entire provisioned cache directory when transferring it,
+including tree metadata; excluded repository files need not be downloaded.
+The three required checks above were rerun for this fix, with `UV_CACHE_DIR` set to
+`/tmp/uranus-encoder-uv-cache` because the default uv cache is read-only in the
+sandbox. The full suite passed outside the sandbox after TestClient startup stalled
+inside it; all ten native-loader cases also passed inside the sandbox. The opt-in
+real-cache integration test was not run for this fix.
 
 ## Docker verification
 

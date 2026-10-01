@@ -5,26 +5,8 @@ import argparse
 import os
 from pathlib import Path
 
+from uranus_research_encoder.model_artifacts import MODEL_ALLOW_PATTERNS
 from uranus_research_encoder.version import MODEL_REPOSITORY, MODEL_REVISION
-
-# Native safetensors and the two retrieval adapters only. No repository Python code.
-PATTERNS = [
-    "config.json",
-    "model.safetensors",
-    "model-*.safetensors",
-    "model.safetensors.index.json",
-    "tokenizer.json",
-    "tokenizer_config.json",
-    "special_tokens_map.json",
-    "added_tokens.json",
-    "sentencepiece.bpe.model",
-    "retrieval_query/adapter_config.json",
-    "retrieval_query/adapter_model.safetensors",
-    "retrieval_passage/adapter_config.json",
-    "retrieval_passage/adapter_model.safetensors",
-    "README.md",
-    "LICENSE*",
-]
 
 
 def main() -> None:
@@ -41,7 +23,7 @@ def main() -> None:
         repo_id=MODEL_REPOSITORY,
         revision=MODEL_REVISION,
         cache_dir=str(args.model_root),
-        allow_patterns=PATTERNS,
+        allow_patterns=MODEL_ALLOW_PATTERNS,
     )
     if Path(snapshot).name != MODEL_REVISION:
         raise RuntimeError("unexpected model revision")

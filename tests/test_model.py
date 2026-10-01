@@ -1,16 +1,20 @@
 """Exercise the native loader and adapters with small locally generated weights."""
 
+import hashlib
+import json
 import math
 import socket
+from fnmatch import fnmatch
 
 import pytest
 
 from uranus_research_encoder.model import JinaBackend
-from uranus_research_encoder.version import MODEL_REVISION
+from uranus_research_encoder.model_artifacts import MODEL_ALLOW_PATTERNS
+from uranus_research_encoder.version import MODEL_REPOSITORY, MODEL_REVISION
 
 
 @pytest.fixture
-def tiny_cache(tmp_path, monkeypatch):
+def tiny_cache(tmp_path, monkeypatch, request):
     monkeypatch.setenv("HF_HUB_OFFLINE", "1")
     monkeypatch.setenv("TRANSFORMERS_OFFLINE", "1")
     monkeypatch.setenv("HF_HUB_DISABLE_PROGRESS_BARS", "1")
@@ -46,7 +50,7 @@ def tiny_cache(tmp_path, monkeypatch):
         num_attention_heads=16,
     )
     model = JinaEmbeddingsV3Model(config)
-    model.save_pretrained(snapshot)
+    model.save_pretrained(snapshot, max_shard_size=getattr(request, "param", "5GB"))
     for task in ("retrieval_query", "retrieval_passage"):
         model.add_adapter(
             LoraConfig(
@@ -57,6 +61,97 @@ def tiny_cache(tmp_path, monkeypatch):
         model.set_adapter(task)
         model.save_pretrained(snapshot / task)
     return tmp_path
+
+
+@pytest.fixture
+def filtered_cache(tiny_cache, monkeypatch):
+    def no_network(*args, **kwargs):
+        pytest.fail("runtime attempted a network connection")
+
+    monkeypatch.setattr(socket.socket, "connect", no_network)
+    repo = tiny_cache / "models--jinaai--jina-embeddings-v3-hf"
+    snapshot = repo / "snapshots" / MODEL_REVISION
+    blobs = repo / "blobs"
+    blobs.mkdir()
+    files = {}
+    for path in sorted(snapshot.rglob("*")):
+        if not path.is_file():
+            continue
+        name = path.relative_to(snapshot).as_posix()
+        data = path.read_bytes()
+        blob_id = hashlib.sha256(data).hexdigest()
+        files[name] = {"size": len(data), "blob_id": blob_id}
+        path.unlink()
+        if any(fnmatch(name, pattern) for pattern in MODEL_ALLOW_PATTERNS):
+            blob = blobs / blob_id
+            blob.write_bytes(data)
+            path.symlink_to(blob)
+    # A filtered download still caches the FULL repository tree. These entries
+    # deliberately have neither snapshot files nor blobs in this temporary cache.
+    for name in (
+        ".gitattributes",
+        "custom_st.py",
+        "modeling_custom.py",
+        "onnx/model.onnx",
+        "classification/adapter_config.json",
+        "classification/adapter_model.safetensors",
+        "pytorch_model.bin",
+        "tf_model.h5",
+        "README.md",
+        "LICENSE",
+    ):
+        files[name] = {"size": 1, "blob_id": "0" * 40}
+    trees = repo / "trees"
+    trees.mkdir()
+    (trees / f"{MODEL_REVISION}.json").write_text(json.dumps({"format_version": 1, "files": files}))
+    return tiny_cache, snapshot
+
+
+@pytest.mark.parametrize("tiny_cache", ["5GB", "1MB"], indirect=True)
+def test_filtered_snapshot_loads_offline_with_full_cached_tree(filtered_cache):
+    from huggingface_hub import snapshot_download
+    from huggingface_hub.errors import IncompleteSnapshotError
+
+    root, snapshot = filtered_cache
+    # Reproduce the original failure using the real Hub implementation, without
+    # mocking snapshot_download or the native Transformers/PEFT loaders.
+    with pytest.raises(IncompleteSnapshotError, match="custom_st.py"):
+        snapshot_download(
+            MODEL_REPOSITORY,
+            revision=MODEL_REVISION,
+            cache_dir=str(root),
+            local_files_only=True,
+        )
+    backend = JinaBackend(root)
+    backend.load()
+    assert backend.loaded and backend.tokenizer_available
+    assert backend.revision == MODEL_REVISION
+    assert backend.count("hello world") == 4
+    assert len(backend.embed(["hello world"], "query")[0]) == 1024
+    assert not (snapshot / "custom_st.py").exists()
+    assert not (snapshot / "onnx/model.onnx").exists()
+
+
+@pytest.mark.parametrize(
+    "required_file",
+    [
+        "config.json",
+        "model.safetensors",
+        "tokenizer.json",
+        "retrieval_query/adapter_config.json",
+        "retrieval_passage/adapter_model.safetensors",
+    ],
+)
+def test_filtered_snapshot_missing_required_file_fails_offline(filtered_cache, required_file):
+    from huggingface_hub.errors import IncompleteSnapshotError
+
+    root, snapshot = filtered_cache
+    (snapshot / required_file).unlink()
+    backend = JinaBackend(root)
+    with pytest.raises(IncompleteSnapshotError, match=required_file):
+        backend.load()
+    assert not backend.loaded
+    assert not backend.tokenizer_available
 
 
 def test_native_backend_offline_and_task_isolation(tiny_cache, monkeypatch):

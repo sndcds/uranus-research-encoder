@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Protocol
 
 from .contracts import EmbeddingKind
+from .model_artifacts import MODEL_ALLOW_PATTERNS
 from .version import DIMENSIONS, MODEL_REPOSITORY, MODEL_REVISION
 
 
@@ -55,6 +56,7 @@ class JinaBackend:
                 MODEL_REPOSITORY,
                 revision=MODEL_REVISION,
                 cache_dir=str(self.root),
+                allow_patterns=MODEL_ALLOW_PATTERNS,
                 local_files_only=True,
             )
         )
