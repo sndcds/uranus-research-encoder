@@ -25,6 +25,12 @@ float32 matrices must have identical SHA-256 digests. Embedding LoRA matrices us
 `base + scaling * (B @ A).T` in blocks of 1024 vocabulary rows. This avoids the
 multiple full vocabulary-table copies of PEFT's safe merge. Tiny-model tests
 compare the embedding result directly with PEFT's `get_delta_weight` formula.
+Full and blocked GEMM are [not guaranteed bit-identical across CPU kernels](https://docs.pytorch.org/docs/main/notes/numerical_accuracy.html). The
+cross-block fixture checks exact equality for small dyadic weights, and checks
+both random float32 results against an independent float64 reference using the
+standard dot-product/scaling/addition rounding bound. This does not change any
+embedding parity threshold. Embedding audit hashes certify the specified blocked
+formula; linear audit hashes independently certify PEFT's same-shape merge.
 Every target is audited, including the unused native pooler, then each adapter
 wrapper is replaced by its plain base layer. Parameters are frozen.
 
