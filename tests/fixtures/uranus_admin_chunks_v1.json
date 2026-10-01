@@ -1,0 +1,11 @@
+{
+  "model": "jina-v3",
+  "documents": [{
+    "entity_id": "019d5f3a-de7e-780a-9fa0-dc24e5545e2e",
+    "sections": [
+      {"kind": "content", "context": {"scope": "event"}, "text": "Titel: Communitytreffen..."},
+      {"kind": "tickets", "context": {"scope": "event"}, "text": "Preisart: kostenlos..."},
+      {"kind": "location_context", "context": {"scope": "venue", "venue_id": "019d9b4e-b7ca-7b1f-8d19-56ca89e33ce7"}, "text": "Ort: Aktivitetshuset\n\nGemeinden / Kommunen: Flensburg"}
+    ]
+  }]
+}

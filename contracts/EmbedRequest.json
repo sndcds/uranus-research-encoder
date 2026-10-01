@@ -1,0 +1,36 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "enum": [
+        "query",
+        "passage"
+      ],
+      "title": "Kind",
+      "type": "string"
+    },
+    "model": {
+      "const": "jina-v3",
+      "title": "Model",
+      "type": "string"
+    },
+    "texts": {
+      "items": {
+        "maxLength": 200000,
+        "minLength": 1,
+        "type": "string"
+      },
+      "maxItems": 64,
+      "minItems": 1,
+      "title": "Texts",
+      "type": "array"
+    }
+  },
+  "required": [
+    "model",
+    "texts",
+    "kind"
+  ],
+  "title": "EmbedRequest",
+  "type": "object"
+}

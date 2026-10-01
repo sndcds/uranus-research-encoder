@@ -1,0 +1,154 @@
+{
+  "$defs": {
+    "ChunkDocument": {
+      "additionalProperties": false,
+      "properties": {
+        "entity_id": {
+          "format": "uuid",
+          "title": "Entity Id",
+          "type": "string"
+        },
+        "sections": {
+          "items": {
+            "$ref": "#/$defs/Section"
+          },
+          "maxItems": 1000,
+          "minItems": 1,
+          "title": "Sections",
+          "type": "array"
+        }
+      },
+      "required": [
+        "entity_id",
+        "sections"
+      ],
+      "title": "ChunkDocument",
+      "type": "object"
+    },
+    "EvidenceContext": {
+      "additionalProperties": false,
+      "properties": {
+        "occurrence_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Occurrence Id"
+        },
+        "scope": {
+          "enum": [
+            "event",
+            "venue",
+            "space",
+            "occurrence"
+          ],
+          "title": "Scope",
+          "type": "string"
+        },
+        "space_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Space Id"
+        },
+        "venue_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Venue Id"
+        }
+      },
+      "required": [
+        "scope"
+      ],
+      "title": "EvidenceContext",
+      "type": "object"
+    },
+    "Section": {
+      "additionalProperties": false,
+      "properties": {
+        "context": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/EvidenceContext"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "kind": {
+          "enum": [
+            "content",
+            "participation",
+            "accessibility",
+            "tickets",
+            "additional",
+            "facilities",
+            "location_context",
+            "activities",
+            "categories"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "text": {
+          "maxLength": 200000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "text"
+      ],
+      "title": "Section",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "documents": {
+      "items": {
+        "$ref": "#/$defs/ChunkDocument"
+      },
+      "maxItems": 4,
+      "minItems": 1,
+      "title": "Documents",
+      "type": "array"
+    },
+    "model": {
+      "const": "jina-v3",
+      "title": "Model",
+      "type": "string"
+    }
+  },
+  "required": [
+    "model",
+    "documents"
+  ],
+  "title": "ChunkRequest",
+  "type": "object"
+}
