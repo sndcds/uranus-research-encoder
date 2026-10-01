@@ -1,0 +1,13 @@
+{
+  "NanoCpus": 8000000000,
+  "CpusetCpus": "0-7",
+  "Memory": 7516192768,
+  "MemorySwap": 7516192768,
+  "NetworkMode": "none",
+  "source_cache_mount": "read-only, existing separate native/ONNX test cache",
+  "workspace": "isolated export/validation workspace",
+  "backends_sequential": true,
+  "benchmark_intra_op_threads": 8,
+  "benchmark_inter_op_threads": 1,
+  "production_changed": false
+}

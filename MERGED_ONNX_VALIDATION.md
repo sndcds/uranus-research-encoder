@@ -182,7 +182,7 @@ confirmed that Torch, PEFT, ONNX and ONNXScript are absent, while the merged
 backend imports successfully with ORT 1.30.0 and Transformers 5.17.0. Its runtime
 user is `10001:10001`. See [image evidence](validation/merged-runtime-image.json).
 
-## Results and release decision
+## Development-host results
 
 Both native adapter merges passed before ONNX export:
 
@@ -324,7 +324,9 @@ Further local model runs were stopped. Real padded batching and the optimized
 1024-token workload were not validated locally. The generated padded-batch tests
 pass, but that is not a substitute for real-model validation.
 
-At the operator's request, validation is moving to the actual eight-vCPU server
+## Server results
+
+At the operator's request, validation runs on the actual eight-vCPU server
 using an existing separate native/ONNX test cache mounted read-only. A new isolated
 workspace holds code, dependencies, exports and results. Benchmark workers use
 all eight intra-op threads, including a benchmark-only Torch override; production
@@ -352,13 +354,85 @@ sequential request-size stability pass.
 | upstream ONNX | 5.252659e-7 | 0.9999999999932306 | 7.833922e-8 |
 | locally merged ONNX, disabled optimization | 4.712492e-7 | 0.9999999999949032 | 7.673905e-8 |
 
-Server performance measurements are running separately from the laptop results.
+All 48 server baseline cases completed successfully; the optional basic/padded stages are still running. These measurements are separate from the laptop results.
 The benchmark uses eight threads for Torch as well as both ONNX backends;
 `--torch-threads 8` is a benchmark-only override. Semantic reference comparisons
 continue to use the unchanged production Torch configuration.
 
+The server baseline command is:
 
-### Limits of this experiment
+```sh
+JINA_NONCOMMERCIAL=1 uv run --no-sync python scripts/benchmark_backends.py \
+  --model-root /absolute/audit-cache --merged-root /absolute/derived/merged-v1 \
+  --backends torch onnx onnx-merged --threads 8 --torch-threads 8 \
+  --lengths 32 128 480 1024 --batch-sizes 1 4 --warmups 2 --samples 5 \
+  --output validation/server-merged-onnx-benchmark.json
+```
+
+Optional basic and padded runs use separate output files and only
+`--backends onnx-merged`, after their corresponding parity command succeeds.
+All server stages run sequentially; any nonzero exit stops subsequent stages.
+
+
+### Server benchmarks
+
+All backends use eight intra-op threads and one inter-op thread. Each case has two warmups and five raw samples, in a fresh worker per backend/configuration. Torch uses a benchmark-only override; production remains unchanged. CPU model: QEMU Virtual CPU version 2.5+. Container affinity: CPUs 0–7; memory limit 7 GiB, no container swap. Other existing host services remain active. Load is process-cold; the OS file cache is not flushed.
+
+| Backend | Load seconds | Peak RSS MiB | Completed cases |
+|---|---:|---:|---:|
+| torch | 9.130 | 3889.04 | 16/16 |
+| upstream | 11.907 | 5227.55 | 16/16 |
+| merged disabled | 18.011 | 4211.81 | 16/16 |
+
+#### p50 / p95 request latency, milliseconds
+
+| Tokens | Kind | Request size | torch | upstream | merged disabled |
+|---:|---|---:|---:|---:|---:|
+| 32 | query | 1 | 320.95 / 356.96 | 768.13 / 840.25 | 358.12 / 405.52 |
+| 32 | query | 4 | 1152.32 / 2017.47 | 2873.33 / 2973.64 | 1455.97 / 1498.17 |
+| 32 | passage | 1 | 334.01 / 565.40 | 696.06 / 709.57 | 336.66 / 353.09 |
+| 32 | passage | 4 | 1210.96 / 1315.06 | 2849.13 / 2941.94 | 1438.06 / 1483.39 |
+| 128 | query | 1 | 750.70 / 2014.42 | 1090.51 / 1150.43 | 702.96 / 766.54 |
+| 128 | query | 4 | 2400.68 / 3576.67 | 4136.65 / 4675.09 | 2581.08 / 2718.99 |
+| 128 | passage | 1 | 630.61 / 741.02 | 1071.42 / 1108.02 | 663.08 / 673.36 |
+| 128 | passage | 4 | 2530.51 / 2848.29 | 4021.68 / 4175.05 | 2812.13 / 2829.62 |
+| 478 | query | 1 | 2686.65 / 3413.94 | 2615.62 / 2687.97 | 1886.99 / 2649.43 |
+| 478 | query | 4 | 9311.42 / 10270.31 | 10397.87 / 11351.14 | 7486.78 / 7894.83 |
+| 478 | passage | 1 | 2231.92 / 2791.70 | 2602.39 / 2766.30 | 1884.04 / 1898.10 |
+| 478 | passage | 4 | 9821.66 / 10295.41 | 10251.09 / 10726.77 | 7310.15 / 7806.26 |
+| 1023 | query | 1 | 5396.74 / 6762.99 | 5918.60 / 6349.32 | 4289.44 / 4369.61 |
+| 1023 | query | 4 | 22744.38 / 23469.55 | 23425.85 / 23755.89 | 16672.07 / 17172.44 |
+| 1023 | passage | 1 | 6004.76 / 6724.18 | 6095.09 / 6196.56 | 4484.86 / 4806.88 |
+| 1023 | passage | 4 | 22907.95 / 24266.60 | 23318.18 / 24136.09 | 17064.38 / 17678.09 |
+
+#### Throughput, texts/second, request size four
+
+| Tokens | Kind | torch | upstream | merged disabled |
+|---:|---|---:|---:|---:|
+| 32 | query | 2.932 | 1.400 | 2.743 |
+| 32 | passage | 3.289 | 1.433 | 2.829 |
+| 128 | query | 1.453 | 0.941 | 1.532 |
+| 128 | passage | 1.580 | 0.986 | 1.449 |
+| 478 | query | 0.421 | 0.377 | 0.530 |
+| 478 | passage | 0.417 | 0.390 | 0.540 |
+| 1023 | query | 0.175 | 0.171 | 0.240 |
+| 1023 | passage | 0.176 | 0.171 | 0.236 |
+
+#### Equally weighted 32–480-token comparisons against Torch 8
+
+| Backend | p50 ratio | Throughput ratio | RSS ratio |
+|---|---:|---:|---:|
+| upstream | 1.5903 | 0.6708 | 1.3442 |
+| merged disabled | 0.9712 | 1.0868 | 1.0830 |
+
+These geometric means weight both tasks and request sizes 1/4 equally; they do not represent production traffic. Raw reports retain every sample and metadata. Only eight threads was measured on this server at the operator’s request; the 1/2/4/8 sweep above belongs to the development host.
+
+
+The straightforward merged export does **not** meet the material-improvement gate on this server: only 2.9% lower aggregate p50 and 8.7% higher throughput, with 8.3% higher peak RSS than Torch at the same eight threads. It improves long texts but regresses on several short-text cases. The basic-pass experiment must establish its own semantic and performance results.
+
+Raw baseline data: [server-merged-onnx-benchmark.json](validation/server-merged-onnx-benchmark.json). Execution constraints: [server-execution-context.json](validation/server-execution-context.json). Graph signatures and initializer audit: [server-merged-graph-audit.json](validation/server-merged-graph-audit.json).
+
+## Limits of this experiment
 
 Real-model semantic validation includes up to 912 tokens; the timing grid reaches
 1023 actual tokens. The exported shape contract allows 8192 tokens, but this run
