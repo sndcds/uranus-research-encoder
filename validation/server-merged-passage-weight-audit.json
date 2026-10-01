@@ -1,0 +1,1923 @@
+{
+  "native_merge_parity": {
+    "max_absolute_difference": 1.2665987014770508e-07,
+    "max_norm_error": 9.14881705949e-08,
+    "min_cosine_similarity": 0.9999999999995227
+  },
+  "passed": true,
+  "source_adapter": "retrieval_passage",
+  "task": "passage",
+  "weights": [
+    {
+      "base_sha256": "827e52a1bff60a42513a0c2ded3bb3db168c973d473ab1a4e3281ec2060b4d98",
+      "delta_sha256": "8328c958b66286e579c64d7eabd35b8878b5c3daf12d032869ac18e36da6617c",
+      "exact_weight_match": true,
+      "formula": "base + scaling * (B @ A).T; blocks of 1024 rows",
+      "merged_sha256": "782105f2e16b55e3f7c50c0653a7e0561124f62155bf667dce5138b653405461",
+      "method": "explicit_embedding_merge",
+      "name": "embeddings.word_embeddings",
+      "shape": [
+        250002,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "c950567ce29d5bc5a3438a96818de10f450ef489ae6c096f82b3eb7d03123459",
+      "delta_sha256": "b9cb373392218726b4bfaa623382a06cb2c047da17de29571aacbd24454b9166",
+      "exact_weight_match": true,
+      "formula": "base + scaling * (B @ A).T; blocks of 1024 rows",
+      "merged_sha256": "75fe2494721a29805af0a8301cf5911effa8b3136571f694e9f5ea279c55f8bb",
+      "method": "explicit_embedding_merge",
+      "name": "embeddings.token_type_embeddings",
+      "shape": [
+        1,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "4a212b560607fbd031927d86126c6f8e0e2a678ff2ea2376f078ae06bdb9c0c6",
+      "delta_sha256": "bb9f8df61474d25e71fa00722318cd387396ca1736605e1248821cc0de3d3af8",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "4a212b560607fbd031927d86126c6f8e0e2a678ff2ea2376f078ae06bdb9c0c6",
+      "method": "peft_safe_merge",
+      "name": "pooler.dense",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "841cf3f67fbb99cad22eb25d469b1300e1246dc62ae7e651ef7a50c37386098e",
+      "delta_sha256": "db0c71100a0427761ba8ac7b90bc550025160cb170e51184e526b4cda31b27b6",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f91e62efccedbd3388fd78b1dfb7ada1fdaf1d9ee44701e01e26f93505a553b8",
+      "method": "peft_safe_merge",
+      "name": "layers.0.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "6a27c74c0d67d8a96ea66a48ca382d4a0a3ebf5354b1ce0bd75a1c8ef2f815ee",
+      "delta_sha256": "8edcf3dcc660947adf70810bdaf4924506fa0af0d78b321bee10dc3b1e67de55",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "e19c6b11797112ff3579941b36ac517e19937ce48fb810ca8d7c88c2e0c2741c",
+      "method": "peft_safe_merge",
+      "name": "layers.0.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "7902f69609ddcf191fa59bac4ca06d792bf57c6bf0fc6282b81c018a26ed17dd",
+      "delta_sha256": "ab8310e4fcbc09e636e47f1f2f18106c9be02d533b40eb15be12570c62cde23a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "5ced46a87f06b32f4c726f1e008d64fcfe1bc8b7f1b84a800a7efd7d98d7bc30",
+      "method": "peft_safe_merge",
+      "name": "layers.0.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "ccfea4afb44e8de319703ca521f54a6011a26e8ddfbc401e4c412b77ca7e7d28",
+      "delta_sha256": "54e6bf915704d9bc73f7d543ee90e06b870a3fcc8910eb637802ead22f22747f",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "7254c8910379ffdc1440c5f2eae1d885e1d88c6e437da4965b76a9f888288dde",
+      "method": "peft_safe_merge",
+      "name": "layers.0.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "fd9e45f4ed05d76fd7fa3ccd8b04f5d65bd70fc5d35c029d720892b7f7ce19f5",
+      "delta_sha256": "c808dc35e28d235b38823ffbf6d88e93378423213334c3dd5babc76e0f353f67",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "909f8f66f22a3c7196fb70519a4a0854dce1c0ed3964587ce7d05ad7c1c8e1a6",
+      "method": "peft_safe_merge",
+      "name": "layers.0.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "a17c40b5eba6671395bcad41b488730162eb8f26aea126d2de8f76857053adb5",
+      "delta_sha256": "53ae363dfa2f0612bf1546400b477b81302f27299c5045d1c17324244d3a30e2",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "1102b62898be42019ae94dd131994f2849f2493249fbfc714e021259f197f6f7",
+      "method": "peft_safe_merge",
+      "name": "layers.0.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "083cd922bbe4bb93359461a08ca3ab1c80feb9ba08ac9332f07a2f204549fe0f",
+      "delta_sha256": "7b0e4413b0acfbf7b275d2beddf94b4e4240480c7e05bae92fc33d90bcc20470",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c71db79ab06cf8724f37c08e6e13f8456f866711744bfe3d9206f824eae633d5",
+      "method": "peft_safe_merge",
+      "name": "layers.1.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "004cdb4408206f4a5c0d9c2e0a829ec0096c5ad98e9bbe93af8c0104af0d9e4a",
+      "delta_sha256": "018013da246c0c813f1cd0ae227914d498e935a1e729063574284923bcc525e9",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "2a613c1e1f67fac0f0433a383cc9efe79bcb4f2bc65667afad761a220da588e3",
+      "method": "peft_safe_merge",
+      "name": "layers.1.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "69b846bb8addccf0194b0e89985b00f36a45d349d9e51929e0d1e32e5ecab527",
+      "delta_sha256": "2f616ff968b4402a39d1edfcd4ed02d6929d3b637f7d9bc3204f9b9f6c4b0a76",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d1a7ac190b8dbf42a495de2533a7ea667ac762de3bc2c2bdd0765535ffe80ae3",
+      "method": "peft_safe_merge",
+      "name": "layers.1.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "df0cacc3c8f959b68b2da23668392fc2ce6dc384d12497c9f06f3c1cb1d2f079",
+      "delta_sha256": "f922098700e3bfcfa51ebcbd7e0f4b90bfbc2432505bb299f45a9e998bb85bd2",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "b19aa024b9d84fb9ac9fbe5fc3958cc7e837286dba0451be42dbc2650b09f064",
+      "method": "peft_safe_merge",
+      "name": "layers.1.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "ea5b6a65324ffa59e4da49c70b5436f9b6f87659da20f32d442459ca101b9fc8",
+      "delta_sha256": "39746e423d00c1da8b04aae02bcbd63f240fba0d82b6a363039ddbcfaa0e9ccc",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "4db256379ce9d5af6a66cd08aec4816149451cde9b2633cd910b932c3d323954",
+      "method": "peft_safe_merge",
+      "name": "layers.1.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "1af212a115f6af2f0cd3d6430c71d53ea022cda186ed9097fcda06d243471598",
+      "delta_sha256": "970728c17f7860f0383d4b748b5696ff315ffb1c79575006510f91b01b0694b1",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "10d67d8e26e48da16b850ce419078d0e726dfa29933d69ccb180090966955a36",
+      "method": "peft_safe_merge",
+      "name": "layers.1.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "02a00c7963df0152648ffe7f19d7caa38336b5dd6fce03121655082eb55863be",
+      "delta_sha256": "b8d88f2962a6a55e940802de4f7ec91398b25d8ccf72ffebd6e20bf70e730ea8",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "5455c4b1cc5bfafe44d7eae9a6b96833bd0504d08ba024897d5818f526aacba0",
+      "method": "peft_safe_merge",
+      "name": "layers.2.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "228f3ec9d3172f97f2fa30e053932e4223c46d56a2ff11090357cf62c9f0d309",
+      "delta_sha256": "44ced890b6016532115e06f60d34409c2848afebfdc42b91def7e2f348feea02",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "5ca97602e7f44bab7fcb8652660a684c3aba1a49973c24b77b1ca75366785055",
+      "method": "peft_safe_merge",
+      "name": "layers.2.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "f0b23cc57084d91d1cb9144d0e0a30a29520a3e4d913ccd1a8bd11a2de468512",
+      "delta_sha256": "6d9f36305bdad1e9b5e0b05a3630091a27f6b9616d6906927e3005666a0d5603",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "438751698fe1a0c0cd20bca686956c02d55505b47f2ec66900848545954b1415",
+      "method": "peft_safe_merge",
+      "name": "layers.2.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "2dffd41e79b3079bde35fef6aad4951d56418eb5dd8244e111a918e5692d01b1",
+      "delta_sha256": "ee6e42f4dae9291cda084e6770e47f1c02cf5260a040a6dd122a1558fb93d208",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "93c903263fbf7eb6c90c6519f89b43b9476a9b445bf862320b6faa7c295b8d37",
+      "method": "peft_safe_merge",
+      "name": "layers.2.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "a0062466e9eb92e7a3742df93b345a8e57d3561d0ac8293d64088b74b6f25e6f",
+      "delta_sha256": "f4f31adb0d18e46eb06854c2993eff1b3d9274d5ffe77c588ad84c61c97b8325",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "14ee938be38146cd2bef4fa3ee81c58cfd293ca8b20289fd8f087ce0ee74eecb",
+      "method": "peft_safe_merge",
+      "name": "layers.2.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "67471a6a78eda9a820932fc450cbabb20f60f6304cf5b1e74fc305c53701bc9f",
+      "delta_sha256": "f00c4bc59296bcad9685fdeae4e1c7836540b8a75ca0ce91a96625877f474927",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0eb0ed2f17eaca4103bd10bf38b4c3363fb3a987dcc67264f9e0fb83b3f8ddd6",
+      "method": "peft_safe_merge",
+      "name": "layers.2.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "d2005406f802ba455a3cc464078fd7052039303decd98acfca4e6ff767bebbb9",
+      "delta_sha256": "713857b694d2822017f5e4f10854e6485ee9f018cbea073a6fae10835ce323fb",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "30d8337290fc26d808a00d01a7bb772b26f7e40e35c5680b103d76590662f1a9",
+      "method": "peft_safe_merge",
+      "name": "layers.3.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "e24c21d129a477ba168042e1db76a40c53976b342dd2a7bc82a0fa8e4b5c1d73",
+      "delta_sha256": "c4f8aea707616806e7cb8f8d61f71c450751f984bd2b9fd2af1256f2d92bda64",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "689cad9fbce8924709385b92081fe8a64875e95e7ae6eff6e0285f02236b71f4",
+      "method": "peft_safe_merge",
+      "name": "layers.3.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "7d3f0e39dbc8372b967037705422f60fa30d68fb0fd9e5b7010dab8007122b2e",
+      "delta_sha256": "76a104c9ce80de3b9f720588b1ce9e2547c16a2c4308a395294f0bfdddc45209",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "379429f1150168d73106e78a90611c4418b56afa4ed06975c7e8c23ffa37082d",
+      "method": "peft_safe_merge",
+      "name": "layers.3.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "c5966a587208c2ba75488654b97b9f703f4ea4c877c6821290e4a8f431621e01",
+      "delta_sha256": "b03ee059ba2b5f9b6d897cfd297e1dbe4fef47bfb3ee324570c3ca5fea862ca5",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9282901f52fb9ee2339e6bf06ddaee346ea951e4ad91546f22eb8cf1bbddd659",
+      "method": "peft_safe_merge",
+      "name": "layers.3.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "e3d555736915083f7d22451ba118f16b068f779129c4543a17c5f11635d7c2ad",
+      "delta_sha256": "706445a5b0a9e4fc38cec9b85975899066d97d26bd4962ba8a9e5768b2db7106",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "eeb544591759c7fa79cee44c16aca6af66010ddcad66ee0ef16c2f0217c0d921",
+      "method": "peft_safe_merge",
+      "name": "layers.3.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "97ac0d3c5940714da5cb0622ba25d2909488db6c6059c22da1af03ac309f464e",
+      "delta_sha256": "419f07a8eb9e789cee36231b8cefc8d8662b814e8800db41443a417614bf7f2c",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9921971d0c31a104afb2a5bab64fb8959756a29e266420d60744efd2cfae9a1d",
+      "method": "peft_safe_merge",
+      "name": "layers.3.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "b073c7fba3175faf9dd431d3b03b5085f70bf66002f3d7a232d19e70ad114503",
+      "delta_sha256": "6c63f0934d9a4122f09016cb833b701d2277fe89cd550ae30b68350a2bf6e729",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c77bea384a6886f6449b1dc3d310a1e24dc201795bf2c377b90ab2a9f100cc48",
+      "method": "peft_safe_merge",
+      "name": "layers.4.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "57a150058689b94fb7348453ea8fb354da214ffccb228228db769f15089d2551",
+      "delta_sha256": "956cb49ed2a2a93b7b4c74b0de90f388c77d3471a64e063874d508bd13c67842",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "41cff47c213841158ca3231e96026b58a6c389550893ecfe852689a3e6ddd1de",
+      "method": "peft_safe_merge",
+      "name": "layers.4.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "585fccb264a3985e3ea35a2579bc538a2e3087e0da2484fb8c0a49125b19104e",
+      "delta_sha256": "79d2503103161cff79c2e9b822d77e9076e3db58f23b7f2de0b5e564e4fb1cd0",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "e478ce2cbdb75deb733cf326875f7c88382ae5ae6aab1664fd424c6710edcb93",
+      "method": "peft_safe_merge",
+      "name": "layers.4.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "1632e2d8b8335b0463e21d32a190d6bde4255259f7190ae46394b4844d31920a",
+      "delta_sha256": "e647b2b54f1361681b494077fd14891888199633335dfcd015ea26b9e849cb0a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "cf45f427de4fea3845464437cf5ace61366acfee25f30012c1d80865dd729769",
+      "method": "peft_safe_merge",
+      "name": "layers.4.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "e0a8456f15e791c8655a265aa9f64ac08d7fd5da6269cdeb977d0309731c8400",
+      "delta_sha256": "e8b83ae2a97352384a6005aea4f428349250f94024a40e6669cb6ac60e5297bb",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "fb461a3a3ba39642b672dd30985b78714a3c688d0a9847749cc31d53f9bd030e",
+      "method": "peft_safe_merge",
+      "name": "layers.4.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "17365777136a2cc5c4cff4c82ff5428a7854994efa163ba2f4e810cf00b7153a",
+      "delta_sha256": "1814eb22f168e6271d1e2d367c1e01b1a766eb2248fd83cfd6ce8bd759d193ec",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "a3d27587d04c0ebcedb1aa6a48b399ee34ebf49d08c1f2ef40eaabf2f375a1fe",
+      "method": "peft_safe_merge",
+      "name": "layers.4.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "654eca35b9ba955eac8deee603a2dc9fb4f7e0d7abf82a506e55963dda5dacea",
+      "delta_sha256": "3e0cc51da76586810144320cb8af189039e13e684fa7c7a10053a21b22fa61fd",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c35b020de488830938d583955e43171192433fa2f45c612edbfc3483e6bcf95c",
+      "method": "peft_safe_merge",
+      "name": "layers.5.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "2c0f5e96fd52f6899d000fcf8016a80006c9808f2238d2f0f05aec777b25018b",
+      "delta_sha256": "516b42482b5d8f9ad80f861293d238b2d910a6a9eaa03c925c67334c1dc2bd9a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "aea12b9925c3d65057a4c6a61879df17644eec25c27dc6be8a273b8cfc10a564",
+      "method": "peft_safe_merge",
+      "name": "layers.5.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "1ecef73c15e3ee5969ab6ddf6ee88f567ef6b134b3ee4b341b6dd0a0974d2ecc",
+      "delta_sha256": "839366bad574c008b916d0413a9a2be09c50cbcf804e9fb97d1bb19685ca75a7",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c23c4b7af2fed5763452d85786ebb8a746ffb7ba02f47ed3c199d44c7d1cdd2a",
+      "method": "peft_safe_merge",
+      "name": "layers.5.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "a2bea3fe44670ba3aad2ee6af21424c37a63b2367c7e5f3e1348a5345c537a80",
+      "delta_sha256": "8610cc976fb1ad3002ead0259e30047702d104299d9ca8d48ab764e2c59b3883",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "91203724533b0f041761478d607bb6081f7b9a9e4771c00ae8439ad647faa972",
+      "method": "peft_safe_merge",
+      "name": "layers.5.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "282ceae079956ce01ef82310c298a12c28100e338a6b704ad197f349e7e49407",
+      "delta_sha256": "e4ca4d67a6a6fbf9bf4744f7abe9d46b630950c1779591088a89512bfb0e3fab",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "16a85f204ba21558b86f653c1614466925a6f1d35152ec28069dfd5063006485",
+      "method": "peft_safe_merge",
+      "name": "layers.5.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "f59131467ee7fa365c66bc876465f8440fdff47898786fea8cd3f00e7c3d12d9",
+      "delta_sha256": "74c3d5c1ce3d7f31019ccce350bb2bbf0a5e930a80cb818d8e501155b09e9f9b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "73d4ca661754c05d38d04ba56938c7879ef2717862849d210d10fa33b9f9d680",
+      "method": "peft_safe_merge",
+      "name": "layers.5.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "7d8547206935c8613a9f5ecf05abd65a04bb2e3adc20be14f26925cd6f1093f5",
+      "delta_sha256": "359869b48f88ee6e058921bd6075c0124abde814d99a20740201da17eb34a1d2",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0fde2727fcc23474933e4cd9009c82823c182a7c8079d3f05816a409ce80406a",
+      "method": "peft_safe_merge",
+      "name": "layers.6.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "ef32e440073c38ef5b045827a307b3c16d9e251ebd076a8365c7a73d9010c0ee",
+      "delta_sha256": "fbfdce745d6de268b8459cf92c7942ae6134325748a34996894683b01856d74a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "00f14c3e1468db2c9a4e1c2974f1822d6b2e983bad74470fc51f8b48f1fc6cf6",
+      "method": "peft_safe_merge",
+      "name": "layers.6.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "bf688347150cbfcbfa25ef0e217e4c9c901965decde3bab8320cae025dabd16a",
+      "delta_sha256": "bbdeba559f12b5d5bb49d9543031f13638749eecf46db8188c591d426b0fac0c",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "10cd2e8be7742db5fe1c880e526ec1a8cf205312f1567b4a19bedb7e54554611",
+      "method": "peft_safe_merge",
+      "name": "layers.6.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "f9f98e902ac2eeb14ce106fbad60dab3750b5df97810daa2f5e1ede623dd9a47",
+      "delta_sha256": "0ba76c53b9f99b11de70aa492d5d6ea3e71049c9447e598d915155043f0e75aa",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "3816c80dd3a4ea99d63a317a3baf445c659c0e6e6243e6b7fe1de76d974299e5",
+      "method": "peft_safe_merge",
+      "name": "layers.6.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "591ff93c868470c1780ecf2222e7c119ab9ee692b485570c0705602ae90e2885",
+      "delta_sha256": "16bed9c1a7c9f0260850fdb3c663de844fafb858bc86294f15d61b319326148b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "cf41ad54c0f407e0101ed588bcbd447bac514df244b06a8de891a2bb9eefc7ec",
+      "method": "peft_safe_merge",
+      "name": "layers.6.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "8e79a89a85c3e2dbcae81beb99861aec39f3281dc54117c584dce485691b06b5",
+      "delta_sha256": "2786d91d51213a59be5ab24452b2b7cf86ad8397867e74c7429dda7e1cbcc70b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "2e410d4df26750d635d1279e2a1f91ffe50f67de71089a80540927fe3d064257",
+      "method": "peft_safe_merge",
+      "name": "layers.6.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "9ffdc36fd81b818ee2572fe0373efcbf723e1f8dc322856741c239971c231561",
+      "delta_sha256": "4130bee479c81e7f7ddca84b07f5ae222d6a54b2c7e447c443406a6ce549efd3",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "8f28195472f068ec8e2e1a1eb7d98267f352b420b51b4b3296a04add06a381ad",
+      "method": "peft_safe_merge",
+      "name": "layers.7.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "b72d3261516db1543983419de6c51964b305add32ec4c8fb7bc07c415ca1546c",
+      "delta_sha256": "9832c5b0c1a343067fc2f34ed2a8a17aaea4634e939e9a07adf2a26144ba137f",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9e3280017005cebb74d27050dd5269eb84b5c2058d734af046bc052d07da2441",
+      "method": "peft_safe_merge",
+      "name": "layers.7.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "75aa998fdf6271e4157c3fb931823e72286c7db9465171e9160b5a34d3a9c9ed",
+      "delta_sha256": "99f1fece258c525f11475bef28ede132d24ab6ec32c81f08f1166dcef55d7ff4",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "a36ccb11b30a00dd320d06fcbb961e6778a37738f82f21ea901dff064bb3fa7b",
+      "method": "peft_safe_merge",
+      "name": "layers.7.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0f1ce12c0a995d51761342d3767fe29cbfc032b89963b9035354b697614d3263",
+      "delta_sha256": "6a1a9274be29c0667005a868ae76abbc2c023130c56d4de9766ba8d24ab46a22",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "fa0881d383b607639663e4a2ac5a78a9947f0032626cc33def6960fa6e7a2e7b",
+      "method": "peft_safe_merge",
+      "name": "layers.7.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "a3fcbad9ef17c6c87b96a12f9cf300ddd017812df7b75bf7ed2b00ac22be09fa",
+      "delta_sha256": "140bde1b303a70aed17330cccf17b3dcf5ab2f7f100a6c1fad5343f93638ae9c",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "6b478be73fc07443e87895e88d06a324f5bc4c56063d29921d8871701465222c",
+      "method": "peft_safe_merge",
+      "name": "layers.7.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "d7db3b428ab837e7df85cd7c983bc79df03a07b0fd012fd05c3b96511fb3468f",
+      "delta_sha256": "81536ba83f8f9ac520250594b4b89617add6557214dc7bfa72f770ec8611ba0a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "59db6b914844abb370b3ec7d67b5e8101c49b3e4a6dfb5d54d2a44056fc3e3ee",
+      "method": "peft_safe_merge",
+      "name": "layers.7.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "48ca4900c56a494251bb482e36555571daa087519ee505f6b07763f5ec66b647",
+      "delta_sha256": "cbfc52310ccd24b8dc149e1eacb83bdb3422a88eb7d087d427517fb9cbcc2f43",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "ae6bc2f226779374eb9cd446d7dddd0528e68c0ae8f17e60a5ff8ec17b9cc550",
+      "method": "peft_safe_merge",
+      "name": "layers.8.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "fcbac627d90fa0baa1b99c33a4ca9b832b51fffae807eb64daf7b2b2338a0b6d",
+      "delta_sha256": "08397f51092ee347e30748eb79d87dc12e995ddb4ccbf1fc9c767914bf1913b9",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "8e1a5277bd4c73db698c92e2e79d8d4a5c04b7dafd7658902c7a99b19217e5d9",
+      "method": "peft_safe_merge",
+      "name": "layers.8.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "5db04c0a967bbd8d76d22719d8bc9d93739e1c6eefa1a2d0a84d7252e2b9dedb",
+      "delta_sha256": "06d6560a0b2363ba91caa532da71bf2d5ff37a731683e95ba281f440a6a39949",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "7f83bf7f6d03b76ae291f358365e4674580fecec3636e432e588f94cf0bfd45f",
+      "method": "peft_safe_merge",
+      "name": "layers.8.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0a1185587d6f19829501d47ed76d37b3a33ec6e2e60ac1161473f7e0b367eac3",
+      "delta_sha256": "3c03fc8cf4c564b05505c613907a1d0c445d31131b3dd767dc24dee0138fb12a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "6932b8a12b8f657bc2514a4cf3a97ab5937414fd05ee8f9dedc735651078117f",
+      "method": "peft_safe_merge",
+      "name": "layers.8.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "efde89342bd31c8920950cd1104913d39009bc6dcf3962cb1a52b6cab8ec72e2",
+      "delta_sha256": "fc75f8b8933d2f7e398a9ef3ca81a4c5f164cedfa4484ba612d124a98e699b27",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "2a18548d31b1e75d243983bd82ef861c00184267ce0cb1d1dbc701c18e58cfd3",
+      "method": "peft_safe_merge",
+      "name": "layers.8.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "91211eed59550b919efde34e2a6e73f307e445bdcef21e6439c7dcdb196628fa",
+      "delta_sha256": "dba0371fb503fc3cc8cbfa53741aba15302d34977a7f323689fcc8e27a53ce33",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d0c34529756baa2b62ac0ebcb63e8aa13b00704337151826c1f226925209380f",
+      "method": "peft_safe_merge",
+      "name": "layers.8.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "2dd1574aa03673c98b23a683f9584c099d954b031f172219a6f9a6f86b8f5e6b",
+      "delta_sha256": "c308e469d60a573ba4b91878c5d6dedf8066a0719166bf1f8eb6502f84aa1167",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "cfea9fe37e43508fd8b6a4e88e8fdb7e8b993d1a9dd3ca30652adf7c6fc9fdb9",
+      "method": "peft_safe_merge",
+      "name": "layers.9.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "5398438975461981b0dc9860f21d4b21cd71b492946a67e7eac6022bcb2244e6",
+      "delta_sha256": "2c39875775a04de134591db555c9bd0cb3ee320ba950077439879b49fe90ed04",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "8aace38da683b4f7fe3b1f90fa214507d763752006d3f1c911c3775fc3b56c89",
+      "method": "peft_safe_merge",
+      "name": "layers.9.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "a1c4d7f19a2c4ec023eda9fe7eeebcfa784c94a2719733aac742a1de1eb675b7",
+      "delta_sha256": "c467d2f6c72e3ba768b400167a7d96ca4b7d2ee99f1fa5ee0200d997d6b3450e",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "79d9ce4d69ed7bd407dc29c7b8a450c1825749fd79bb6a6088de177619061313",
+      "method": "peft_safe_merge",
+      "name": "layers.9.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "069e2617ec05164ee24910d16384d10590f5952ba296c7703cf4719d6a3fa5e3",
+      "delta_sha256": "df4bc3e2c58eabac98c664e9c751af31b99df4758dd6fd636b42f35cb6e11ffb",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "ac10e5ef6d7e73f3b612d8a1b0ca270db66a688363378b085d9eeff9db7becc0",
+      "method": "peft_safe_merge",
+      "name": "layers.9.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "334e7d04bb02e789822bbdbfdcf900bddb9357831d2c18998acee2a071d2d915",
+      "delta_sha256": "07ed65966e0e574c3ac67724582051d88b69a6a01c727e9e1fe5c5e85db74518",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "170ac430517eb095bd3ae9035f7c4316315d946b5927b18239f97554f51d394d",
+      "method": "peft_safe_merge",
+      "name": "layers.9.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "df0664fa6d9e98074659e30feed2a1fb290cd24eb412b490af6f450fc54f22fb",
+      "delta_sha256": "f9a163aabe76d87d523e39067fdbd5b1ecabd99b8947ebfc67d8803a97b52a77",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "444ed44d7d5d17b237eff765d75ded313712c85b9d0c41650b241d1a3203567b",
+      "method": "peft_safe_merge",
+      "name": "layers.9.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0bcfc8c48fa5682fab4eda4efc926296c1b912e25e8eabbf088826f79cfba627",
+      "delta_sha256": "8d482b79453556c2060fa0fd027076af223e2e1c7298bfc0fdfca6fbd057056e",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "12e446abf5d805c815c4e74e5ed4a6e093024321b7f939969946d054266f985d",
+      "method": "peft_safe_merge",
+      "name": "layers.10.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "9c15f7fa15ee3bf424320c6b8a823b40e62fffa9945cf985ba7666300667412e",
+      "delta_sha256": "093a0def8f88b0504d52f65b3e444ef2756817772021a89ba462857afd9c0e3b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9b4d7950f7d97b191ed6b408181ed0855e36c925e96163f03e1db14b3f9260c6",
+      "method": "peft_safe_merge",
+      "name": "layers.10.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "9782249334923c7d8c6f8cf8e3a8dd7da8bb1fece6142d34e545c45b28fad895",
+      "delta_sha256": "568e0eeb9ffef93e69774ce8d13d64a9e7e93d087667f8e99b25cdfa5c83c9b7",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "66fb96ddac93fb53afab83b61523183a5a9041b81f443f0a7267e926287c0749",
+      "method": "peft_safe_merge",
+      "name": "layers.10.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "b81ba9d3e27c61f3a908e698655eb2a40563051eea0317388c12f01ff81360b4",
+      "delta_sha256": "53e01293fd8c7aa7c5769965410e5e30befb5ccd8917dcd8bf5ebe302ce732b5",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "8247b214c7018a5819dc2074663a929280b93f7a9950eb7e69b5adc769f6b4a8",
+      "method": "peft_safe_merge",
+      "name": "layers.10.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "28b43d1859307a631a4d917ab2c6708ddef27d752c192f2fcafc5dee0d3e5599",
+      "delta_sha256": "7d4a535cd08d15b4323044166852acb71484d02f1a04a402359163a3ab1253b1",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "eb066faeefd9c471c086d57d7eaf3be97098c8741477dcaf2ced17cf2c9a01e5",
+      "method": "peft_safe_merge",
+      "name": "layers.10.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "3bb88e776197f7986730c10af22bbaac3de27496471e5e1a93ba46fe6f3e1d94",
+      "delta_sha256": "05c2988bbbe22c487e8ffbcecad7a03f911f23afa09607b98bc47b217e019ac3",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d2d63c8eabe822b3286ed195326d0b08bc1f1dc073ccb36ab64edde5f360a041",
+      "method": "peft_safe_merge",
+      "name": "layers.10.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "e90e9b1c68d17de5b1b076010d07f65c3566f5cb2c575acf1c17f60cb98a0743",
+      "delta_sha256": "f3bfc08459ba38273a35492977cb9ac1a6fd65f7fe77f7489d0757b63181c30c",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "801b5721a436fddcdb555e94336ef40025779dd7b5fbbc99424e06801defc756",
+      "method": "peft_safe_merge",
+      "name": "layers.11.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "71e61ee55ac534cdada5c7901cae45f42902baf0c9a9f135e5cbd498b4ba6b88",
+      "delta_sha256": "b0f7baf453ecb11a809f687d391c42de0eaece2a6f8787d70a4ad095c0be756f",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f75658ff1f98943dc24a7f9b1e3d0a9875b9523da6b944b115e93f869a27ef45",
+      "method": "peft_safe_merge",
+      "name": "layers.11.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "a55c14c2dfe531cfa4527e4b987ae7b19c4ab5ddd7b75850972f9a8146a47ce9",
+      "delta_sha256": "71eebd2e4c020f1bb497c076b3a713d0d1896e718942ff1e05231fff6adca3e9",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "158674fa4e4e8438f0412814212cba288e6fd66cfac8736c9f52eb6f8a48a9ca",
+      "method": "peft_safe_merge",
+      "name": "layers.11.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "8c68579ccaa70698973e6f2251342c4e5be0517f28e61bc1b03e87053912f121",
+      "delta_sha256": "8bcd53fc6feb2468e4eb50231fb5a76815f19ff5f0a46026081dd03485b163ca",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "97cefdcb237b70b64e2545ad76953433c7f0f407fe78d0c6be51b85b2b53e1e4",
+      "method": "peft_safe_merge",
+      "name": "layers.11.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "9e988d3d5fc85750b24a069e7a21b27b66f2295b7c49881041476714f5619625",
+      "delta_sha256": "0c4b4b63eaa725d998ed6d136d98369f5acaca8d7c5e940c9bbebc66793393be",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c6a69e17051318e34c0d1b20faa9447e66149fd4356b54f6b9b62af18dd5269f",
+      "method": "peft_safe_merge",
+      "name": "layers.11.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "fad0205ded5fad4e430ed71770d6130ea692f831b97c2992fd9c84ac5cc145ff",
+      "delta_sha256": "2ba72ae111930e1b1e8702791f7ac825dfb8538558ecc86b2960e4581bf75f59",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "2228a9744af68e121b161281098b5596d58d548a8c060215af1af2af9aec97fd",
+      "method": "peft_safe_merge",
+      "name": "layers.11.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "d55dbe84214d7c4b2c66b06e792ca84fc3a5f7ed594aa51c73da51442f75e880",
+      "delta_sha256": "6359ac4649c0dd6d79262a4106b691b2714a50146542981e4d81bcba04766caa",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "6437c7e89f268a5a4c94c4c1ea855452fed5ac29d3d9f1dbf094a236c18f69fb",
+      "method": "peft_safe_merge",
+      "name": "layers.12.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "6a054bbee3c254b33d0f6ea187e0bd79994a71ea2e6ffa3edcdf0d4b0edb2345",
+      "delta_sha256": "f0efa2cc8fe4641d205bafed39a612cc758f13cc17909fb451a4ad7e5e2c0146",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d573b9c230295d23852e5b5958e7e2fa7652219182fa4691a2b129399d78e61e",
+      "method": "peft_safe_merge",
+      "name": "layers.12.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "4ba87587eebcf7a053e17e9f3e2b07f4ab305d34dea9ccdbcc175ef215ee5a27",
+      "delta_sha256": "9a7fc3744631846780e263bfda85db71cb56d36bf7d4da10e4cebe1439342b38",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "4934abf79461bc6e64b3ffa19b28dcd74928f6db4fcbcc71c54ee9285b9ac07d",
+      "method": "peft_safe_merge",
+      "name": "layers.12.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0915921a793547287a4e1f21fc94deedf8f1fd23db72ee0957906c22020ecf7c",
+      "delta_sha256": "5ca55a58a52915b249cebc98bbb45f5fc580877f9347fd531d3a91655d4730ee",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c542ce300259fdf6941d9aacb70adf57d13db94dd94c3b175125dceefae3088d",
+      "method": "peft_safe_merge",
+      "name": "layers.12.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "4e4883ee6d5147f8b0eb838b22cb0ce9bd23250732acf31174456a2f176ce5a8",
+      "delta_sha256": "a6b87888dbe0ae5c0668b4b7fd6fc7f8fb5a36cd86af13f05c118c2a5e831ac3",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "6ab90646cb951f17c3c2f72d38e4bd7312a8d16d3dc2975a8836a77a4e056cca",
+      "method": "peft_safe_merge",
+      "name": "layers.12.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0f4a2ab65912e302b222326d17301f6979910c80dde44e8889ba5dd496d9df31",
+      "delta_sha256": "d178792c3d8b8dc9d200092a1bdaa64d488c16cc12b5cbb55f23aea4a20e9bb3",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0a0148b38dad424f074fb6e3d68cdab9baad1d1aad175fa00f308eaacc84df7a",
+      "method": "peft_safe_merge",
+      "name": "layers.12.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0a5fce56dd85872da55ccbf926fb1d2e5f7793ef8e9842babeb44945302ca909",
+      "delta_sha256": "cb4c2f8808333b2408f53042924448e4ef5f5e83fbed0661531dbd3fc9d825d7",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f6fafbcf3b080d8f0aa7c7feac4bed03a1f302d8299620900b1017381ca9826f",
+      "method": "peft_safe_merge",
+      "name": "layers.13.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0a9b84c4724c4f89415bb43c4db8531e00e71d04171a9083e58b378df48ec196",
+      "delta_sha256": "e3aad470542673ae888b26dffcd58c42282717f5b4d7e2335b47786fefd9b634",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "855f3b21c79113c467a12963fec2a08fb42286e585115b483e5ad4a05889a6e8",
+      "method": "peft_safe_merge",
+      "name": "layers.13.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "75e43c1b723cbc9ed994422361353457a4bc7636997349cb3591b5d785072abe",
+      "delta_sha256": "9f907c9a1f0cbc46371db6b8af01d8ff49bd69e088d7a481935ac23d428d9084",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "91d54d2d5856ef9d88f9251a4a4488b1124ab0aa1af62dfdef91e508ff170619",
+      "method": "peft_safe_merge",
+      "name": "layers.13.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "6fc4a76fefa267e1fa6935c357b4a3d19e7a6be0d7ed999d98f25f2308a1c0a1",
+      "delta_sha256": "b33512eeb44dbf582028ff4e65d1a100f602bed1c561b714cd2f3d8ce5ad39f6",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "2b7a95326cbdbe2244cd4cac3b1414538515c88dd092e64ef746a3c00a809416",
+      "method": "peft_safe_merge",
+      "name": "layers.13.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "28541f395323b940c5572dc1281a37bb898e3de1a09b1a7495d343d957345aff",
+      "delta_sha256": "86e07a68e0b04c55eefdc87de041770320f0a1621b175083ee56cb79f156285b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "1f8f21baef7fd221d34acf7024cb770cf4fae6585523df27f4f0e9a2ea986497",
+      "method": "peft_safe_merge",
+      "name": "layers.13.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "327b26d8a25a7701ad83cc51dec31311d9458837e59cc4937da270e17d8d3b22",
+      "delta_sha256": "513d213ce7baa2425d80d927ffbdf9eea7c4e7c00ea5de47bcb40b228899ae25",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "557d20621ed4387944c153637433d8dca4f0a5542f0b4ba1ddcc113838b5df77",
+      "method": "peft_safe_merge",
+      "name": "layers.13.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "e3e03774f1849a2b225a84846845f9f34244e7f7e89d500f281b5b28a7570526",
+      "delta_sha256": "484e2a3f01d1731772d7de571b3ac62a723d78721d1a1beae391322a70ef2c48",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9e0e5e3ef08393dadf05e0e1f3f49b9c30096223ee1c4ca12e3e34ca38b56766",
+      "method": "peft_safe_merge",
+      "name": "layers.14.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "c991d3941093934141d41ad6ba260cfbbe6c99275ceab57d8ffa255c52444682",
+      "delta_sha256": "4b47a9bbfe065e46ba2f470add44774b2202268b1b26ca76bd6e337734578886",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9ea411c162f330c1ba800255975da328fdb868e5d1a1f3d7542ab4f326d50817",
+      "method": "peft_safe_merge",
+      "name": "layers.14.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "28d13ec34bedd2e9d2283a86b66e67818cbbf99bbbe4735034bb2e34443d5aad",
+      "delta_sha256": "1eea0d92fdda89b54e2c1cd769809fabce4b36771acf4d2f1541d4d19d44ac34",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0288fdfffc583ad3ebd5ca0317056c12566eb7ae50452313c4c58611e72c94b9",
+      "method": "peft_safe_merge",
+      "name": "layers.14.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "8909e7c6b564aabcda8fa7df36b0526dc763adc09d9219587a338287883ead45",
+      "delta_sha256": "d890f058c2a48a91e3f3e81ae06e180a0070e63d5d4355c820cfb14769f40a41",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "1c6e23cc0f600d624b9e420a6f14a392535b9f7d320a985f27cb21a11c61f76e",
+      "method": "peft_safe_merge",
+      "name": "layers.14.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "cbcb3632a8d587a8122a3c4e912b3c2fd5a7cc22e2252d78c5528d2ae31b9e54",
+      "delta_sha256": "7b400668b9c0ee51fb0884d12fef4faa098c119a22d1dee13b0bfcbb327a6c96",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "54b67441bfb370b5d9843d99d3049ae5eaaae6e2e1136542191f961fd25878a8",
+      "method": "peft_safe_merge",
+      "name": "layers.14.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "783a1f03863fb95fabb906791a4b2cb029915f37200c90e97c2c6e31e9f5f95f",
+      "delta_sha256": "0c90941de2a14292adf3c9bd626c81b89b9410ef75e57ba502253149d45ef233",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "b79caaa7c1486fa9a76875c8136cb3d0c579f9f2c2ef0ec9a70a61d4cd9f9471",
+      "method": "peft_safe_merge",
+      "name": "layers.14.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "f1193a79f64f2fe1c76a7523d4293f7785391824a874d889481ecb3f5aa38e91",
+      "delta_sha256": "c4a2a99ab75b4bce30162d9a94139dcbd73e81bb37f74cbddec7a8b2a6cbd0e1",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "afe9ce28a6deea5508685b80d49c7f5148229d8d32baa97abc0faf0a444c3837",
+      "method": "peft_safe_merge",
+      "name": "layers.15.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "675aa9be00174235b4d750ef8eca6035df89dd7a8651e2cfd8eee794314f1c5d",
+      "delta_sha256": "be3f43ab33e922e75d33b1c47e653e12ed1a910351c1ab4105d82980e74fc571",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f1b484d1370663e40a4fef499a13ac7d4b1ec4674800855544e5e41d738d1637",
+      "method": "peft_safe_merge",
+      "name": "layers.15.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "dc5d062b83d9556524a85d64736f1803b2e299a85137f400376afeb7b89a6831",
+      "delta_sha256": "330399d124a275ea5abcd960d389e0e9963257083e8dcdabbed92128e81da5fd",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "8ce8925aa61e361d832e86832590682f7af294ec7b38cc73178c800e34668768",
+      "method": "peft_safe_merge",
+      "name": "layers.15.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "3b931c2ea5451c2e33f2633dd416012f193afc84b1961309f541535b1d0f8c69",
+      "delta_sha256": "03cd40aefdca46293b92d2ad3b8ad03601aca090b80380bc0de242e7803eb456",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "647ffe897d00ef08a677b5816f5cf5ac09b2368781a29417bff33f0154123df2",
+      "method": "peft_safe_merge",
+      "name": "layers.15.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "a4a9199059aecf4ac165717d96573087862f2fe395648c16f2fbed184a62ad47",
+      "delta_sha256": "7a029e7d22e5ec8514d1daa6ca6cb0129d6a1b7bf42ba3d45d074d621bfc6735",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "5ad1055a298ecf4cc5df45afa8b10ab57952d33740e0b7d462c852d7c13e124e",
+      "method": "peft_safe_merge",
+      "name": "layers.15.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "622c5f0380f03b938fd1743bf0bf0d1204509f57322279f1526f6f0e454441e4",
+      "delta_sha256": "ed63bd69a82e7cdd77f069964f2432b48d7b361b14c51d6a9a785dde866ea088",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "246c260452f47c14d749595310c5c30448069f598ceadf350c74d5a02d1dab8f",
+      "method": "peft_safe_merge",
+      "name": "layers.15.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "5cd926b08a71511d3b559141ba0cc440400ec2136c5cd544c1e0898892132c2f",
+      "delta_sha256": "2409372cf0ae6aa6678668d6cf30680a657b54394680a7b40f1c9f7523bc7d9a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "4145714a388fc593dd565171d538157e69e60a2512b9609d1d409af7dfb7589f",
+      "method": "peft_safe_merge",
+      "name": "layers.16.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "3afffdfacc83a0e0b46ccfa2f209541e4a26b4a92211e8c8e7aee7a28eeb5120",
+      "delta_sha256": "60456f560bcd167e7cd8bde6b77bf3b4a921bdd8c87b601db32ada2ca476ffbf",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d3fbc069fdd0076ca2f262726b2410ff2766d47e5a3e1db9718d4d4f42ea38cc",
+      "method": "peft_safe_merge",
+      "name": "layers.16.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "1facdf9c10c1a27e5232e63eac1572c73196fbb02593e38f8c023db56172ba43",
+      "delta_sha256": "50277813ab8575abf29042a9053e792b8f98386cc063a927ead6ee8df2b95613",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "9f361c4ed68f6d942b2edfa2029ade9c80498dedc0566fd801d34be77b2748a6",
+      "method": "peft_safe_merge",
+      "name": "layers.16.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "fdca832f4d2b94b6cf2c895be9dbf5794fa985802c58d9551a4276e33125f755",
+      "delta_sha256": "1ffd9ed52a8144f2be5c40f03c77c6ac3dfb482d637204a17ba92602b111e76b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "fcac3a85c391acb80cc567b9775e2966c97b3354758cac0fa7eb6de31d98c672",
+      "method": "peft_safe_merge",
+      "name": "layers.16.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "92677420548a82471f0c76954d668b5fb4b4f1dd67a89239d299a079f327df62",
+      "delta_sha256": "604c2dc7b190dc087bbc818bc7ce6b00c2e82c0bfec5f34138de24de810be5e7",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0e071035a4e8bcf9b1b25f3003bf9b4817b74bd8a3f99f147d52886ea7cf7637",
+      "method": "peft_safe_merge",
+      "name": "layers.16.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "8a8cf053aa988372108e9e8939e1b7a4e6d59d118bcf148973c44f526b098af1",
+      "delta_sha256": "2fd7b55428e61de67f665f5a30cc809a91e758fac7cf7855af09f41f53db4b21",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "c9c9b7de49f40056cc8b3d5f9d0eae598c5f13f93ce7cdb31fe7612a42a274a4",
+      "method": "peft_safe_merge",
+      "name": "layers.16.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0d8fa810f45454dfeaa73eb9fc2d660a9758d98f7a78a0d312dafe811f4682f8",
+      "delta_sha256": "78c498eaacc5caf1ed19aa568a65aeabd9846484b559714f39745061aec5a217",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d5d739fd98f62f1cb1cda7508379b9eab17b1809e27280200252c2e2473e833a",
+      "method": "peft_safe_merge",
+      "name": "layers.17.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "c460223b51067f040cfdddd9250fee87f3b6891ad10d491c9d2c96353fb0b1f9",
+      "delta_sha256": "424d6f97c2bb7414ae08c2332ffe9a4af7d7e9391027f73f0841c3cb7f33391d",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "aad1a9129152261c90313082ab7777f165bf0478e9023fe4a5d9e854378d4a7e",
+      "method": "peft_safe_merge",
+      "name": "layers.17.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "91f108829cad2d6875e1514debb15791d398f06e5562f061f6c78bc44119b08d",
+      "delta_sha256": "c11d7c5eea1cc5a6e8f37d78c564dac20a873de1c8c012581e6726d1d3f270ba",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "3eb0a8680a536ea15e511dc51c906e0a1c5ba8fadac0d24e479e85aaa2e6a4fa",
+      "method": "peft_safe_merge",
+      "name": "layers.17.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "d51e052694c66e3d78d7f10e4ec520e87fd950a12ae6fb8b3c13f17297aeedca",
+      "delta_sha256": "840a4331db6f0e2efd94da262935cbba31ade0802b47da9fe8491ea21a0198ae",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "ef67a362be5829a68aacfd99379be8ad81b193c05d94e129094f2af65ae17f71",
+      "method": "peft_safe_merge",
+      "name": "layers.17.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "f4295420c92b9908af3e1fa3f9b0ed43ffc9bdfab5a1ccb2e43f82d3b98f439f",
+      "delta_sha256": "f256731673651513f22d714a68881af25aef1dd3e857432955ac67e176e553db",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "080a497c79e32b624617c506c88a457da323f8787ce3f085ed8a20b77a4c7cb0",
+      "method": "peft_safe_merge",
+      "name": "layers.17.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "5200d14859e6718f1a87476c19f58ab5c114b2603b93cfd721972a2fa2ed540b",
+      "delta_sha256": "f9f314af66e2bcf1a61cf9f056824ae56dc4f443e99837d08d10ed2b5c0ae6a2",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "febe40e6f905ef297562fa523ba9a573ce2ac9c3ef57ff88a5cb0adc3408293b",
+      "method": "peft_safe_merge",
+      "name": "layers.17.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "5b7a2978072219f7c3566db6f79c68d9720686b4b9a47327e2e1efdf3b81b126",
+      "delta_sha256": "07b9b56dc424848bf2aeea72342a076ee1e9a138175bfbffe0714be4864d505a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "3f17015f28c5a17356b362be477b55ce83a1aac26b61d746e5b56640352ce0ce",
+      "method": "peft_safe_merge",
+      "name": "layers.18.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "b4b5c300ff886effbf6b92dfa019fd8e07a5ebea9275ef3e3e3dc861346afc4a",
+      "delta_sha256": "461f02f8cc21de45d110f72a62fc7c1a5102b3c69610447ce7ee7c3ff7a534c3",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "8c2481f69bc33df8a41f48a7baf46aa0b6bafe3a4c9a01cbb40761b5d73966a6",
+      "method": "peft_safe_merge",
+      "name": "layers.18.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "a745fc5633d67033380a81bc008d0d092999487ad7e761f63e510bf03352dd3a",
+      "delta_sha256": "cf53b2b5f13b63e6d24e398fe06bacba4f3347f081b0140a1c745d214119f1eb",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "5179f4b37792edaa7042d8a5151a7ce75294b484d711d2e936c7dedffb7ad524",
+      "method": "peft_safe_merge",
+      "name": "layers.18.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "5ba3c6afb3ea0a0e57691782cd10ab006815c577a9d812d0267578f5384ac27a",
+      "delta_sha256": "c99c30fe8f3e4ac7d2d9673e5fad08229cd4fc2b15e7090dce189fb40068baf1",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f6e200c5676ad816b2b16f000569442339186953b6c451b86dc4132d0e8483f0",
+      "method": "peft_safe_merge",
+      "name": "layers.18.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0784c682322beaa9698a6f4b9016e82726c71b4411ffb40de0faa544733d050b",
+      "delta_sha256": "744e74ba2335627a562fde20b1c8723a52a157182434f90fa65cedfcc3384b9d",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "a0928918e18065796dbe7036ea4892e047f1601d9a4042eedc27ebd8e6825187",
+      "method": "peft_safe_merge",
+      "name": "layers.18.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "30d544f2b643d5a048239e734353c5f81ad72c6b2bbce380f125d6c04b8f4acf",
+      "delta_sha256": "2750b8d6ff7cd09955091123a348bf822eb2f7fb17d8ae3a500d525c31870b2a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "139107cedeb8a795487fa905d9bd8ecfb30281892a88431186e91c9131c2458f",
+      "method": "peft_safe_merge",
+      "name": "layers.18.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "6465cbbb29e095ca58377ba25868de87f12c33da6940fe6841d1be54eebfd8b0",
+      "delta_sha256": "183f5ce3b0dfe1792253e791750f474cec6477767e739eca6e371d072cfcdd04",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "b87c39fdd6e3f205d06d164f2af612030430dadbb61a1bb52043092bd9c766e4",
+      "method": "peft_safe_merge",
+      "name": "layers.19.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0259b3f4bbcb3b4145fc6f25041ffc32ec8484f1492932fda34fb6e4a27513e7",
+      "delta_sha256": "8a51b105c794736c7a022a8587a12cf01769ad1e49c755953c14f1306e32041b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "6c7a87519e4bef1a797cc3623f110b77effbc91528b4b97cbbd542688ae138ad",
+      "method": "peft_safe_merge",
+      "name": "layers.19.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "49aec8e1b1ea075d8b76094e56875b0641da477cbe92518828cc45281010caff",
+      "delta_sha256": "4cd279832bcc9c94cf1e6d39cc1257d75ff8af7e853e571538aabf300bc50c01",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "e50048c31b923480aeaa803e24c54e5c4e4679aa00332e8a548f39bd1077ec15",
+      "method": "peft_safe_merge",
+      "name": "layers.19.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "2740b22eb7ae45b6d3f883f4b43834dad1bd9ae43179b4bf86738e778f46f457",
+      "delta_sha256": "ca0a06df7da0ad6e8d5be01a0494b98d61a5bc8a5d61c805cd984faa54c6418c",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "771cd17ba9277f06da0ace2495b1a3bbe147aa4fefc74b00dbd33e2631f62355",
+      "method": "peft_safe_merge",
+      "name": "layers.19.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "45dc426d172a45c31212f51e2dcad68bdc60b2240b084bce0556bd9cc0077b96",
+      "delta_sha256": "97e3d6f118851499a1cf43ce5a7125cd120536ed6cd7eb23c718c6dcf0f08315",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "2e8a8b8c49371dac5d16da98821ebdecec1dd5c1117a1f4ea6e57ac0dc14364d",
+      "method": "peft_safe_merge",
+      "name": "layers.19.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "4bddc1bafb1f2cf1fbacf6211ab0d5e442bd96413c9a72c4cee844938a3df0a5",
+      "delta_sha256": "1170125a8945ffaa4abe6ea03724ec1933eec087a015565b06ea29a0df33ca05",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "52ca09563731e737adf4ecdb6cd6470de237c5026de1de02fa753ff7a8983e10",
+      "method": "peft_safe_merge",
+      "name": "layers.19.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "d22a9375bfa04d1a7232437d35fc577ec37903b58fcdfc912667c96fa4f33d2b",
+      "delta_sha256": "d9cb0fe162d4e208bfa6fd7b757546b5e7ac92fa54efe6784bd6a02d226d72ec",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "fffb9a0acacfd97f57bc479de10d68ee9796f91cfc10a377bf6b74083961b1dd",
+      "method": "peft_safe_merge",
+      "name": "layers.20.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "1ea9973e253ff95982e2dd631d78275291b24c7ffc890ced2725138c64fbbdbd",
+      "delta_sha256": "0ee2b69c9e5f9e102860e9a40134bb5e7bd5eb7491997a5dcbb6507ac61decae",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "b74e8918dbb9f2d5a5d72698c34f28d318c2d48836f877274e7402a0c0dabcbf",
+      "method": "peft_safe_merge",
+      "name": "layers.20.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "f9917f2f87c2e80406a1548249551fe881c10fbfaf8daf5871a6a8b92bc4fc8e",
+      "delta_sha256": "abafd3be69b76350880e3e72333418535df32244ffc2cb4cca0010fcfdf0911b",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "be2bdd69f81806cad443a6d3915a8d2c991579c5ed90fc6cc609ed8f53de382f",
+      "method": "peft_safe_merge",
+      "name": "layers.20.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "09b2dc53965d6bd6de3d8700a552119506b56aa44053a630249d35805744c307",
+      "delta_sha256": "7c0d1bb40c9bb0fb6814c820d85aee49bc1fe5aa7ea9ffd596f5d9731ff74c64",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f3ba3ca8bfc6eb856eebfb7c98e1ca32c837bf514dcd4323801fd479010bf740",
+      "method": "peft_safe_merge",
+      "name": "layers.20.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "2007498a7ac3f248fa8d922f872aedc4130638bae6caeeccf386afa15df94b9c",
+      "delta_sha256": "c0d0f5e78862b85c475bbec7395e3ec501baca98a997275d4a449ebc15974826",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "f8c4c300c8f69bd6b864ff716721059eb2c9136112c1742ded84d091ba48329c",
+      "method": "peft_safe_merge",
+      "name": "layers.20.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "dc003f074c6d736e2e9370e6cd02e4405c31432b431ff643f9c646661492214e",
+      "delta_sha256": "73a3720e4a907f39d167f5bd8d2a403de264ddc6c18996f1e265dba0d898bd48",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "ff18ebe5b43ed5e38d2ffa564b26bbf5b9ca6a2aa40ca3156ffb25574b888fe2",
+      "method": "peft_safe_merge",
+      "name": "layers.20.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "8c2ec42bc7b714bc4358e712332333f2d4af81d2ca81bdad8d8950cf1a5fa62a",
+      "delta_sha256": "2a972949d678c59078b67a16b9a7768e2a7b09a7fee811d98d7dde843562d4bf",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0a717962196834981099ffd5affa58df6b5115718c24881c251d1cdc153c02b6",
+      "method": "peft_safe_merge",
+      "name": "layers.21.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "8e073dcfc3befd579975ab31262e0a57f37db318dd8b6c1208c96f854f1a2d33",
+      "delta_sha256": "899b00ac73efae1c386484b349b1b5ad30158768088ddd5ac72a346f6ee20ea4",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0964442859911ece8d6db891b9486403611b731a0aba53161380573e1d411cad",
+      "method": "peft_safe_merge",
+      "name": "layers.21.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "ac4558b5d7efe19293afbf1b30c7c4c65ea34c4648762194fbf2bd1ebc22f409",
+      "delta_sha256": "e69a51c70c94ddaf85065282e4b56e707f524f32aff47efdf6ce905219751a4f",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "cb63f66be3ca6a25bc8dd6f03f69d8e6496bb17768bc894d4883cb4e9e07ed69",
+      "method": "peft_safe_merge",
+      "name": "layers.21.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "c2fc825d62359400452dc1ead12348ec77200f6b94b4517a7e5387a4dbf9c1f5",
+      "delta_sha256": "7c293e565fbd0a2d4572e443ba92992a23043bf8024c3516a42f31b1fbc303b3",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "ea0afcc1b07b7914e5f0095f55f1e760f85023f35ef8f0994c7686ce0a56e42a",
+      "method": "peft_safe_merge",
+      "name": "layers.21.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "6f2d14b8537689a1e64b58b2bd305a4ccc0de8043d67b2b6fba9f11f3e6f3173",
+      "delta_sha256": "51dc58f981d282c66eaff3f05e84c646464a9588db5152d3e8b90a36ee40d38f",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "00f3970863c284343550f72a6e56e35d7a3ba1b44783e246ea71b8d507df14b0",
+      "method": "peft_safe_merge",
+      "name": "layers.21.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "d96d6adf68b59d3c0c6026bdd074d9ba56267c75cb03ccfcea286b2ce43576e3",
+      "delta_sha256": "d0cd39530c7b81dadf964a4de9e6e2bfb386bef6c57a6c1da9c189f7e219da0a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "b7f25c0bd0b5f027704bd569a72fb2f4cb5fa8b8a6f814399576be6d5e3ef66b",
+      "method": "peft_safe_merge",
+      "name": "layers.21.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "869b57c0f6f4eeff3480fc0da340d3e085b1e485fe4ea60f94337fc039d6f412",
+      "delta_sha256": "f8a1de1e5526fab4f0ca79cf4565a0d94090343a310f6729fe271edfcb4418eb",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "d1c7939811f42d199ec549693f9be3dcf797d61f6e2b53a238fad06e75e5c60f",
+      "method": "peft_safe_merge",
+      "name": "layers.22.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "0c24f3dbc5010044cbe6ad5021ae91b5ded926a2d312c847f49ad2d7cb602b9c",
+      "delta_sha256": "93e5f6ca9437309765ba2a089dfd80bcbacc5a5e7abbea92fad60bc9dfc6aed9",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "399b8eaf9afc53285d90d4b574ec7090653b296bae28f89030e5bff71847028c",
+      "method": "peft_safe_merge",
+      "name": "layers.22.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "38fa748936c7a71b985be714584d660e3560e2900543ddb96f008a6bd69418e9",
+      "delta_sha256": "7b1b3ecb4375fe0085c0fd7e57e8b49b3326485c35c04342607f471e2a40dad6",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "0729f2b440eaae07b3ea8369b7d9599487e252217bb626ad4ad2cb8abcc99e2c",
+      "method": "peft_safe_merge",
+      "name": "layers.22.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "21ce869abe109e12ff3ca2ec24381dac7b6489b755c1e84ee89c26ada3c7b060",
+      "delta_sha256": "09f6151a27bb2f07b5220a99bb000c3df3e3c08da58098ab970b506a7040596d",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "a8f9e7c6b3e077804827ca29dccb34221028ce029d218c9c32f41ed59e006c30",
+      "method": "peft_safe_merge",
+      "name": "layers.22.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "ea5d4ee43f58acd7bc6329ae2c99c168fcceabd1a1f045f56b65bd6cb307c350",
+      "delta_sha256": "1d21604abd25f4402975525a051ecd33aa33f250db740ed10c375542e6c3b3e0",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "ef1fe85ec17e7941304946b1cf76639ce876344bc48f50b11ca2cbe9ec0b9456",
+      "method": "peft_safe_merge",
+      "name": "layers.22.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "6b5981a2e41c2a0b4d75c3115d47b8275c600942a0ca221dac3f8cdac3fc5c4c",
+      "delta_sha256": "2004ce6cfb737e22fafa0e52e20e0993685bf55d1c26dcd433060e7b4e0c5330",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "42973386ac5b1f6b2919898512140a97f1778413c6ef09a6fafa1e7168c88cf2",
+      "method": "peft_safe_merge",
+      "name": "layers.22.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "fb888b47a8363a106d5b3d47038dfcac41bd9919a2adbfeb64095d541b1372e7",
+      "delta_sha256": "6d5a80593ba8df4ac53e425b75473078f14ca50e07811e674d1481b066802547",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "e2acef5f7e2e1195da07f61c338acf07f81aa5fe50017dfe585aef3dfd109230",
+      "method": "peft_safe_merge",
+      "name": "layers.23.mlp.fc1",
+      "shape": [
+        4096,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "cb7ebf73c7cd45fdde44c0ad52d09eddc5b3584895a47713755b0d76b6a039b5",
+      "delta_sha256": "6b48a486583d9159193b3599a47edbdffcd48918ae506b82d447c0bd5af6793a",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "5019cb187a18a4083f55d74955f3365dc1e77bd74540a316b85b91d7e4db21db",
+      "method": "peft_safe_merge",
+      "name": "layers.23.mlp.fc2",
+      "shape": [
+        1024,
+        4096
+      ]
+    },
+    {
+      "base_sha256": "f83f6402ea0e35c17a08ab2915a510a29be52c9dfe707b939184e2f14209fccb",
+      "delta_sha256": "61e84787bb848ddae76111158bf479fbf07c3601c80e49511cd687dc97da0653",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "51a69074f13a16f5cb10d32fa09b8008eeb7514b9eb4a9368a815365421d0938",
+      "method": "peft_safe_merge",
+      "name": "layers.23.self_attn.q_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "00d5e66378b24cb865c951ce6c20db68f8f4cddfa223fe772aee58622cc5c112",
+      "delta_sha256": "cb199e42448f45314f526d167b35943897be6624d6d53462b3efa19b93adf35e",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "6ea5a97ac5da287be2d42ef95ef064273ad7f9f2aede947cda2037957ac542c3",
+      "method": "peft_safe_merge",
+      "name": "layers.23.self_attn.k_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "2d0b061704f969fcecf5837bd4b6a38e0758556dcf7facf80e7e0e34c5a217f1",
+      "delta_sha256": "dffe9e77621cf216e136d7c313581e5ab63b7283470dc2a1cbedccd460eef762",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "50c63ae107f3dd81bcf3608ff74725120d29cf36f3e460b6aee0a617f94f6d9b",
+      "method": "peft_safe_merge",
+      "name": "layers.23.self_attn.v_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "base_sha256": "e8e0690516f1d93b5e87055cb2a1465ef9ee8ac255ee89fdcd775b3009ca706c",
+      "delta_sha256": "7daa64fe06db0ef694ba1a967443aacf13a9b53de56ff7c4d64c072062b6797f",
+      "exact_weight_match": true,
+      "formula": "base + scaling * transpose_if_required(B @ A)",
+      "merged_sha256": "42257c505c013f08306fa13b50323abc81e78e3059811f3e17f9ac0fdc3efd76",
+      "method": "peft_safe_merge",
+      "name": "layers.23.self_attn.o_proj",
+      "shape": [
+        1024,
+        1024
+      ]
+    }
+  ]
+}

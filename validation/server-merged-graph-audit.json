@@ -1,0 +1,138 @@
+{
+  "passage": {
+    "constant_weight_transposes": 144,
+    "external_locations": [
+      "model.onnx.data"
+    ],
+    "initializer_dtypes": {
+      "FLOAT": 389
+    },
+    "inputs": [
+      {
+        "dtype": "INT64",
+        "name": "input_ids",
+        "shape": [
+          "batch",
+          "sequence"
+        ]
+      },
+      {
+        "dtype": "INT64",
+        "name": "attention_mask",
+        "shape": [
+          "batch",
+          "sequence"
+        ]
+      }
+    ],
+    "lora_initializers": [],
+    "operators": {
+      "Add": 289,
+      "Cast": 294,
+      "Concat": 147,
+      "Constant": 736,
+      "Cos": 1,
+      "Div": 24,
+      "Erf": 24,
+      "Expand": 2,
+      "Gather": 2,
+      "Identity": 97,
+      "LayerNormalization": 49,
+      "MatMul": 193,
+      "Mul": 171,
+      "Neg": 48,
+      "Range": 1,
+      "Reshape": 578,
+      "Shape": 2,
+      "Sin": 1,
+      "Slice": 96,
+      "Softmax": 24,
+      "Squeeze": 2,
+      "Sub": 1,
+      "Transpose": 265,
+      "Unsqueeze": 54
+    },
+    "opsets": {
+      "": 18
+    },
+    "outputs": [
+      {
+        "dtype": "FLOAT",
+        "name": "text_embeds",
+        "shape": [
+          "batch",
+          "sequence",
+          1024
+        ]
+      }
+    ]
+  },
+  "query": {
+    "constant_weight_transposes": 144,
+    "external_locations": [
+      "model.onnx.data"
+    ],
+    "initializer_dtypes": {
+      "FLOAT": 389
+    },
+    "inputs": [
+      {
+        "dtype": "INT64",
+        "name": "input_ids",
+        "shape": [
+          "batch",
+          "sequence"
+        ]
+      },
+      {
+        "dtype": "INT64",
+        "name": "attention_mask",
+        "shape": [
+          "batch",
+          "sequence"
+        ]
+      }
+    ],
+    "lora_initializers": [],
+    "operators": {
+      "Add": 289,
+      "Cast": 294,
+      "Concat": 147,
+      "Constant": 736,
+      "Cos": 1,
+      "Div": 24,
+      "Erf": 24,
+      "Expand": 2,
+      "Gather": 2,
+      "Identity": 97,
+      "LayerNormalization": 49,
+      "MatMul": 193,
+      "Mul": 171,
+      "Neg": 48,
+      "Range": 1,
+      "Reshape": 578,
+      "Shape": 2,
+      "Sin": 1,
+      "Slice": 96,
+      "Softmax": 24,
+      "Squeeze": 2,
+      "Sub": 1,
+      "Transpose": 265,
+      "Unsqueeze": 54
+    },
+    "opsets": {
+      "": 18
+    },
+    "outputs": [
+      {
+        "dtype": "FLOAT",
+        "name": "text_embeds",
+        "shape": [
+          "batch",
+          "sequence",
+          1024
+        ]
+      }
+    ]
+  }
+}

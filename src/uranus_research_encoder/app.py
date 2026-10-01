@@ -22,6 +22,7 @@ from .contracts import (
     EmbedResponse,
 )
 from .errors import error, event
+from .merged_onnx_backend import MergedOnnxBackend
 from .model import Backend, TorchBackend, runtime_name
 from .onnx_backend import OnnxBackend
 from .version import (
@@ -51,6 +52,13 @@ def create_app(settings: Settings | None = None, backend: Backend | None = None)
                         inter_op_threads=current_settings.onnx_inter_op_threads,
                     )
                     if current_settings.backend == "onnx"
+                    else MergedOnnxBackend(
+                        current_settings.merged_onnx_root,
+                        intra_op_threads=current_settings.onnx_intra_op_threads,
+                        inter_op_threads=current_settings.onnx_inter_op_threads,
+                        optimization=current_settings.merged_onnx_optimization,
+                    )
+                    if current_settings.backend == "onnx-merged"
                     else TorchBackend(current_settings.model_root)
                 )
                 await run_in_threadpool(app.state.backend.load)

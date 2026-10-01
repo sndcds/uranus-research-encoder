@@ -28,6 +28,9 @@ FROM runtime-base AS runtime-onnx
 ENV ENCODER_BACKEND=onnx
 COPY --from=builder-onnx --chown=10001:10001 /app/.venv /app/.venv
 
+FROM runtime-onnx AS runtime-onnx-merged
+ENV ENCODER_BACKEND=onnx-merged ENCODER_MERGED_ONNX_ROOT=/merged
+
 FROM builder-base AS builder-torch
 RUN uv sync --locked --no-default-groups --group runtime-torch --no-install-project
 COPY src ./src

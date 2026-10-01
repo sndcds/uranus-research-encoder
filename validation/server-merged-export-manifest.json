@@ -1,0 +1,84 @@
+{
+  "contract": "jina-v3-merged-f32-v1",
+  "dtype": "float32",
+  "exporter": "torch.onnx dynamo; optimize=False",
+  "exporter_version": "1",
+  "files": {
+    "retrieval-passage/merge-audit.json": {
+      "bytes": 75357,
+      "sha256": "cdf330bcea7c0588ddb41ed82735f1fd44d664f97f1453a0e330aeb264738d3e"
+    },
+    "retrieval-passage/model.onnx": {
+      "bytes": 6350470,
+      "sha256": "d728e7ca6f1fb96ebd58f197ac000e7bc63a2426537a1886bc8358a357cdf49d"
+    },
+    "retrieval-passage/model.onnx.data": {
+      "bytes": 2233278464,
+      "sha256": "3a2d9715e86aec888e2a1f8c4642307aafdb13276901c3a90b4b8d45554b7267"
+    },
+    "retrieval-query/merge-audit.json": {
+      "bytes": 75355,
+      "sha256": "f3ee657e0bd60b20a96dfb3be5fec75232616644df369b4619bd73ff54d8cfd7"
+    },
+    "retrieval-query/model.onnx": {
+      "bytes": 6350470,
+      "sha256": "d728e7ca6f1fb96ebd58f197ac000e7bc63a2426537a1886bc8358a357cdf49d"
+    },
+    "retrieval-query/model.onnx.data": {
+      "bytes": 2233278464,
+      "sha256": "3d653038a7c7be6d8176ff88e2ed535c6d63b7bf7197c13c9ad790d15ac41c21"
+    },
+    "tokenizer/config.json": {
+      "bytes": 1387,
+      "sha256": "eca540587675363a0648fb52e46c9d4e5174e777b35cf857565488db4d189c45"
+    },
+    "tokenizer/special_tokens_map.json": {
+      "bytes": 964,
+      "sha256": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835"
+    },
+    "tokenizer/tokenizer.json": {
+      "bytes": 17082756,
+      "sha256": "f59925fcb90c92b894cb93e51bb9b4a6105c5c249fe54ce1c704420ac39b81af"
+    },
+    "tokenizer/tokenizer_config.json": {
+      "bytes": 1148,
+      "sha256": "e1bc77da5b90ba65b47aa8bd776c6317f47d50dc6717e92b10177686b3b8f161"
+    }
+  },
+  "opset": 18,
+  "release_parity": "not yet validated; run compare_backends.py",
+  "source": {
+    "repository": "jinaai/jina-embeddings-v3-hf",
+    "revision": "d18862d9a48706220815554fac3ebb4dfa46fc28"
+  },
+  "source_sha256": {
+    "config.json": "eca540587675363a0648fb52e46c9d4e5174e777b35cf857565488db4d189c45",
+    "model.safetensors": "d6963495e160ad49efe4e82afc7a3ba3f03c7ccd27af97ab845b6c52d8768545",
+    "retrieval_passage/adapter_config.json": "e6e00c1cd3affdc22331cc3f466d417e869937d925e05a73666ded779386dc05",
+    "retrieval_passage/adapter_model.safetensors": "b3483926d79143fbc21719ebc955d6ddb063d522c8993b886000ff24cf6bf15a",
+    "retrieval_query/adapter_config.json": "7a1e28ae1ced095b4cab180231d003048bf19b162ba6355d16675bde23391b7b",
+    "retrieval_query/adapter_model.safetensors": "5b55dd1322ab7d62e62e3ee7626700b8e3d3e63238dc74fc2bb816542366e0a4",
+    "special_tokens_map.json": "8c785abebea9ae3257b61681b4e6fd8365ceafde980c21970d001e834cf10835",
+    "tokenizer.json": "f59925fcb90c92b894cb93e51bb9b4a6105c5c249fe54ce1c704420ac39b81af",
+    "tokenizer_config.json": "e1bc77da5b90ba65b47aa8bd776c6317f47d50dc6717e92b10177686b3b8f161"
+  },
+  "tasks": {
+    "passage": {
+      "graph": "retrieval-passage/model.onnx",
+      "source_adapter": "retrieval_passage",
+      "task": "passage"
+    },
+    "query": {
+      "graph": "retrieval-query/model.onnx",
+      "source_adapter": "retrieval_query",
+      "task": "query"
+    }
+  },
+  "versions": {
+    "onnx": "1.23.1",
+    "onnxscript": "0.6.2",
+    "peft": "0.21.1",
+    "torch": "2.11.0+cpu",
+    "transformers": "5.17.0"
+  }
+}

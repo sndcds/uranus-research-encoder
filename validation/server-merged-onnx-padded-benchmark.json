@@ -1,0 +1,346 @@
+{
+  "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
+  "machine": {
+    "platform": "Linux-6.12.107+deb13-amd64-x86_64-with-glibc2.36",
+    "processor": "",
+    "cpu_count": 8,
+    "cpu_affinity": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "cpuinfo": "processor\t: 0\nvendor_id\t: AuthenticAMD\ncpu family\t: 15\nmodel\t\t: 107\nmodel name\t: QEMU Virtual CPU version 2.5+\nstepping\t: 1\nmicrocode\t: 0x1000065\ncpu MHz\t\t: 1996.249\ncache size\t: 512 KB\nphysical id\t: 0\nsiblings\t: 1\ncore id\t\t: 0\ncpu cores\t: 1\napicid\t\t: 0\ninitial apicid\t: 0\nfpu\t\t: yes\nfpu_exception\t: yes\ncpuid level\t: 13\nwp\t\t: yes\nflags\t\t: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm rep_good nopl xtopology cpuid extd_apicid tsc_known_freq pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand hypervisor lahf_lm cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw perfctr_core ssbd ibpb stibp vmmcall fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt clwb sha_ni xsaveopt xsavec xgetbv1 clzero xsaveerptr wbnoinvd arat umip rdpid arch_capabilities\nbugs\t\t: sysret_ss_attrs null_seg swapgs_fence amd_e400 spectre_v1 spectre_v2 ibpb_no_ret\nbogomips\t: 3992.49\nTLB size\t: 1024 4K pages\nclflush size\t: 64\ncache_alignment\t: 64\naddress sizes\t: 40 bits physical, 48 bits virtual\npower management:"
+  },
+  "load_measurement": "fresh process; operating-system file cache not flushed",
+  "batch_behavior": "padded groups of four (benchmark-only)",
+  "thread_comparison": "Torch benchmark uses 8 intra-op threads; production Torch remains one thread. ONNX settings are separately labeled",
+  "rss_measurement": "process lifetime high-water mark; Linux ru_maxrss",
+  "results": [
+    {
+      "backend": "onnx-merged",
+      "runtime": "onnxruntime-1.30.0-cpu",
+      "load_seconds": 29.581402918091044,
+      "intra_op_threads": 8,
+      "inter_op_threads": 1,
+      "cases": [
+        {
+          "kind": "query",
+          "target_tokens": 32,
+          "actual_tokens": 32,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            0.1301491300109774,
+            0.12751362193375826,
+            0.14969106996431947,
+            0.13431506184861064,
+            0.14485670602880418
+          ],
+          "p50_ms": 134.31506184861064,
+          "p95_ms": 148.7241971772164,
+          "texts_per_second": 7.283049713493054,
+          "peak_rss_mib": 3586.87890625
+        },
+        {
+          "kind": "query",
+          "target_tokens": 32,
+          "actual_tokens": 32,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            0.4248068949673325,
+            0.4305815699044615,
+            0.4966874970123172,
+            0.5213691729586571,
+            0.47429859498515725
+          ],
+          "p50_ms": 474.29859498515725,
+          "p95_ms": 516.4328377693892,
+          "texts_per_second": 8.518817341902079,
+          "peak_rss_mib": 3586.87890625
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 32,
+          "actual_tokens": 32,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            0.18188711488619447,
+            0.15723848179914057,
+            0.14657652005553246,
+            0.16033252305351198,
+            0.1526893600821495
+          ],
+          "p50_ms": 157.23848179914057,
+          "p95_ms": 177.57619651965797,
+          "texts_per_second": 6.2599846765252165,
+          "peak_rss_mib": 3590.1953125
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 32,
+          "actual_tokens": 32,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            0.45495706610381603,
+            0.47795971599407494,
+            0.4783975398167968,
+            0.4572666941676289,
+            0.4534841529093683
+          ],
+          "p50_ms": 457.2666941676289,
+          "p95_ms": 478.3099750522524,
+          "texts_per_second": 8.613022695088546,
+          "peak_rss_mib": 3590.1953125
+        },
+        {
+          "kind": "query",
+          "target_tokens": 128,
+          "actual_tokens": 128,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            0.44423107290640473,
+            0.428084849845618,
+            0.40034118108451366,
+            0.4675114620476961,
+            0.44834730098955333
+          ],
+          "p50_ms": 444.23107290640473,
+          "p95_ms": 463.67862983606756,
+          "texts_per_second": 2.2846533012083277,
+          "peak_rss_mib": 3590.83203125
+        },
+        {
+          "kind": "query",
+          "target_tokens": 128,
+          "actual_tokens": 128,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            1.6145494559314102,
+            1.548616232117638,
+            1.5570989730767906,
+            1.5598123709205538,
+            1.725241333944723
+          ],
+          "p50_ms": 1559.8123709205538,
+          "p95_ms": 1703.1029583420604,
+          "texts_per_second": 2.498339114777212,
+          "peak_rss_mib": 3590.83203125
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 128,
+          "actual_tokens": 128,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            0.5241040149703622,
+            0.6191678310278803,
+            0.4758289728779346,
+            0.47883607004769146,
+            0.46916574495844543
+          ],
+          "p50_ms": 478.83607004769146,
+          "p95_ms": 600.1550678163766,
+          "texts_per_second": 1.9477211132919665,
+          "peak_rss_mib": 3591.40234375
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 128,
+          "actual_tokens": 128,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            1.4351172409951687,
+            1.573832576861605,
+            1.7370680819731206,
+            1.6318801590241492,
+            1.6951116940472275
+          ],
+          "p50_ms": 1631.8801590241492,
+          "p95_ms": 1728.676804387942,
+          "texts_per_second": 2.4773907888334232,
+          "peak_rss_mib": 3591.40234375
+        },
+        {
+          "kind": "query",
+          "target_tokens": 480,
+          "actual_tokens": 478,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            1.4980656849220395,
+            1.6834814918693155,
+            1.7242110799998045,
+            1.6285901819355786,
+            1.581675800960511
+          ],
+          "p50_ms": 1628.5901819355786,
+          "p95_ms": 1716.0651623737067,
+          "texts_per_second": 0.6160651881188411,
+          "peak_rss_mib": 3591.40234375
+        },
+        {
+          "kind": "query",
+          "target_tokens": 480,
+          "actual_tokens": 478,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            5.157064517959952,
+            6.234628470148891,
+            6.233035781187937,
+            6.063473935937509,
+            5.869355667149648
+          ],
+          "p50_ms": 6063.473935937509,
+          "p95_ms": 6234.3099323567,
+          "texts_per_second": 0.6766458767678962,
+          "peak_rss_mib": 3703.16796875
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 480,
+          "actual_tokens": 478,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            1.5136824608780444,
+            1.4910597649868578,
+            1.5708092730492353,
+            1.5309305279515684,
+            1.3488191370852292
+          ],
+          "p50_ms": 1513.6824608780444,
+          "p95_ms": 1562.833524029702,
+          "texts_per_second": 0.6706637183453835,
+          "peak_rss_mib": 3703.16796875
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 480,
+          "actual_tokens": 478,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            6.156857453053817,
+            5.931382242124528,
+            5.957361733075231,
+            6.243846124969423,
+            6.287005372112617
+          ],
+          "p50_ms": 6156.857453053817,
+          "p95_ms": 6278.373522683978,
+          "texts_per_second": 0.6540981077444736,
+          "peak_rss_mib": 3703.16796875
+        },
+        {
+          "kind": "query",
+          "target_tokens": 1024,
+          "actual_tokens": 1023,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            3.5516041461378336,
+            3.0429119039326906,
+            3.4225770831108093,
+            3.2112505799159408,
+            3.280836527934298
+          ],
+          "p50_ms": 3280.836527934298,
+          "p95_ms": 3525.7987335324287,
+          "texts_per_second": 0.3028617973152358,
+          "peak_rss_mib": 3719.2109375
+        },
+        {
+          "kind": "query",
+          "target_tokens": 1024,
+          "actual_tokens": 1023,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            14.349308569915593,
+            14.084862102987245,
+            13.321089633041993,
+            13.424093240173534,
+            13.840416840044782
+          ],
+          "p50_ms": 13840.416840044782,
+          "p95_ms": 14296.419276529923,
+          "texts_per_second": 0.28977204485179703,
+          "peak_rss_mib": 4294.49609375
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 1024,
+          "actual_tokens": 1023,
+          "batch_size": 1,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            3.48375435709022,
+            3.5774538030382246,
+            3.8277809971477836,
+            3.7384876569267362,
+            3.694380319910124
+          ],
+          "p50_ms": 3694.380319910124,
+          "p95_ms": 3809.922329103574,
+          "texts_per_second": 0.27289809997975606,
+          "peak_rss_mib": 4294.49609375
+        },
+        {
+          "kind": "passage",
+          "target_tokens": 1024,
+          "actual_tokens": 1023,
+          "batch_size": 4,
+          "warmups": 2,
+          "samples": 5,
+          "seconds": [
+            15.241763203870505,
+            13.935678525129333,
+            13.12700317800045,
+            14.325791451148689,
+            15.21588784805499
+          ],
+          "p50_ms": 14325.791451148689,
+          "p95_ms": 15236.588132707402,
+          "texts_per_second": 0.2783727058483829,
+          "peak_rss_mib": 4294.59765625
+        }
+      ],
+      "inference_batching": "padded groups of 4",
+      "manifest_sha256": "aff3546a806a98ac8d730be33f24db43874e3c26ca37f94b3ab9dca85959fd1c",
+      "graph_optimization": "basic",
+      "peak_rss_mib": 4294.59765625,
+      "requested_intra_op_threads": 8,
+      "exit_code": 0,
+      "expected_cases": 16,
+      "complete": true
+    }
+  ]
+}

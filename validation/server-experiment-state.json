@@ -1,0 +1,35 @@
+{
+  "completed": [
+    {
+      "stage": "baseline",
+      "exit_code": 0,
+      "seconds": 1903.103057174012,
+      "output": "server-merged-onnx-benchmark.json"
+    },
+    {
+      "stage": "basic-parity",
+      "exit_code": 0,
+      "seconds": 149.32155946595594,
+      "output": "server-merged-onnx-basic-parity.json"
+    },
+    {
+      "stage": "basic-benchmark",
+      "exit_code": 0,
+      "seconds": 442.0091412840411,
+      "output": "server-merged-onnx-basic-benchmark.json"
+    },
+    {
+      "stage": "padded-parity",
+      "exit_code": 0,
+      "seconds": 188.5233940500766,
+      "output": "server-merged-onnx-padded-parity.json"
+    },
+    {
+      "stage": "padded-benchmark",
+      "exit_code": 0,
+      "seconds": 421.9351709019393,
+      "output": "server-merged-onnx-padded-benchmark.json"
+    }
+  ],
+  "complete": true
+}
