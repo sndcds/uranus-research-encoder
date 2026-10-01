@@ -10,11 +10,13 @@ import subprocess
 import sys
 import tempfile
 import time
+from functools import partial
 from pathlib import Path
 
 import numpy as np
 
 from uranus_research_encoder.merged_artifacts import digest
+from uranus_research_encoder.merged_batching import embed_padded
 from uranus_research_encoder.merged_onnx_backend import MergedOnnxBackend
 from uranus_research_encoder.model import TorchBackend
 from uranus_research_encoder.onnx_backend import OnnxBackend
@@ -102,12 +104,36 @@ def worker(args) -> None:
     }
     if args.worker == "onnx-merged":
         result["manifest_sha256"] = digest(args.merged_root / "manifest.json")
+    padded = args.worker == "onnx-merged" and args.padded_batching
+    embed = partial(embed_padded, backend) if padded else backend.embed
     for kind in ("query", "passage"):
-        vectors = backend.embed(TEXTS, kind)
+        vectors = embed(TEXTS, kind)
         result[kind] = vectors
         # Stability and request-batching invariance are part of the contract.
-        result[kind + "_stable"] = vectors[0] == backend.embed([TEXTS[0]], kind)[0]
-        result[kind + "_batch_stable"] = vectors[:2] == backend.embed(TEXTS[:2], kind)
+        if padded:
+            result[kind + "_stable"] = vectors == embed(TEXTS, kind)
+            singles = backend.embed(TEXTS, kind)
+            mixed = embed([TEXTS[0], TEXTS[-1]], kind)
+            result[kind + "_mixed_long"] = mixed
+            left = np.asarray(vectors + [vectors[0], vectors[-1]], dtype=np.float64)
+            right = np.asarray(singles + mixed, dtype=np.float64)
+            error = float(np.max(np.abs(left - right)))
+            cosine = float(
+                np.min(
+                    np.sum(left * right, axis=1)
+                    / (np.linalg.norm(left, axis=1) * np.linalg.norm(right, axis=1))
+                )
+            )
+            result[kind + "_request_size_metrics"] = {
+                "max_absolute_difference": error,
+                "min_cosine_similarity": cosine,
+            }
+            result[kind + "_batch_stable"] = (
+                error <= MAX_ABSOLUTE_DIFFERENCE and cosine >= MIN_COSINE_SIMILARITY
+            )
+        else:
+            result[kind + "_stable"] = vectors[0] == embed([TEXTS[0]], kind)[0]
+            result[kind + "_batch_stable"] = vectors[:2] == embed(TEXTS[:2], kind)
         print(f"{args.worker}: {kind} corpus and stability checks complete", flush=True)
     result["peak_rss_mib"] = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1024
     args.output.write_text(json.dumps(result))
@@ -122,10 +148,22 @@ def compare(reference: dict, candidate: dict) -> dict:
             raise ValueError("dimension_mismatch")
         if not np.isfinite(left).all() or not np.isfinite(right).all():
             raise ValueError("nonfinite_embeddings")
-        for index, (a, b) in enumerate(zip(left, right, strict=True)):
+        pairs = [
+            (index, "request", a, b) for index, (a, b) in enumerate(zip(left, right, strict=True))
+        ]
+        if kind + "_mixed_long" in candidate:
+            mixed = np.asarray(candidate[kind + "_mixed_long"])
+            if mixed.shape != (2, 1024) or not np.isfinite(mixed).all():
+                raise ValueError("invalid_mixed_batch")
+            pairs.extend(
+                (index, "short_and_long_padded_together", left[index], vector)
+                for index, vector in zip((0, len(TEXTS) - 1), mixed, strict=True)
+            )
+        for index, context, a, b in pairs:
             metrics.append(
                 {
                     "text_index": index,
+                    "context": context,
                     "kind": kind,
                     "dimensions": len(b),
                     "tokens": reference["token_counts"][index],
@@ -144,6 +182,12 @@ def compare(reference: dict, candidate: dict) -> dict:
     return {
         "candidate_backend": candidate.get("backend", "onnx"),
         "manifest_sha256": candidate.get("manifest_sha256"),
+        "intra_op_threads": candidate.get("intra_op_threads", 1),
+        "request_size_metrics": {
+            kind: candidate[kind + "_request_size_metrics"]
+            for kind in ("query", "passage")
+            if kind + "_request_size_metrics" in candidate
+        },
         "model_revision": MODEL_REVISION,
         "embedding_version": EMBEDDING_VERSION,
         "machine": {"platform": platform.platform(), "processor": platform.processor()},
@@ -176,6 +220,11 @@ def main() -> None:
     parser.add_argument("--model-root", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--merged-root", type=Path)
+    parser.add_argument(
+        "--padded-batching",
+        action="store_true",
+        help="validate the separate merged-only padded-batching experiment",
+    )
     parser.add_argument("--threads", type=int, choices=range(1, 9), default=1)
     parser.add_argument(
         "--worker", choices=("torch", "onnx", "onnx-merged"), help=argparse.SUPPRESS
@@ -185,6 +234,8 @@ def main() -> None:
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")
     if not args.model_root.is_absolute():
         parser.error("--model-root must be absolute")
+    if args.padded_batching and not args.merged_root:
+        parser.error("--padded-batching requires --merged-root")
     if args.worker:
         worker(args)
         return
@@ -205,6 +256,7 @@ def main() -> None:
                     "--worker",
                     backend,
                     *(["--merged-root", str(args.merged_root)] if args.merged_root else []),
+                    *(["--padded-batching"] if args.padded_batching else []),
                 ],
                 check=True,
                 env=os.environ | ({"USE_TORCH": "0"} if backend != "torch" else {}),

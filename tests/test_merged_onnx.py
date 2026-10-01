@@ -35,6 +35,7 @@ def merged_cache(onnx_cache, tmp_path):  # noqa: F811
         folder = root / f"retrieval-{kind}"
         folder.mkdir()
         weights = np.zeros((6, 1024), dtype=np.float32)
+        weights[1, 2] = 10  # Nonzero PAD state must be excluded by the pooling mask.
         weights[4, :2] = [3, 0] if index == 0 else [-4, 0]
         weights[5, :2] = [0, 4] if index == 0 else [0, 3]
         graph = helper.make_graph(
@@ -337,3 +338,24 @@ def test_embedding_merge_across_row_blocks_matches_peft(exact_arithmetic):
         assert torch.all((actual.double() - ideal).abs() <= bound)
         assert torch.all((expected.double() - ideal).abs() <= bound)
         assert torch.all((actual.double() - expected.double()).abs() <= 2 * bound)
+
+
+@pytest.mark.parametrize("kind", ["query", "passage"])
+def test_padded_batching_preserves_vectors_and_limits(merged_cache, kind):
+    from uranus_research_encoder.merged_batching import embed_padded
+
+    backend = MergedOnnxBackend(merged_cache)
+    backend.load()
+    texts = ["hello world", "hello", "world", "hello hello world", "hello"]
+    expected = backend.embed(texts, kind)
+    actual = embed_padded(backend, texts, kind)
+    assert actual == expected
+    assert actual == embed_padded(backend, texts, kind)
+    assert actual == embed_padded(backend, texts, kind, batch_size=2)
+    for index, text in enumerate(texts):
+        assert actual[index] == embed_padded(backend, [text], kind)[0]
+    with pytest.raises(ValueError, match="invalid_batch_size"):
+        embed_padded(backend, texts, kind, batch_size=0)
+    backend.max_tokens = 3
+    with pytest.raises(ValueError, match="token_limit"):
+        embed_padded(backend, texts, kind)

@@ -124,6 +124,20 @@ The tool records actual token lengths, every raw timing sample, p50, p95,
 texts/sec, load seconds, runtime/CPU/thread metadata and process peak RSS. The OS
 file cache is not flushed. Request size 4 is sequential, not true graph batching.
 
+The separate benchmark-only `--padded-batching` experiment groups up to four
+texts with right padding. It is not enabled by the HTTP backend. After the
+sequential baseline, validate it with `compare_backends.py --padded-batching`
+using the same model/merged roots and chosen thread count. This checks all corpus
+texts in groups, alone, and as a short/long padded pair; the extra pair is also
+compared directly with the corresponding Torch vectors. Repeat output remains
+exact; request-size comparisons use the unchanged component/cosine gate.
+Only if it passes, run `benchmark_backends.py --padded-batching --backends
+onnx-merged` with the same chosen thread count and the same lengths/request sizes.
+Use a separate JSON output. The timing inputs remain homogeneous within each
+request to preserve the existing benchmark contract; mixed-length masking is
+validated separately. Generated tests exercise real ORT batches and nonzero PAD
+hidden states, so accidentally including padding in pooling fails CI.
+
 Experimental service selection is explicit:
 `ENCODER_BACKEND=onnx-merged`, `ENCODER_MERGED_ONNX_ROOT=/absolute/derived/merged-v1`,
 `ENCODER_ONNX_INTRA_OP_THREADS=1`, `ENCODER_ONNX_INTER_OP_THREADS=1` and the existing
