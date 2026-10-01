@@ -359,3 +359,34 @@ def test_padded_batching_preserves_vectors_and_limits(merged_cache, kind):
     backend.max_tokens = 3
     with pytest.raises(ValueError, match="token_limit"):
         embed_padded(backend, texts, kind)
+
+
+@pytest.mark.parametrize("force", [False, True])
+def test_export_never_overwrites_unidentified_output(tmp_path, monkeypatch, capsys, force):
+    import sys
+
+    script = Path(__file__).parents[1] / "scripts/export_merged_onnx.py"
+    main = runpy.run_path(str(script))["main"]
+    source = tmp_path / "source"
+    snapshot = source / MODEL_REVISION
+    snapshot.mkdir(parents=True)
+    output = tmp_path / "output"
+    output.mkdir()
+    sentinel = output / "keep-me"
+    sentinel.write_bytes(b"operator data")
+    (output / "manifest.json").write_text(json.dumps({"contract": "unrelated-output"}))
+    monkeypatch.setenv("JINA_NONCOMMERCIAL", "1")
+    monkeypatch.setitem(main.__globals__, "cached_snapshot", lambda *args: snapshot)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [str(script), "--model-root", str(source), "--output-dir", str(output)]
+        + (["--force"] if force else []),
+    )
+    with pytest.raises(SystemExit) as error:
+        main()
+    assert error.value.code == 2
+    message = "--force only replaces" if force else "output exists"
+    assert message in capsys.readouterr().err
+    assert sentinel.read_bytes() == b"operator data"
+    assert not list(source.rglob("*.onnx"))

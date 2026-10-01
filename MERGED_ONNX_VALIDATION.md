@@ -82,6 +82,8 @@ tasks complete, and verifies source hashes again before publication. Failure
 leaves a diagnostic staging directory. An existing output requires `--force`,
 and must identify itself as an earlier export of this contract. Source/output
 overlap, including resolved source blob targets, is rejected.
+Completed directories/files use modes 0755/0644 so the unprivileged runtime can
+read a read-only mount. Stdout is the sorted manifest JSON; progress goes to stderr.
 
 ## Reproduction (offline)
 
@@ -131,6 +133,9 @@ using the same model/merged roots and chosen thread count. This checks all corpu
 texts in groups, alone, and as a short/long padded pair; the extra pair is also
 compared directly with the corresponding Torch vectors. Repeat output remains
 exact; request-size comparisons use the unchanged component/cosine gate.
+This mode also emits an independent sequential-merged comparison at the selected
+thread count. Its parity-process RSS includes both modes; performance and memory
+comparisons use the separately isolated benchmark workers.
 Only if it passes, run `benchmark_backends.py --padded-batching --backends
 onnx-merged` with the same chosen thread count and the same lengths/request sizes.
 Use a separate JSON output. The timing inputs remain homogeneous within each

@@ -105,6 +105,8 @@ def worker(args) -> None:
     if args.worker == "onnx-merged":
         result["manifest_sha256"] = digest(args.merged_root / "manifest.json")
     padded = args.worker == "onnx-merged" and args.padded_batching
+    result["inference_batching"] = "padded groups of 4" if padded else "sequential"
+    result["rss_scope"] = "shared sequential/padded parity worker" if padded else "single mode"
     embed = partial(embed_padded, backend) if padded else backend.embed
     for kind in ("query", "passage"):
         vectors = embed(TEXTS, kind)
@@ -113,6 +115,11 @@ def worker(args) -> None:
         if padded:
             result[kind + "_stable"] = vectors == embed(TEXTS, kind)
             singles = backend.embed(TEXTS, kind)
+            result[kind + "_sequential"] = singles
+            result[kind + "_sequential_stable"] = singles[0] == backend.embed([TEXTS[0]], kind)[0]
+            result[kind + "_sequential_batch_stable"] = singles[:2] == backend.embed(
+                TEXTS[:2], kind
+            )
             mixed = embed([TEXTS[0], TEXTS[-1]], kind)
             result[kind + "_mixed_long"] = mixed
             left = np.asarray(vectors + [vectors[0], vectors[-1]], dtype=np.float64)
@@ -181,6 +188,8 @@ def compare(reference: dict, candidate: dict) -> dict:
         rankings[name] = np.argsort(-scores, axis=1, kind="stable").tolist()
     return {
         "candidate_backend": candidate.get("backend", "onnx"),
+        "inference_batching": candidate.get("inference_batching", "sequential"),
+        "rss_scope": candidate.get("rss_scope", "single mode"),
         "manifest_sha256": candidate.get("manifest_sha256"),
         "intra_op_threads": candidate.get("intra_op_threads", 1),
         "request_size_metrics": {
@@ -262,7 +271,20 @@ def main() -> None:
                 env=os.environ | ({"USE_TORCH": "0"} if backend != "torch" else {}),
             )
             results.append(json.loads(output.read_text()))
-        reports = [compare(results[0], candidate) for candidate in results[1:]]
+        reports = []
+        for candidate in results[1:]:
+            if "query_sequential" in candidate:
+                sequential = candidate | {"inference_batching": "sequential"}
+                for kind in ("query", "passage"):
+                    sequential[kind] = candidate[kind + "_sequential"]
+                    sequential[kind + "_stable"] = candidate[kind + "_sequential_stable"]
+                    sequential[kind + "_batch_stable"] = candidate[
+                        kind + "_sequential_batch_stable"
+                    ]
+                    sequential.pop(kind + "_mixed_long", None)
+                    sequential.pop(kind + "_request_size_metrics", None)
+                reports.append(compare(results[0], sequential))
+            reports.append(compare(results[0], candidate))
     for report in reports:
         acceptance(report)
     report = (
@@ -279,7 +301,8 @@ def main() -> None:
         )
     for comparison in reports:
         print(
-            f"{comparison['candidate_backend']}: passed={comparison['passed']}; "
+            f"{comparison['candidate_backend']} ({comparison['inference_batching']}): "
+            f"passed={comparison['passed']}; "
             f"rankings={comparison['rankings_identical']}; stable={comparison['stable']}"
         )
     if not report["passed"]:

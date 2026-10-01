@@ -212,6 +212,7 @@ def main() -> None:
                     kind,
                 ],
                 check=True,
+                stdout=sys.stderr,  # Keep stdout exclusively the deterministic manifest JSON.
             )
         (stage / "tokenizer").mkdir()
         for name in TOKENIZER_FILES:
@@ -247,6 +248,11 @@ def main() -> None:
             "release_parity": "not yet validated; run compare_backends.py",
         }
         (stage / "manifest.json").write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n")
+        # Publish artifacts readable by the unprivileged inference image. mkdtemp
+        # intentionally kept the staging directory private until export completed.
+        for path in stage.rglob("*"):
+            path.chmod(0o755 if path.is_dir() else 0o644)
+        stage.chmod(0o755)
         if output.exists():
             shutil.rmtree(output)
         stage.rename(output)
