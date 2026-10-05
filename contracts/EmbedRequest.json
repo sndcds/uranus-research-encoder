@@ -10,7 +10,7 @@
       "type": "string"
     },
     "model": {
-      "const": "jina-v3",
+      "const": "jina-v5",
       "title": "Model",
       "type": "string"
     },

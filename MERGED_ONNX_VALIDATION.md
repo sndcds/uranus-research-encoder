@@ -1,3 +1,6 @@
+> Historical Jina v3 validation only. Jina v5 ONNX serving/export is currently disabled;
+> these results and commands do not validate or provision the current model.
+
 # Experimental locally merged ONNX
 
 Torch remains the production default. These graphs are local derived artifacts,

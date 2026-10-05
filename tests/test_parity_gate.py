@@ -1,4 +1,4 @@
-"""Freeze the measured compatibility gate without loading real weights in CI."""
+"""Historical v3 report tests validate gate arithmetic, not v5 ONNX parity."""
 
 import copy
 import json

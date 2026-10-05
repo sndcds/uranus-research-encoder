@@ -16,7 +16,7 @@ def test_busy_requests_do_not_queue(settings, backend, auth):
         return original(texts, kind)
 
     backend.embed = blocked
-    data = {"model": "jina-v3", "texts": ["hello"], "kind": "query"}
+    data = {"model": "jina-v5", "texts": ["hello"], "kind": "query"}
     settings = settings.model_copy(update={"max_concurrent_requests": 1})
     with TestClient(create_app(settings, backend)) as client, ThreadPoolExecutor() as pool:
         first = pool.submit(client.post, "/embed", headers=auth, json=data)

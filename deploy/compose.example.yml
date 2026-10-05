@@ -8,7 +8,7 @@ services:
     environment:
       ENCODER_API_KEY_FILE: /run/secrets/embedding.key
       ENCODER_MODEL_ROOT: /models
-      ENCODER_MODEL: jina-v3
+      ENCODER_MODEL: jina-v5
       JINA_NONCOMMERCIAL: "1"
       ENCODER_MAX_CONCURRENT_REQUESTS: "2"
     volumes:

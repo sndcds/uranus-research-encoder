@@ -13,7 +13,7 @@ KEY = "test-only-encoder-key-0123456789abcdef"
 class FakeBackend:
     backend = "fake"
     runtime = "deterministic-test-backend"
-    max_tokens = 8192
+    max_tokens = 32768
     revision = MODEL_REVISION
     loaded = False
     tokenizer_available = False
@@ -26,7 +26,7 @@ class FakeBackend:
         self.loads += 1
         self.loaded = self.tokenizer_available = True
 
-    def count(self, text):
+    def count(self, text, kind="passage"):
         return len(text) + 2
 
     def embed(self, texts, kind):

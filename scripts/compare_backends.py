@@ -246,6 +246,7 @@ def main() -> None:
         "--worker", choices=("torch", "onnx", "onnx-merged"), help=argparse.SUPPRESS
     )
     args = parser.parse_args()
+    parser.error("onnx_not_supported_for_jina_v5")
     if os.environ.get("JINA_NONCOMMERCIAL") != "1":
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")
     if not args.model_root.is_absolute():

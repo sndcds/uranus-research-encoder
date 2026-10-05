@@ -12,7 +12,7 @@ from uranus_research_encoder.version import MODEL_REPOSITORY, MODEL_REVISION
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--model-root", required=True, type=Path)
-    parser.add_argument("--backend", choices=("torch", "onnx", "all"), default="torch")
+    parser.add_argument("--backend", choices=("torch",), default="torch")
     args = parser.parse_args()
     if os.environ.get("JINA_NONCOMMERCIAL") != "1":
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")

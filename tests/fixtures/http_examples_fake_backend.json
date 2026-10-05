@@ -4,28 +4,28 @@
   },
   "/ready": {
     "status": "ready",
-    "model": "jina-v3",
+    "model": "jina-v5",
     "dimensions": 1024,
-    "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+    "embedding_version": "dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2",
     "contract_version": "uranus-research-encoder-v1",
     "backend": "fake",
     "runtime": "deterministic-test-backend",
-    "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28"
+    "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192"
   },
   "/version": {
-    "service_version": "0.1.0",
+    "service_version": "0.2.0",
     "contract_version": "uranus-research-encoder-v1",
-    "model": "jina-v3",
-    "model_repository": "jinaai/jina-embeddings-v3-hf",
-    "model_revision": "d18862d9a48706220815554fac3ebb4dfa46fc28",
+    "model": "jina-v5",
+    "model_repository": "jinaai/jina-embeddings-v5-text-small",
+    "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
     "dimensions": 1024,
-    "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+    "embedding_version": "dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2",
     "chunk_version": "sections-480-overlap64-v2",
     "backend": "fake",
     "runtime": "deterministic-test-backend"
   },
   "/chunks": {
-    "embedding_version": "d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2",
+    "embedding_version": "dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2",
     "documents": [
       {
         "entity_id": "019d5f3a-de7e-780a-9fa0-dc24e5545e2e",

@@ -22,7 +22,7 @@ def test_failure_logs_bounded(client, backend, auth, caplog):
     backend.embed = broken
     with caplog.at_level(logging.WARNING, logger="encoder"):
         response = client.post(
-            "/embed", headers=auth, json={"model": "jina-v3", "texts": ["hi"], "kind": "query"}
+            "/embed", headers=auth, json={"model": "jina-v5", "texts": ["hi"], "kind": "query"}
         )
     assert response.status_code == 500
     assert "request_failed" in caplog.text

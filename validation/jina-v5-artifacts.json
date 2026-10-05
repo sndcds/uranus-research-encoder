@@ -1,0 +1,38 @@
+{
+  "revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+  "artifacts": [
+    {
+      "path": "config.json",
+      "bytes": 991,
+      "sha256": "1af1e1269488c83d8b2332e42099f0d2201d687fbe074d1ed096c6201f283546"
+    },
+    {
+      "path": "tokenizer.json",
+      "bytes": 11422654,
+      "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "bytes": 9732,
+      "sha256": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101"
+    },
+    {
+      "path": "model.safetensors",
+      "bytes": 1192133208,
+      "sha256": "045fa75ff963a528cda2589fb1ca0a9ad848b53511780ed4f08f6fe10f6167c3"
+    },
+    {
+      "path": "adapters/retrieval/adapter_config.json",
+      "bytes": 883,
+      "sha256": "f37c5d6dd368e2675e54e01b685252d4d44eed042c773a48f56ebe1565cd0320"
+    },
+    {
+      "path": "adapters/retrieval/adapter_model.safetensors",
+      "bytes": 40420176,
+      "sha256": "2bc6ab71895eb04664e4d995ee29e1620603f3a3fc4dfc573bc2383dfc85bb94"
+    }
+  ],
+  "model_lfs_digest_verified": true,
+  "repository_code_files": 0,
+  "other_task_adapters": 0
+}

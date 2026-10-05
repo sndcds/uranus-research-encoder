@@ -2,6 +2,7 @@
 
 import math
 import os
+import socket
 from pathlib import Path
 
 import pytest
@@ -13,14 +14,22 @@ from uranus_research_encoder.version import MODEL_REVISION
 
 
 @pytest.mark.integration
-def test_local_jina():
+def test_local_jina(monkeypatch):
     root = os.environ.get("ENCODER_INTEGRATION_MODEL_ROOT")
     if not root:
         pytest.skip("set ENCODER_INTEGRATION_MODEL_ROOT to an existing pinned cache")
     assert os.environ.get("JINA_NONCOMMERCIAL") == "1"
+
+    def no_network(*args, **kwargs):
+        pytest.fail("real model runtime attempted network access")
+
+    monkeypatch.setattr(socket.socket, "connect", no_network)
     backend = JinaBackend(Path(root))
     backend.load()  # Missing/incomplete cache is a failure when explicitly selected.
     assert backend.revision == MODEL_REVISION
+    assert backend.max_tokens == 32768
+    assert {str(p.dtype) for p in backend._model.parameters()} == {"torch.float32"}
+    assert list(backend._model.peft_config) == ["retrieval"]
     text = "Gemeinsames Communitytreffen in Flensburg."
     queries = backend.embed([text], "query")
     passages = backend.embed([text], "passage")
