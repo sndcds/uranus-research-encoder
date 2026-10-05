@@ -1,209 +1,79 @@
-"""Real CPU ORT sessions over tiny local task-conditioned external-data graphs."""
+"""Unsupported ONNX paths must fail before touching any cached graph or output."""
 
-import hashlib
-import json
+import runpy
 import socket
+import sys
+from pathlib import Path
 
-import numpy as np
 import pytest
+from fastapi.testclient import TestClient
 
-from uranus_research_encoder import onnx_backend
+from uranus_research_encoder.app import create_app
+from uranus_research_encoder.merged_artifacts import verify_manifest
+from uranus_research_encoder.merged_onnx_backend import MergedOnnxBackend
+from uranus_research_encoder.model_artifacts import artifact_patterns
 from uranus_research_encoder.onnx_backend import OnnxBackend
-from uranus_research_encoder.version import MODEL_REVISION
 
 
-@pytest.fixture
-def onnx_cache(tmp_path, monkeypatch):
-    import onnx
-    from onnx import TensorProto, helper, numpy_helper
-    from tokenizers import Tokenizer
-    from tokenizers.models import WordLevel
-    from tokenizers.pre_tokenizers import Whitespace
-    from tokenizers.processors import TemplateProcessing
-    from transformers import PreTrainedTokenizerFast
+@pytest.mark.parametrize("backend_type", [OnnxBackend, MergedOnnxBackend])
+@pytest.mark.parametrize("operation", ["load", "count", "query", "passage"])
+def test_unsupported_backend_never_reads_artifacts(tmp_path, monkeypatch, backend_type, operation):
+    def forbidden(*args, **kwargs):
+        pytest.fail("unsupported backend attempted IO")
 
-    def no_network(*args, **kwargs):
-        pytest.fail("runtime attempted a network connection")
+    backend = backend_type(tmp_path)
+    monkeypatch.setattr(socket.socket, "connect", forbidden)
+    monkeypatch.setattr(Path, "open", forbidden)
+    with pytest.raises(ValueError, match="onnx_not_supported_for_jina_v5"):
+        if operation == "load":
+            backend.load()
+        elif operation == "count":
+            backend.count("text")
+        else:
+            backend.embed(["text"], operation)
+    assert not backend.loaded and not backend.tokenizer_available
+    assert backend.revision == ""
 
-    monkeypatch.setattr(socket.socket, "connect", no_network)
-    repo = tmp_path / "models--jinaai--jina-embeddings-v3-hf"
-    snapshot = repo / "snapshots" / MODEL_REVISION
-    (snapshot / "onnx").mkdir(parents=True)
-    tokenizer = Tokenizer(
-        WordLevel(
-            {"<s>": 0, "<pad>": 1, "</s>": 2, "<unk>": 3, "hello": 4, "world": 5}, unk_token="<unk>"
-        )
-    )
-    tokenizer.pre_tokenizer = Whitespace()
-    tokenizer.post_processor = TemplateProcessing(
-        single="<s> $A </s>", special_tokens=[("<s>", 0), ("</s>", 2)]
-    )
-    PreTrainedTokenizerFast(
-        tokenizer_object=tokenizer, pad_token="<pad>", unk_token="<unk>", model_max_length=8192
-    ).save_pretrained(snapshot)
-    (snapshot / "config.json").write_text(
-        json.dumps({"model_type": "jina_embeddings_v3", "hidden_size": 1024})
-    )
-    weights = np.zeros((2, 6, 1024), dtype=np.float32)
-    weights[0, 4, 0], weights[0, 5, 1] = 3, 4
-    weights[1, 4, 0], weights[1, 5, 1] = -4, 3
-    graph = helper.make_graph(
+
+@pytest.mark.parametrize("backend", ["onnx", "all", "onnx-merged"])
+def test_no_onnx_provisioning(backend):
+    with pytest.raises(ValueError, match="onnx_not_supported_for_jina_v5"):
+        artifact_patterns(backend)
+
+
+def test_no_merged_manifest_is_accepted(tmp_path):
+    with pytest.raises(ValueError, match="onnx_not_supported_for_jina_v5"):
+        verify_manifest(tmp_path)
+
+
+@pytest.mark.parametrize("backend_type", [OnnxBackend, MergedOnnxBackend])
+def test_unsupported_backend_not_ready(tmp_path, settings, auth, backend_type):
+    with TestClient(create_app(settings, backend_type(tmp_path))) as client:
+        assert client.get("/health").status_code == 200
+        assert client.get("/ready", headers=auth).status_code == 503
+
+
+@pytest.mark.parametrize("force", [False, True])
+def test_export_cannot_modify_existing_output(tmp_path, monkeypatch, capsys, force):
+    output = tmp_path / "existing"
+    output.mkdir()
+    sentinel = output / "model.onnx"
+    sentinel.write_bytes(b"existing artifacts stay intact")
+    namespace = runpy.run_path(str(Path(__file__).parents[1] / "scripts/export_merged_onnx.py"))
+    monkeypatch.setattr(
+        sys,
+        "argv",
         [
-            helper.make_node("Gather", ["banks", "task_id"], ["bank"], axis=0),
-            helper.make_node("Gather", ["bank", "input_ids"], ["text_embeds"], axis=0),
+            "export",
+            "--model-root",
+            str(tmp_path / "absent"),
+            "--output-dir",
+            str(output),
+            *(["--force"] if force else []),
         ],
-        "tiny-task-encoder",
-        [
-            helper.make_tensor_value_info("input_ids", TensorProto.INT64, ["batch", "sequence"]),
-            helper.make_tensor_value_info(
-                "attention_mask", TensorProto.INT64, ["batch", "sequence"]
-            ),
-            helper.make_tensor_value_info("task_id", TensorProto.INT64, []),
-        ],
-        [
-            helper.make_tensor_value_info(
-                "text_embeds", TensorProto.FLOAT, ["batch", "sequence", 1024]
-            )
-        ],
-        [numpy_helper.from_array(weights, name="banks")],
     )
-    model = helper.make_model(graph, opset_imports=[helper.make_opsetid("", 16)], ir_version=10)
-    onnx.save_model(
-        model,
-        snapshot / "onnx/model.onnx",
-        save_as_external_data=True,
-        all_tensors_to_one_file=True,
-        location="model.onnx_data",
-        size_threshold=0,
-    )
-    hashes = {
-        name: hashlib.sha256((snapshot / name).read_bytes()).hexdigest()
-        for name in ("onnx/model.onnx", "onnx/model.onnx_data")
-    }
-    # Only generated fixtures replace the reviewed production digests.
-    monkeypatch.setattr(onnx_backend, "ONNX_SHA256", hashes)
-    files = {
-        path.relative_to(snapshot).as_posix(): {"size": path.stat().st_size, "blob_id": "0" * 40}
-        for path in snapshot.rglob("*")
-        if path.is_file()
-    }
-    for name in (
-        "custom_st.py",
-        "model.safetensors",
-        "classification/adapter_model.safetensors",
-        "retrieval_query/adapter_model.safetensors",
-        "onnx/model_fp16.onnx",
-    ):
-        files[name] = {"size": 1, "blob_id": "0" * 40}
-    (repo / "trees").mkdir()
-    (repo / "trees" / f"{MODEL_REVISION}.json").write_text(
-        json.dumps({"format_version": 1, "files": files})
-    )
-    return tmp_path, snapshot
-
-
-def test_onnx_offline_tasks_pooling_and_session_options(onnx_cache):
-    import onnxruntime as ort
-
-    root, _ = onnx_cache
-    backend = OnnxBackend(root, intra_op_threads=2)
-    backend.load()
-    assert backend.loaded and backend.tokenizer_available
-    assert backend.backend == "onnx"
-    assert backend.revision == MODEL_REVISION
-    assert backend.count("hello world") == 4
-    assert backend._session.get_providers() == ["CPUExecutionProvider"]
-    options = backend._session.get_session_options()
-    assert options.intra_op_num_threads == 2
-    assert options.inter_op_num_threads == 1
-    assert options.execution_mode == ort.ExecutionMode.ORT_SEQUENTIAL
-    assert options.graph_optimization_level == ort.GraphOptimizationLevel.ORT_ENABLE_ALL
-    query = backend.embed(["hello world"], "query")
-    passage = backend.embed(["hello world"], "passage")
-    assert query[0][:2] == pytest.approx([0.6, 0.8])
-    assert passage[0][:2] == pytest.approx([-0.8, 0.6])
-    assert query == backend.embed(["hello world", "world"], "query")[:1]
-    assert passage == backend.embed(["hello world"], "passage")
-    for vector in query + passage:
-        assert len(vector) == 1024
-        assert np.isfinite(vector).all()
-        assert np.linalg.norm(vector) == pytest.approx(1, abs=1e-6)
-    with pytest.raises(ValueError, match="token_limit"):
-        backend.embed(["hello " * 8192], "query")
-
-
-@pytest.mark.parametrize("name", ["onnx/model.onnx", "onnx/model.onnx_data", "tokenizer.json"])
-def test_onnx_missing_required_file_fails_offline(onnx_cache, name):
-    from huggingface_hub.errors import IncompleteSnapshotError
-
-    root, snapshot = onnx_cache
-    (snapshot / name).unlink()
-    backend = OnnxBackend(root)
-    with pytest.raises(IncompleteSnapshotError):
-        backend.load()
-    assert not backend.loaded
-
-
-@pytest.mark.parametrize("name", ["onnx/model.onnx", "onnx/model.onnx_data"])
-def test_onnx_changed_graph_or_adapter_weights_fail_integrity(onnx_cache, name):
-    root, snapshot = onnx_cache
-    with (snapshot / name).open("ab") as stream:
-        stream.write(b"changed")
-    backend = OnnxBackend(root)
-    with pytest.raises(ValueError, match="onnx_artifact_mismatch"):
-        backend.load()
-    assert not backend.loaded
-
-
-def test_onnx_rejects_zero_vectors(onnx_cache):
-    root, _ = onnx_cache
-    backend = OnnxBackend(root)
-    backend.load()
-    with pytest.raises(RuntimeError, match="invalid_vector"):
-        backend.embed(["unknown"], "query")
-
-
-def test_onnx_pooling_excludes_masked_tokens(onnx_cache, monkeypatch):
-    root, _ = onnx_cache
-    backend = OnnxBackend(root)
-    backend.load()
-    tokenizer = backend._tokenizer
-
-    def masked(*args, **kwargs):
-        encoded = tokenizer(*args, **kwargs)
-        encoded["attention_mask"][0, 2] = 0  # Exclude "world", leaving the first axis only.
-        return encoded
-
-    monkeypatch.setattr(backend, "_tokenizer", masked)
-    assert backend.embed(["hello world"], "query")[0][:2] == [1.0, 0.0]
-
-
-def test_http_selects_onnx_and_reports_runtime(onnx_cache, settings, auth):
-    from fastapi.testclient import TestClient
-
-    from uranus_research_encoder.app import create_app
-
-    root, _ = onnx_cache
-    configured = settings.model_copy(update={"backend": "onnx", "model_root": root})
-    with TestClient(create_app(configured)) as client:
-        ready = client.get("/ready", headers=auth)
-        assert ready.status_code == 200
-        version = client.get("/version", headers=auth).json()
-        for name in (
-            "backend",
-            "runtime",
-            "model_revision",
-            "dimensions",
-            "embedding_version",
-            "contract_version",
-        ):
-            assert ready.json()[name] == version[name]
-        assert version["backend"] == "onnx"
-        assert version["runtime"].startswith("onnxruntime-")
-        response = client.post(
-            "/embed",
-            headers=auth,
-            json={"model": "jina-v3", "kind": "query", "texts": ["hello world"]},
-        )
-        assert response.status_code == 200
-        assert response.json()["vectors"][0][:2] == pytest.approx([0.6, 0.8])
+    with pytest.raises(SystemExit) as exc:
+        namespace["main"]()
+    assert exc.value.code == 2
+    assert "onnx_not_supported_for_jina_v5" in capsys.readouterr().err
+    assert sentinel.read_bytes() == b"existing artifacts stay intact"

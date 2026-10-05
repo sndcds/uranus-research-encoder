@@ -43,4 +43,4 @@ def test_mixed_context_rejected():
 )
 def test_embed_contract(change):
     with pytest.raises(ValidationError):
-        EmbedRequest(**({"model": "jina-v3", "kind": "query", "texts": ["hi"]} | change))
+        EmbedRequest(**({"model": "jina-v5", "kind": "query", "texts": ["hi"]} | change))

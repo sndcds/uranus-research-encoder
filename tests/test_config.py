@@ -27,7 +27,7 @@ def test_file_preferred_and_no_dotenv(tmp_path, monkeypatch):
     settings = Settings.from_env()
     assert settings.api_key.get_secret_value() == KEY
     assert KEY not in repr(settings)
-    assert settings.model == "jina-v3"
+    assert settings.model == "jina-v5"
 
 
 @pytest.mark.parametrize(
@@ -61,12 +61,9 @@ def test_backend_environment_is_explicit(monkeypatch):
     assert Settings.from_env().backend == "torch"
     monkeypatch.setenv("ENCODER_BACKEND", "onnx")
     monkeypatch.setenv("ENCODER_ONNX_INTRA_OP_THREADS", "2")
-    settings = Settings.from_env()
-    assert settings.backend == "onnx"
-    assert settings.onnx_intra_op_threads == 2
-    assert settings.onnx_inter_op_threads == 1
+    with pytest.raises(ValidationError, match="onnx_not_supported_for_jina_v5"):
+        Settings.from_env()
     monkeypatch.setenv("ENCODER_BACKEND", "onnx-merged")
     monkeypatch.setenv("ENCODER_MERGED_ONNX_ROOT", "/derived")
-    assert Settings.from_env().merged_onnx_optimization == "disabled"
-    monkeypatch.setenv("ENCODER_MERGED_ONNX_OPTIMIZATION", "basic")
-    assert Settings.from_env().merged_onnx_optimization == "basic"
+    with pytest.raises(ValidationError, match="onnx_not_supported_for_jina_v5"):
+        Settings.from_env()

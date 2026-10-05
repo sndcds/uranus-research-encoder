@@ -24,15 +24,28 @@ def tiny_cache(tmp_path, monkeypatch, request):
     from tokenizers.models import WordLevel
     from tokenizers.pre_tokenizers import Whitespace
     from tokenizers.processors import TemplateProcessing
-    from transformers import JinaEmbeddingsV3Config, JinaEmbeddingsV3Model, PreTrainedTokenizerFast
+    from transformers import PreTrainedTokenizerFast, Qwen3Config, Qwen3Model
 
     torch.manual_seed(123)
     torch.set_num_threads(1)
-    snapshot = tmp_path / "models--jinaai--jina-embeddings-v3-hf" / "snapshots" / MODEL_REVISION
+    snapshot = (
+        tmp_path / "models--jinaai--jina-embeddings-v5-text-small" / "snapshots" / MODEL_REVISION
+    )
     snapshot.mkdir(parents=True)
     tokenizer = Tokenizer(
         WordLevel(
-            {"<s>": 0, "<pad>": 1, "</s>": 2, "<unk>": 3, "hello": 4, "world": 5}, unk_token="<unk>"
+            {
+                "<s>": 0,
+                "<pad>": 1,
+                "</s>": 2,
+                "<unk>": 3,
+                "hello": 4,
+                "world": 5,
+                "Query": 6,
+                "Document": 7,
+                ":": 8,
+            },
+            unk_token="<unk>",
         )
     )
     tokenizer.pre_tokenizer = Whitespace()
@@ -40,26 +53,54 @@ def tiny_cache(tmp_path, monkeypatch, request):
         single="<s> $A </s>", special_tokens=[("<s>", 0), ("</s>", 2)]
     )
     PreTrainedTokenizerFast(
-        tokenizer_object=tokenizer, pad_token="<pad>", unk_token="<unk>", model_max_length=8192
+        tokenizer_object=tokenizer, pad_token="<pad>", unk_token="<unk>", model_max_length=32768
     ).save_pretrained(snapshot)
-    config = JinaEmbeddingsV3Config(
-        vocab_size=6,
+    config = Qwen3Config(
+        vocab_size=9,
         hidden_size=1024,
         intermediate_size=32,
         num_hidden_layers=1,
         num_attention_heads=16,
+        num_key_value_heads=2,
+        head_dim=64,
+        max_position_embeddings=32768,
     )
-    model = JinaEmbeddingsV3Model(config)
+    model = Qwen3Model(config)
     model.save_pretrained(snapshot, max_shard_size=getattr(request, "param", "5GB"))
-    for task in ("retrieval_query", "retrieval_passage"):
+    for task in ("retrieval",):
         model.add_adapter(
             LoraConfig(
-                r=2, lora_alpha=2, target_modules=["q_proj", "v_proj"], init_lora_weights=False
+                r=32,
+                lora_alpha=32,
+                lora_dropout=0.1,
+                target_modules=[
+                    "q_proj",
+                    "k_proj",
+                    "v_proj",
+                    "o_proj",
+                    "gate_proj",
+                    "up_proj",
+                    "down_proj",
+                ],
+                task_type="FEATURE_EXTRACTION",
+                init_lora_weights=False,
             ),
             adapter_name=task,
         )
         model.set_adapter(task)
-        model.save_pretrained(snapshot / task)
+        model.save_pretrained(snapshot / "adapters" / task)
+    raw = json.loads((snapshot / "config.json").read_text())
+    raw.update(
+        model_type="jina_embeddings_v5",
+        architectures=["JinaEmbeddingsV5Model"],
+        task_names=["retrieval"],
+        auto_map={"AutoModel": "forbidden.RemoteCode"},
+    )
+    (snapshot / "config.json").write_text(json.dumps(raw))
+    adapter_config = snapshot / "adapters/retrieval/adapter_config.json"
+    raw = json.loads(adapter_config.read_text())
+    raw["base_model_name_or_path"] = MODEL_REPOSITORY
+    adapter_config.write_text(json.dumps(raw))
     return tmp_path
 
 
@@ -69,7 +110,7 @@ def filtered_cache(tiny_cache, monkeypatch):
         pytest.fail("runtime attempted a network connection")
 
     monkeypatch.setattr(socket.socket, "connect", no_network)
-    repo = tiny_cache / "models--jinaai--jina-embeddings-v3-hf"
+    repo = tiny_cache / "models--jinaai--jina-embeddings-v5-text-small"
     snapshot = repo / "snapshots" / MODEL_REVISION
     blobs = repo / "blobs"
     blobs.mkdir()
@@ -126,7 +167,7 @@ def test_filtered_snapshot_loads_offline_with_full_cached_tree(filtered_cache):
     backend.load()
     assert backend.loaded and backend.tokenizer_available
     assert backend.revision == MODEL_REVISION
-    assert backend.count("hello world") == 4
+    assert backend.count("hello world") == 6
     assert len(backend.embed(["hello world"], "query")[0]) == 1024
     assert not (snapshot / "custom_st.py").exists()
     assert not (snapshot / "onnx/model.onnx").exists()
@@ -138,8 +179,9 @@ def test_filtered_snapshot_loads_offline_with_full_cached_tree(filtered_cache):
         "config.json",
         "model.safetensors",
         "tokenizer.json",
-        "retrieval_query/adapter_config.json",
-        "retrieval_passage/adapter_model.safetensors",
+        "tokenizer_config.json",
+        "adapters/retrieval/adapter_config.json",
+        "adapters/retrieval/adapter_model.safetensors",
     ],
 )
 def test_filtered_snapshot_missing_required_file_fails_offline(filtered_cache, required_file):
@@ -163,15 +205,19 @@ def test_native_backend_offline_and_task_isolation(tiny_cache, monkeypatch):
     backend.load()
     assert backend.loaded and backend.tokenizer_available
     assert backend.revision == MODEL_REVISION
-    assert backend.count("hello world") == 4
+    assert backend.count("hello world") == 6
     # Every loaded adapter tensor must match its file even after loading the other task.
     import torch
     from safetensors.torch import load_file
 
-    snapshot = tiny_cache / "models--jinaai--jina-embeddings-v3-hf" / "snapshots" / MODEL_REVISION
+    snapshot = (
+        tiny_cache / "models--jinaai--jina-embeddings-v5-text-small" / "snapshots" / MODEL_REVISION
+    )
     parameters = dict(backend._model.named_parameters())
-    for task in ("retrieval_query", "retrieval_passage"):
-        for key, tensor in load_file(snapshot / task / "adapter_model.safetensors").items():
+    for task in ("retrieval",):
+        for key, tensor in load_file(
+            snapshot / "adapters" / task / "adapter_model.safetensors"
+        ).items():
             name = key.removeprefix("base_model.model.")
             name = name.replace(".lora_A.weight", f".lora_A.{task}.weight")
             name = name.replace(".lora_B.weight", f".lora_B.{task}.weight")
@@ -188,7 +234,7 @@ def test_native_backend_offline_and_task_isolation(tiny_cache, monkeypatch):
     assert str(next(backend._model.parameters()).dtype) == "torch.float32"
     assert not backend._model.training
     with pytest.raises(ValueError, match="token_limit"):
-        backend.embed(["hello " * 8192], "query")
+        backend.embed(["hello " * 32768], "query")
 
 
 def test_missing_cache_fails_offline(tmp_path, monkeypatch):
@@ -207,7 +253,7 @@ def test_incomplete_weights_fail_readiness(tiny_cache):
 
     weights = (
         tiny_cache
-        / "models--jinaai--jina-embeddings-v3-hf"
+        / "models--jinaai--jina-embeddings-v5-text-small"
         / "snapshots"
         / MODEL_REVISION
         / "model.safetensors"
@@ -219,3 +265,121 @@ def test_incomplete_weights_fail_readiness(tiny_cache):
     with pytest.raises(ValueError, match="incomplete_weights"):
         backend.load()
     assert not backend.loaded
+
+
+def snapshot_path(root):
+    return root / "models--jinaai--jina-embeddings-v5-text-small" / "snapshots" / MODEL_REVISION
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"model_type": "qwen3"},
+        {"hidden_size": 512},
+        {"max_position_embeddings": 8192},
+        {"task_names": ["classification"]},
+        {"architectures": ["Qwen3ForCausalLM"]},
+    ],
+)
+def test_wrong_model_configuration_fails(tiny_cache, change):
+    path = snapshot_path(tiny_cache) / "config.json"
+    path.write_text(json.dumps(json.loads(path.read_text()) | change))
+    backend = JinaBackend(tiny_cache)
+    with pytest.raises(ValueError, match="model_mismatch"):
+        backend.load()
+    assert not backend.loaded and not backend.tokenizer_available
+
+
+@pytest.mark.parametrize(
+    "change",
+    [
+        {"r": 16},
+        {"lora_alpha": 16},
+        {"target_modules": ["q_proj"]},
+        {"base_model_name_or_path": "another-model"},
+        {"task_type": "CAUSAL_LM"},
+        {"peft_type": "IA3"},
+        {"use_rslora": True},
+        {"use_dora": True},
+    ],
+)
+def test_wrong_retrieval_configuration_fails(tiny_cache, change):
+    path = snapshot_path(tiny_cache) / "adapters/retrieval/adapter_config.json"
+    path.write_text(json.dumps(json.loads(path.read_text()) | change))
+    backend = JinaBackend(tiny_cache)
+    with pytest.raises(ValueError, match="retrieval_configuration_mismatch"):
+        backend.load()
+    assert not backend.loaded
+
+
+def test_missing_adapter_tensor_fails(tiny_cache):
+    from safetensors.torch import load_file, save_file
+
+    path = snapshot_path(tiny_cache) / "adapters/retrieval/adapter_model.safetensors"
+    tensors = load_file(path)
+    tensors.pop(next(iter(tensors)))
+    save_file(tensors, path)
+    backend = JinaBackend(tiny_cache)
+    with pytest.raises(ValueError, match="incomplete_adapter"):
+        backend.load()
+    assert not backend.loaded
+
+
+def test_wrong_snapshot_revision_fails(tmp_path, monkeypatch):
+    import huggingface_hub
+
+    monkeypatch.setattr(huggingface_hub, "snapshot_download", lambda *a, **kw: tmp_path / "main")
+    backend = JinaBackend(tmp_path)
+    with pytest.raises(ValueError, match="revision_mismatch"):
+        backend.load()
+    assert not backend.loaded
+
+
+def test_failed_reload_clears_readiness(tiny_cache):
+    backend = JinaBackend(tiny_cache)
+    backend.load()
+    (snapshot_path(tiny_cache) / "adapters/retrieval/adapter_model.safetensors").unlink()
+    with pytest.raises(ValueError, match="missing_adapter"):
+        backend.load()
+    assert not backend.loaded and not backend.tokenizer_available and not backend.revision
+
+
+@pytest.mark.parametrize("kind,prefix", [("query", "Query: "), ("passage", "Document: ")])
+def test_retrieval_prefix_and_last_token_pooling(tiny_cache, kind, prefix):
+    import torch
+    from torch.nn.functional import normalize
+
+    backend = JinaBackend(tiny_cache)
+    backend.load()
+    text = "hello world"
+    # Explicit official recipe: one retrieval adapter, prefix, last-token pooling.
+    encoded = backend._tokenizer(prefix + text, return_tensors="pt", truncation=False)
+    assert backend.count(text, kind) == encoded["input_ids"].shape[1]
+    with torch.inference_mode():
+        hidden = backend._model(**encoded, use_cache=False).last_hidden_state.float()
+        expected = normalize(hidden[:, -1], p=2, dim=-1)[0]
+        mean = normalize(hidden.mean(dim=1), p=2, dim=-1)[0]
+    actual = torch.tensor(backend.embed([text], kind)[0])
+    assert torch.equal(actual, expected)
+    assert not torch.allclose(actual, mean)
+    assert list(backend._model.peft_config) == ["retrieval"]
+
+
+def test_context_boundary_no_truncation_or_forward_above_limit(tiny_cache):
+    backend = JinaBackend(tiny_cache)
+    backend.load()
+    # Avoid quadratic attention at 32K in a unit test; the same guard is exercised
+    # with a deliberately small per-instance limit and real tokenizer/weights.
+    assert backend.max_tokens == 32768
+    backend.max_tokens = backend.count("hello world", "query")
+    assert len(backend.embed(["hello world"], "query")[0]) == 1024
+    with pytest.raises(ValueError, match="token_limit"):
+        backend.embed(["hello world hello"], "query")
+
+
+def test_artifact_allowlist_contains_no_executable_or_unrelated_task():
+    assert "adapters/retrieval/adapter_model.safetensors" in MODEL_ALLOW_PATTERNS
+    assert not any(name.endswith((".py", ".bin")) for name in MODEL_ALLOW_PATTERNS)
+    assert not any(
+        "classification" in name or "text-matching" in name for name in MODEL_ALLOW_PATTERNS
+    )

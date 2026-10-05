@@ -16,7 +16,7 @@ def test_load_failure_keeps_health_and_version(settings, auth):
         assert client.get("/version", headers=auth).status_code == 200
         assert (
             client.post(
-                "/embed", headers=auth, json={"model": "jina-v3", "texts": ["hi"], "kind": "query"}
+                "/embed", headers=auth, json={"model": "jina-v5", "texts": ["hi"], "kind": "query"}
             ).status_code
             == 503
         )
@@ -52,7 +52,7 @@ def test_loaded_once_and_readiness_no_inference(client, backend, auth):
 def test_invalid_backend_vector_is_not_exposed(client, backend, auth, vector):
     backend.embed = lambda texts, kind: [vector]
     response = client.post(
-        "/embed", headers=auth, json={"model": "jina-v3", "texts": ["private"], "kind": "query"}
+        "/embed", headers=auth, json={"model": "jina-v5", "texts": ["private"], "kind": "query"}
     )
     assert response.status_code == 500
     assert response.json() == {"error": "internal_error"}

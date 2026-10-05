@@ -177,7 +177,7 @@ def create_app(settings: Settings | None = None, backend: Backend | None = None)
 
         def process():
             current = app.state.backend
-            counts = [current.count(text) for text in request.texts]
+            counts = [current.count(text, request.kind) for text in request.texts]
             if any(n < 1 or n > current.max_tokens for n in counts):
                 return error(422, "invalid_request")
             vectors = current.embed(request.texts, request.kind)

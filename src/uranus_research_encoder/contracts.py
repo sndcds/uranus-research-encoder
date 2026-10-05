@@ -94,7 +94,7 @@ class ChunkDocument(Contract):
 
 
 class EmbedRequest(Contract):
-    model: Literal["jina-v3"]
+    model: Literal["jina-v5"]
     texts: list[Text] = Field(min_length=1, max_length=MAX_TEXTS)
     kind: EmbeddingKind
 
@@ -108,7 +108,7 @@ class EmbedRequest(Contract):
 
 
 class ChunkRequest(Contract):
-    model: Literal["jina-v3"]
+    model: Literal["jina-v5"]
     documents: list[ChunkDocument] = Field(min_length=1, max_length=MAX_DOCUMENTS)
 
     @model_validator(mode="after")

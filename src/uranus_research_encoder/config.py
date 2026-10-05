@@ -13,7 +13,7 @@ class Settings(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
     api_key: SecretStr
     model_root: Path = Path("/models")
-    model: Literal["jina-v3"] = "jina-v3"
+    model: Literal["jina-v5"] = "jina-v5"
     model_revision: Literal[MODEL_REVISION] = MODEL_REVISION
     backend: Literal["torch", "onnx", "onnx-merged"] = "torch"
     merged_onnx_root: Path | None = None
@@ -43,11 +43,8 @@ class Settings(BaseModel):
     def acknowledged_license(self) -> Self:
         if not self.jina_noncommercial:
             raise ValueError("license_acknowledgement_required")
-        if self.backend == "onnx-merged":
-            if self.merged_onnx_root is None or not self.merged_onnx_root.is_absolute():
-                raise ValueError("absolute_merged_onnx_root_required")
-            if self.onnx_inter_op_threads != 1:
-                raise ValueError("merged_inter_op_must_be_one")
+        if self.backend != "torch":
+            raise ValueError("onnx_not_supported_for_jina_v5")
         return self
 
     @classmethod
@@ -66,7 +63,7 @@ class Settings(BaseModel):
         return cls(
             api_key=SecretStr(key),
             model_root=Path(os.environ.get("ENCODER_MODEL_ROOT", "/models")),
-            model=os.environ.get("ENCODER_MODEL", "jina-v3"),
+            model=os.environ.get("ENCODER_MODEL", "jina-v5"),
             model_revision=os.environ.get("ENCODER_MODEL_REVISION", MODEL_REVISION),
             backend=os.environ.get("ENCODER_BACKEND", "torch"),
             merged_onnx_root=os.environ.get("ENCODER_MERGED_ONNX_ROOT"),

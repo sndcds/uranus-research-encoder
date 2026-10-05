@@ -125,7 +125,7 @@ def main() -> None:
         help="separate merged-only experiment: pad groups of up to four texts",
     )
     parser.add_argument(
-        "--backends", nargs="+", choices=("torch", "onnx", "onnx-merged"), default=["torch", "onnx"]
+        "--backends", nargs="+", choices=("torch", "onnx", "onnx-merged"), default=["torch"]
     )
     parser.add_argument(
         "--lengths",
@@ -156,6 +156,8 @@ def main() -> None:
         "--worker", choices=("torch", "onnx", "onnx-merged"), help=argparse.SUPPRESS
     )
     args = parser.parse_args()
+    if any(name != "torch" for name in args.backends) or args.worker not in (None, "torch"):
+        parser.error("onnx_not_supported_for_jina_v5")
     if os.environ.get("JINA_NONCOMMERCIAL") != "1":
         parser.error("set JINA_NONCOMMERCIAL=1 to acknowledge the model license")
     if not args.model_root.is_absolute():

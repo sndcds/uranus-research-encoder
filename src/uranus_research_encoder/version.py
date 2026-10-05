@@ -1,15 +1,16 @@
 """Reviewed compatibility identifiers. Never derive the embedding version."""
 
-SERVICE_VERSION = "0.1.0"
+SERVICE_VERSION = "0.2.0"
 CONTRACT_VERSION = "uranus-research-encoder-v1"
-MODEL = "jina-v3"
-MODEL_REPOSITORY = "jinaai/jina-embeddings-v3-hf"
-MODEL_REVISION = "d18862d9a48706220815554fac3ebb4dfa46fc28"
+MODEL = "jina-v5"
+MODEL_REPOSITORY = "jinaai/jina-embeddings-v5-text-small"
+MODEL_REVISION = "dd76d535f5447ca3897a9c893fb1e612ead98192"
 DIMENSIONS = 1024
 CHUNK_VERSION = "sections-480-overlap64-v2"
 EMBEDDING_VERSION = (
-    "d18862d9a48706220815554fac3ebb4dfa46fc28:"
-    "native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2"
+    "dd76d535f5447ca3897a9c893fb1e612ead98192:"
+    "native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-"
+    "retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2"
 )
 
 

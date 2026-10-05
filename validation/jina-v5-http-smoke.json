@@ -1,0 +1,29 @@
+{
+  "status": "passed",
+  "version": {
+    "service_version": "0.2.0",
+    "contract_version": "uranus-research-encoder-v1",
+    "model": "jina-v5",
+    "model_repository": "jinaai/jina-embeddings-v5-text-small",
+    "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+    "dimensions": 1024,
+    "embedding_version": "dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2",
+    "chunk_version": "sections-480-overlap64-v2",
+    "backend": "torch",
+    "runtime": "torch-2.11.0+cpu-transformers-5.17.0-peft-0.21.1-cpu"
+  },
+  "health": 200,
+  "unauthenticated_ready": 401,
+  "ready": 200,
+  "query_tokens": 18,
+  "passage_tokens": 18,
+  "chunks": 3,
+  "normalized_1024": true,
+  "deterministic": true,
+  "query_passage_distinct": true,
+  "network_interfaces": [
+    "lo"
+  ],
+  "root": "read-only",
+  "uid": 10001
+}

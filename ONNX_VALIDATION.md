@@ -1,3 +1,6 @@
+> Historical Jina v3 validation only. Jina v5 ONNX serving/export is currently disabled;
+> these results and commands do not validate or provision the current model.
+
 # Pinned ONNX investigation
 
 ## Phase 1 findings, before backend implementation

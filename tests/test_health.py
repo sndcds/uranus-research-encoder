@@ -7,6 +7,8 @@ def test_readiness_and_version(client, auth):
     ready = client.get("/ready", headers=auth)
     assert ready.status_code == 200
     assert ready.json()["status"] == "ready"
+    assert ready.json()["model"] == "jina-v5"
+    assert ready.json()["dimensions"] == 1024
     version = client.get("/version", headers=auth).json()
     assert ready.json()["embedding_version"] == version["embedding_version"]
     assert ready.json()["contract_version"] == version["contract_version"]

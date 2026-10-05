@@ -29,7 +29,7 @@ def test_section_regressions(client, auth, context):
         "/chunks",
         headers=auth,
         json={
-            "model": "jina-v3",
+            "model": "jina-v5",
             "documents": [
                 {
                     "entity_id": "019d5f3a-de7e-780a-9fa0-dc24e5545e2e",
@@ -56,3 +56,10 @@ def test_admin_fixture(client, auth):
     assert result["entity_id"] == data["documents"][0]["entity_id"]
     assert [c["chunk_kind"] for c in result["chunks"]] == ["content", "tickets", "location_context"]
     assert result["chunks"][2]["contexts"][0]["venue_id"] == "019d9b4e-b7ca-7b1f-8d19-56ca89e33ce7"
+
+
+def test_metadata_http_fixtures(client, auth):
+    fixture = Path(__file__).parent / "fixtures/http_examples_fake_backend.json"
+    examples = json.loads(fixture.read_text())
+    for endpoint in ("/health", "/ready", "/version"):
+        assert client.get(endpoint, headers=auth).json() == examples[endpoint]

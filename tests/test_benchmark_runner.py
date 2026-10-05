@@ -28,7 +28,7 @@ def test_failed_or_empty_worker_stops_sweep(tmp_path, monkeypatch, returncode):
             "--output",
             str(output),
             "--backends",
-            "onnx-merged",
+            "torch",
             "--thread-sweep",
             "1",
             "2",

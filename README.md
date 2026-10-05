@@ -27,11 +27,11 @@ intentional. This repository does not install or deploy anything onto existing h
 
 | Identifier | Value |
 | --- | --- |
-| Service | `0.1.0` |
+| Service | `0.2.0` |
 | HTTP contract | `uranus-research-encoder-v1` |
-| Logical model | `jina-v3` |
-| Repository | `jinaai/jina-embeddings-v3-hf` |
-| Weights revision | `d18862d9a48706220815554fac3ebb4dfa46fc28` |
+| Logical model | `jina-v5` |
+| Repository | `jinaai/jina-embeddings-v5-text-small` |
+| Weights revision | `dd76d535f5447ca3897a9c893fb1e612ead98192` |
 | Dimensions | `1024` |
 | Chunk version | `sections-480-overlap64-v2` |
 | Model license | `CC-BY-NC-4.0` |
@@ -39,7 +39,7 @@ intentional. This repository does not install or deploy anything onto existing h
 The exact, centrally defined and tested embedding version is:
 
 ```text
-d18862d9a48706220815554fac3ebb4dfa46fc28:native-transformers5.17.0-retrieval-normalized-f32:sections-480-overlap64-v2
+dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2
 ```
 
 `GET /version` is the machine-readable deployment contract. Clients should compare
@@ -53,7 +53,7 @@ old embedding version. Reindexing requirements must be assessed when these chang
 - `contracts.py` defines strict Pydantic v2 request/response types and hard limits.
 - `chunking.py` implements the reviewed Section v2 semantics using exact counts.
 - `model.py` defines the backend protocol and the native `TorchBackend` reference.
-- `onnx_backend.py` implements the offline CPU `OnnxBackend` candidate.
+- `onnx_backend.py` and `merged_onnx_backend.py` retain imports but reject v5 use.
 - `model_artifacts.py` defines their shared canonical artifact manifests.
 - `auth.py` authenticates before reading/parsing protected request bodies and applies
   streaming size, body-read timeout, and admission limits.
@@ -63,12 +63,28 @@ old embedding version. Reindexing requirements must be assessed when these chang
 - `scripts/prefetch_model.py` is an explicit network-enabled provisioning tool.
 - `deploy/` contains a production image definition and portable example Compose file.
 
-The native model implementation requires Transformers 5.17.0 and PEFT for retrieval
-LoRA adapters. The backend selects `retrieval_query` or `retrieval_passage`, mean-pools
-hidden states with the attention mask, and L2-normalizes float32 vectors. No textual
-instruction prefix is added by this native API. Special tokens are included in counts.
-See the [pinned model card](https://huggingface.co/jinaai/jina-embeddings-v3-hf/blob/d18862d9a48706220815554fac3ebb4dfa46fc28/README.md)
-and [native Transformers documentation](https://huggingface.co/docs/transformers/model_doc/jina_embeddings_v3).
+The selected 677M model uses **Qwen3**, a 1024-dimensional hidden state and a
+**32,768-token** model context. The tokenizer advertises a larger length; the loader
+uses the reviewed model configuration limit instead. Existing locked dependencies
+are retained: Transformers 5.17.0, Torch 2.11.0 and PEFT 0.21.1. The official minimums
+are Transformers 4.57.0, Torch 2.8.0 and PEFT 0.15.2.
+
+The [pinned model card](https://huggingface.co/jinaai/jina-embeddings-v5-text-small/blob/dd76d535f5447ca3897a9c893fb1e612ead98192/README.md),
+[configuration](https://huggingface.co/jinaai/jina-embeddings-v5-text-small/blob/dd76d535f5447ca3897a9c893fb1e612ead98192/configuration_jina_embeddings_v5.py)
+and [encoding wrapper](https://huggingface.co/jinaai/jina-embeddings-v5-text-small/blob/dd76d535f5447ca3897a9c893fb1e612ead98192/modeling_jina_embeddings_v5.py)
+were reviewed as source text. The upstream configuration only subclasses Qwen3Config
+with a custom model type. The service validates that upstream identity, constructs a
+native `Qwen3Config`, and loads an explicit `Qwen3Model`; it **never executes the
+repository's Python code**. `AutoTokenizer` receives that native configuration with
+`trust_remote_code=False`. The upstream generic AutoModel example requires remote
+code, but our equivalent native path does not.
+
+Both external kinds use the **same retrieval LoRA adapter** from `adapters/retrieval`:
+`query` prepends `Query: `; `passage` prepends `Document: `. Clients supply raw text,
+not these internal prefixes. The backend pools the last valid token and applies
+exactly one L2 normalization in float32. No mean pooling, dimension reduction,
+secondary normalization, alternative adapter or fallback model is used. A finite,
+nonzero unit vector of exactly 1024 dimensions is checked before returning it.
 
 The Torch reference uses CPU float32, eager attention, deterministic Torch operations,
 one Torch compute thread, and one text per forward pass. A lock covers adapter selection
@@ -90,12 +106,12 @@ command-line arguments, repository files, access logs, or issue reports.
 | `GET /health` | Exactly `{"status":"ok"}`; no model access or inference |
 | `GET /ready` | Configuration, loaded model, tokenizer, pinned revision; 503 if unavailable |
 | `GET /version` | Backend/runtime, service, contract, repository, revision, dimensions, embedding and chunk versions |
-| `POST /embed` | `{"model":"jina-v3","texts":["..."],"kind":"query"}`; also accepts `passage` |
+| `POST /embed` | `{"model":"jina-v5","texts":["..."],"kind":"query"}`; also accepts `passage` |
 | `POST /chunks` | Generic documents with UUID `entity_id` and `sections` |
 
 `/embed` returns `embedding_version`, `vectors`, and text/token **counts** in `metrics`.
 Every vector must have 1024 finite numbers and unit norm. Text is never silently
-truncated: requests above the model's 8192-token window, including special tokens,
+truncated: requests above the model's 32,768-token window, including the retrieval prefix and special tokens,
 fail validation. JSON represents the numeric values of float32 outputs.
 
 `/chunks` returns `embedding_version` and ordered `documents`, each with `entity_id`
@@ -144,12 +160,12 @@ Different scopes or optional location IDs are never collapsed. Plain Sections fo
 the admin v2 behavior: a whole document fitting within 480 tokens is combined with
 blank lines and labeled `content`; larger documents split each Section by its kind.
 
-Each emitted chunk is measured with the actual model tokenizer, including special
+Each emitted chunk is measured with the actual model tokenizer, including its `Document: ` prefix and special
 tokens, and contains at most 480 tokens. A deterministic prefix search prefers paragraph
 or sentence ends in the last 35% of the candidate. It may underfill a chunk because
 BPE counts are not monotonic; every chosen piece is rechecked. Split pieces trim outer
 whitespace as in the reviewed v2 contract. Overlap is the longest suffix found by the
-v2 search with a standalone token count of at most 64 **including special tokens**;
+v2 search with a standalone token count of at most 64 **including the passage prefix and special tokens**;
 this is a budget, not a guarantee of exactly 64 content tokens. Splits always advance.
 No approximate character-to-token conversion or tokenizer truncation is used.
 
@@ -178,15 +194,16 @@ Do not run additional Uvicorn workers: each would load a separate model and have
 own limits. There is no hard cancellation of a running model forward; clients can time
 out while admitted computation completes. Container memory/pid/CPU limits are the
 outer resource boundary. The 8 GiB Compose memory setting is an example, not a measured
-capacity guarantee for 8192-token eager-attention requests; tune it before rollout.
+capacity guarantee for 32,768-token eager-attention requests; tune it before rollout.
 
 ## Configuration and local development
 
 Python **3.13.15**, uv **0.12.5**, and the committed `uv.lock` are the supported baseline.
 Linux uses locked CPU-only inference packages. No CUDA libraries are needed.
-`uv sync --locked` installs both reference and candidate backends plus test tools.
-For a minimal installation, use `--no-default-groups --group runtime-torch` or
-`--no-default-groups --group runtime-onnx`; the ONNX group does not install Torch/PEFT.
+`uv sync --locked` installs the reference backend and test tools. The locked ONNX
+packages remain for historical report/merge arithmetic tests, not as supported
+serving backends. For a minimal installation, use
+`uv sync --locked --no-default-groups --group runtime-torch`.
 
 ```sh
 uv sync --locked
@@ -195,8 +212,7 @@ uv run --no-sync ruff check .
 uv run --no-sync pytest -q
 ```
 
-Normal tests use a deterministic fake backend, small generated native weights, and
-tiny generated ONNX graphs with external data. They exercise real offline loaders
+Normal tests use a deterministic fake backend, small generated native Qwen3 weights and retrieval LoRA weights. They exercise real offline loaders
 without downloading Jina weights. The `integration` and `benchmark` markers are
 excluded by default. No static type checker is configured.
 
@@ -205,34 +221,27 @@ To run locally, set explicit environment variables or use a service manager:
 ```sh
 export ENCODER_API_KEY_FILE=/absolute/path/embedding.key
 export ENCODER_MODEL_ROOT=/absolute/path/model-cache
-export ENCODER_MODEL=jina-v3
+export ENCODER_MODEL=jina-v5
 export ENCODER_BACKEND=torch
 export JINA_NONCOMMERCIAL=1
 export ENCODER_MAX_CONCURRENT_REQUESTS=2
 uv run --no-sync python -m uranus_research_encoder
 ```
 
-`ENCODER_BACKEND` accepts `torch` (the default/reference), `onnx` (upstream CPU),
-or experimental `onnx-merged` (locally exported CPU graphs). The last requires
-`ENCODER_MERGED_ONNX_ROOT` pointing to a separate export directory; see
-[MERGED_ONNX_VALIDATION.md](MERGED_ONNX_VALIDATION.md) before using it.
-Both `/ready` and `/version` report the backend, runtime, pinned model revision,
-dimensions, embedding version, and contract version. HTTP request and chunk/EvidenceContext
-schemas are unchanged. `/ready` and `/version` add backend/runtime metadata.
+`ENCODER_BACKEND=torch` is the only supported configuration for v5. Requests for
+`onnx` or `onnx-merged` fail configuration/readiness, and direct backend calls,
+manifest validation, export and parity tools reject use before model IO. The previous
+graphs implement a different architecture, task selection and pooling contract;
+labeling them as v5 would be incorrect. ONNX export/parity requires separate work.
+The old ONNX validation documents and `validation/` measurements are **historical v3
+evidence only**, not current setup instructions or v5 performance claims.
 
-The ONNX backends use `ENCODER_ONNX_INTRA_OP_THREADS` and
-`ENCODER_ONNX_INTER_OP_THREADS`, defaulting to 1 and bounded to 1–8; merged ONNX
-requires inter-op 1. Graph execution is sequential and spinning is disabled.
-Upstream ONNX explicitly enables graph optimization. Merged ONNX defaults to
-disabled optimization; `ENCODER_MERGED_ONNX_OPTIMIZATION=basic` selects a separately
-gated experiment. The CPU memory arena and memory-pattern retention are
-disabled. The service backends serialize inference and process each text separately
-to preserve request batching invariance. No graph export or model download happens
-at startup.
-
-See [ONNX_VALIDATION.md](ONNX_VALIDATION.md) for the pinned artifact investigation,
-compatibility evidence, benchmark results, and release limitations. Do not infer
-that ONNX is faster from the backend choice alone.
+Both `/ready` and `/version` expose backend/runtime, model revision, dimensions,
+embedding version and contract version without inference. The JSON structure remains
+unchanged, so `uranus-research-encoder-v1` is retained. The changed model literal and
+embedding space are intentional incompatibilities, represented by service 0.2.0 and
+new model/revision/embedding identifiers. Consumers must deliberately migrate and
+reindex externally; this service performs neither operation.
 
 The CLI binds to **127.0.0.1:6335** by default and installs sanitized JSON logging.
 Use this entrypoint in operations: direct Uvicorn defaults enable access logging.
@@ -251,17 +260,14 @@ JINA_NONCOMMERCIAL=1 uv run --no-sync python scripts/prefetch_model.py \
   --model-root /absolute/path/model-cache --backend torch
 ```
 
-This tool accepts no repository or revision override. `--backend torch` downloads
-native safetensors and the two retrieval adapters. `--backend onnx` downloads exactly
-`onnx/model.onnx` and `onnx/model.onnx_data`; `--backend all` provisions their union.
-Each includes pinned tokenizer/config assets. Python remote code, separate unrelated
-adapters, FP16 ONNX, and unused model formats are excluded. The production cache
-is an intentionally **filtered Hugging Face snapshot**. Provisioning and runtime
-snapshot validation both use the backend manifests in
-`src/uranus_research_encoder/model_artifacts.py` as the canonical reviewed allowlist.
-The cached repository tree may list excluded files such as `.gitattributes`,
-`custom_st.py`, and artifacts for an unselected backend; these need not be present. Required allowlisted
-files must still be present for offline loading to succeed.
+This tool accepts no repository or revision override and supports only `--backend torch`.
+Use a **separate v5 cache path**; never replace or delete an existing v3 cache.
+The allowlist contains `config.json`, `tokenizer.json`, `tokenizer_config.json`,
+native safetensors (including sharded-checkpoint support), and exactly
+`adapters/retrieval/{adapter_config.json,adapter_model.safetensors}`. It excludes
+repository Python, other task adapters, alternate weights, redundant vocabulary/merges
+(the fast-tokenizer JSON is required) and sentence-transformers wrappers. Provisioning and runtime share `model_artifacts.py` as their canonical
+allowlist. Excluded entries in the cached full repository tree need not be present.
 
 Transfer the **entire provisioned cache directory**, including `blobs`, snapshot
 symlinks, and cached `trees` metadata; do not download the complete repository.
@@ -277,12 +283,6 @@ missing adapters, configuration failures or revision mismatches fail readiness; 
 alternative model is downloaded. No prefetch runs during image build or service startup.
 Network-level egress denial can additionally be applied by the operator.
 
-The ONNX loader verifies both graph and external-data SHA-256 against the reviewed
-pinned digests before opening a CPUExecutionProvider session. It selects verified
-task bank 0 for queries and bank 1 for passages, then applies float32 masked mean
-pooling and L2 normalization to `text_embeds`. The graph's dense/tanh pooled output
-is not used. The existing native safetensors and adapter integrity checks remain.
-
 After provisioning, explicitly test the actual cache offline:
 
 ```sh
@@ -297,15 +297,11 @@ latency/memory. Fake-model HTTP tests do not establish real-model numerical qual
 
 ## Container and deployment boundary
 
-The Dockerfile exposes `runtime-torch`, `runtime-onnx`, and experimental
-`runtime-onnx-merged` targets. The default final
-target remains Torch. The ONNX target contains tokenizer support and CPU ONNX Runtime,
-but no Torch, PEFT, ONNX exporter, or development tools. Select it explicitly with
-`docker build --target runtime-onnx -f deploy/Dockerfile -t encoder-onnx .` only after
-reviewing the validation evidence. Building an image does not provision model artifacts.
+The Dockerfile exposes `runtime-torch` and the default `runtime` target. ONNX targets
+are not shipped for v5. Building an image does not provision model artifacts.
 
 ```sh
-docker build -f deploy/Dockerfile -t uranus-research-encoder:0.1.0 .
+docker build -f deploy/Dockerfile -t uranus-research-encoder:0.2.0 .
 ```
 
 The multi-stage image pins Python and uv by version and digest, installs with
@@ -355,30 +351,31 @@ Normal CI never downloads multi-gigabyte model weights.
 The existing repository [LICENSE](LICENSE) is AGPL-3.0; it applies to the service code.
 Model weights are separate Jina AI materials under **CC-BY-NC-4.0**. Preserve Jina AI
 attribution and the pinned model card when distributing/provisioning weights. See the
-[model license declaration](https://huggingface.co/jinaai/jina-embeddings-v3-hf/blob/d18862d9a48706220815554fac3ebb4dfa46fc28/README.md)
+[model license declaration](https://huggingface.co/jinaai/jina-embeddings-v5-text-small/blob/dd76d535f5447ca3897a9c893fb1e612ead98192/README.md)
 and [CC-BY-NC-4.0 terms](https://creativecommons.org/licenses/by-nc/4.0/).
 
 Operators must explicitly set `JINA_NONCOMMERCIAL=1` to acknowledge non-commercial
 Jina use before either prefetch or runtime loading. That flag does not grant permission
-for commercial use. Obtain appropriate authorization from Jina AI when needed.
+for commercial use. Review the published license terms before commercial use; this documentation makes no legal assessment.
 Dependencies retain their own licenses; the service license does not relicense weights.
 
-## Experimental locally merged ONNX
+## Migration boundary and token-count change
 
-`onnx-merged` is an explicit experimental backend using two locally exported,
-task-free float32 graphs. Torch remains the production default. Export requires
-an existing pinned native cache, the noncommercial acknowledgement, and an
-isolated output directory; it never downloads model weights. See
-[MERGED_ONNX_VALIDATION.md](MERGED_ONNX_VALIDATION.md) for the export contract,
-artifact integrity checks, three-backend parity gate, measurements and limitations.
-The `runtime-onnx-merged` Docker target shares the minimal ONNX runtime dependencies
-and expects the exported directory mounted read-only at `/merged`. It contains no
-Torch, PEFT or exporter packages. Building this target does not change the default
-Torch image or deploy a service.
+The preceding model used two retrieval adapters and masked mean pooling; v5 uses a
+shared retrieval adapter, kind-specific prefixes and last-token pooling. Its vectors
+are a different embedding space. Never extend an old collection with these vectors
+under an old identifier. Rollback means running the previous service against its
+unchanged previous cache; no cache deletion or automatic consumer switch is supplied.
 
-On the tested eight-vCPU server, the separately validated `basic` optimization
-with eight threads beats Torch at the same thread count: 36.6% lower aggregate
-p50, 68.8% higher throughput and 3.9% lower peak RSS for the representative
-32–480-token cases. The unoptimized merge alone does not meet that performance
-target. See the validation report for exact settings, complete raw results and
-the separate batching tradeoff; this does not change the production default.
+`chunking.py`, MAX_TOKENS=480, OVERLAP=64, Section/context merging, ordering and
+content hashing remain unchanged at `sections-480-overlap64-v2`. The necessary
+migration difference is the tokenizer and its model-input count: `/embed` counts the
+requested kind's prefix; `/chunks` and one-argument `Backend.count(text)` use passage
+semantics. Texts and hashes do not contain the added prefix. Chunk boundaries may
+therefore differ from the previous tokenizer despite the unchanged algorithm. There
+is no normalization of user text beyond the existing chunking rules.
+
+The actual 32K model limit does not imply that eager CPU inference fits the example
+container budget at that limit. Measure target-host memory and latency before rollout.
+No v5 retrieval-quality improvement or production throughput is claimed by this
+repository migration.

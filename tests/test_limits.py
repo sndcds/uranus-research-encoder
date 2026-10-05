@@ -15,7 +15,7 @@ def test_text_limits(client, auth, texts):
             "/embed",
             headers=auth,
             json={
-                "model": "jina-v3",
+                "model": "jina-v5",
                 "texts": texts,
                 "kind": "query",
             },
@@ -34,8 +34,8 @@ def test_no_truncation(client, auth, backend):
         "/embed",
         headers=auth,
         json={
-            "model": "jina-v3",
-            "texts": ["x" * 8192],
+            "model": "jina-v5",
+            "texts": ["x" * 32768],
             "kind": "query",
         },
     )
@@ -64,7 +64,7 @@ def test_document_limits(client, auth, which):
         doc["sections"] = [{"kind": "content", "text": "x" * 100001}] * 2
     else:
         doc["sections"].append({"kind": "content", "text": "bye", "context": {"scope": "event"}})
-    response = client.post("/chunks", headers=auth, json={"model": "jina-v3", "documents": docs})
+    response = client.post("/chunks", headers=auth, json={"model": "jina-v5", "documents": docs})
     assert response.status_code == 422
     assert response.json() == {"error": "invalid_request"}
 
@@ -77,7 +77,7 @@ def test_compressed_body_rejected(client, auth):
 def test_response_limit(client, auth, monkeypatch):
     monkeypatch.setattr("uranus_research_encoder.app.MAX_RESPONSE_BYTES", 8)
     response = client.post(
-        "/embed", headers=auth, json={"model": "jina-v3", "texts": ["hi"], "kind": "query"}
+        "/embed", headers=auth, json={"model": "jina-v5", "texts": ["hi"], "kind": "query"}
     )
     assert response.status_code == 422
     assert response.json() == {"error": "response_limit"}
