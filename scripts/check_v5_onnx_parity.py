@@ -64,6 +64,11 @@ def evaluate(a):
     tolerance = plan["tolerances"]
     if a.mode == "report":
         native, ort = [np.load(a.output_dir / f"{m}.npz") for m in ["native", "onnx"]]
+        for data in (native, ort):
+            if any(data[key].shape != (len(rows), 1024) for key in ("single", "right", "left")):
+                raise ValueError("incomplete_vector_artifact")
+        if not np.array_equal(native["tokens"], ort["tokens"]):
+            raise ValueError("tokenization_mismatch")
         vectors = [
             {
                 **{k: r[k] for k in ["id", "kind"]},

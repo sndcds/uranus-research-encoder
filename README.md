@@ -201,8 +201,8 @@ capacity guarantee for 32,768-token eager-attention requests; tune it before rol
 Python **3.13.15**, uv **0.12.5**, and the committed `uv.lock` are the supported baseline.
 Linux uses locked CPU-only inference packages. No CUDA libraries are needed.
 `uv sync --locked` installs the reference backend and test tools. The locked ONNX
-packages remain for historical report/merge arithmetic tests, not as supported
-serving backends. For a minimal installation, use
+packages also support the explicit experimental `v5-onnx-merged` backend.
+For a minimal native installation, use
 `uv sync --locked --no-default-groups --group runtime-torch`.
 
 ```sh
@@ -228,11 +228,24 @@ export ENCODER_MAX_CONCURRENT_REQUESTS=2
 uv run --no-sync python -m uranus_research_encoder
 ```
 
-`ENCODER_BACKEND=torch` is the only supported configuration for v5. Requests for
-`onnx` or `onnx-merged` fail configuration/readiness, and direct backend calls,
-manifest validation, export and parity tools reject use before model IO. The previous
+`ENCODER_BACKEND=torch` remains the default native v5 path. The separate experimental
+`v5-onnx-merged` path uses an audited FP32 retrieval-LoRA merge and a shared dynamic
+embedding graph. See [V5_MERGED_ONNX_VALIDATION.md](V5_MERGED_ONNX_VALIDATION.md) for
+frozen gates, measured evidence, limitations and reproduction. It does not replace
+Torch or change the embedding/chunk contract.
+
+For an isolated ONNX-only installation, use `uv sync --locked --no-default-groups
+--group runtime-onnx`. Explicitly select `ENCODER_BACKEND=v5-onnx-merged`, set
+`ENCODER_MERGED_ONNX_ROOT` to an absolute export directory and supply its reviewed
+`ENCODER_V5_ONNX_MANIFEST_SHA256`. Keep `ENCODER_MERGED_ONNX_OPTIMIZATION=disabled`
+and `ENCODER_ONNX_INTER_OP_THREADS=1`; select 1–8 intra-op threads with
+`ENCODER_ONNX_INTRA_OP_THREADS`. Load/hash/contract errors leave readiness false;
+there is no Torch fallback. The public API retains serialized per-text forwards;
+padded graph batching is measured separately.
+
+The legacy `onnx` and `onnx-merged` backend names still reject v5. Their previous
 graphs implement a different architecture, task selection and pooling contract;
-labeling them as v5 would be incorrect. ONNX export/parity requires separate work.
+labeling them as v5 would be incorrect.
 The old ONNX validation documents and `validation/` measurements are **historical v3
 evidence only**, not current setup instructions or v5 performance claims.
 

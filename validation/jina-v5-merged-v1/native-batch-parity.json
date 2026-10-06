@@ -1,0 +1,19 @@
+{
+  "right": {
+    "pass_count": 179,
+    "total": 179,
+    "max_difference": 1.7881393432617188e-07,
+    "worst_mean_difference": 4.029067834920852e-08,
+    "min_cosine_similarity": 0.9999999999986773,
+    "max_norm_error": 1.4773703393977655e-07
+  },
+  "left": {
+    "pass_count": 179,
+    "total": 179,
+    "max_difference": 4.991888999938965e-07,
+    "worst_mean_difference": 9.756202601352015e-08,
+    "min_cosine_similarity": 0.9999999999920881,
+    "max_norm_error": 1.4773703393977655e-07
+  },
+  "native_vectors_sha256": "0047cbfb3d8fab2a4d5c85cd0a8e8946c03a4116f6a5a904637124d8546af989"
+}

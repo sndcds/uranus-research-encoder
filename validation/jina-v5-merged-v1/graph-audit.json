@@ -1,0 +1,81 @@
+{
+  "schema": "jina-v5-graph-audit-v1",
+  "initializer_types": [
+    1
+  ],
+  "inputs": [
+    {
+      "name": "input_ids",
+      "dtype": 7,
+      "dimensions": [
+        "batch",
+        "sequence"
+      ]
+    },
+    {
+      "name": "attention_mask",
+      "dtype": 7,
+      "dimensions": [
+        "batch",
+        "sequence"
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "text_embeds",
+      "dtype": 1,
+      "dimensions": [
+        "batch",
+        1024
+      ]
+    }
+  ],
+  "op_domains": [
+    ""
+  ],
+  "op_types": [
+    "Add",
+    "And",
+    "Cast",
+    "CastLike",
+    "Clip",
+    "Concat",
+    "Constant",
+    "Cos",
+    "Div",
+    "Expand",
+    "Gather",
+    "GatherND",
+    "GreaterOrEqual",
+    "Identity",
+    "MatMul",
+    "Max",
+    "Mul",
+    "Neg",
+    "Pow",
+    "Range",
+    "Reciprocal",
+    "ReduceL2",
+    "ReduceMax",
+    "ReduceMean",
+    "Reshape",
+    "Shape",
+    "Sigmoid",
+    "Sin",
+    "Slice",
+    "Softmax",
+    "Sqrt",
+    "Squeeze",
+    "Transpose",
+    "Unsqueeze",
+    "Where"
+  ],
+  "external_files": [
+    "model.onnx.data"
+  ],
+  "node_count": 6699,
+  "pass": true,
+  "graph_sha256": "fcc2f6d8a28486602fe7e689df9536acfb56cf7be6a8c257ee68918782735f99",
+  "scope": "Initial local export; host re-export audited separately"
+}

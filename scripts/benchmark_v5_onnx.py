@@ -9,6 +9,8 @@ import platform
 import resource
 import statistics
 import time
+from datetime import UTC, datetime
+from importlib.metadata import version
 from pathlib import Path
 
 import numpy as np
@@ -23,12 +25,21 @@ def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("backend", choices=["native", "onnx"])
     p.add_argument("--threads", type=int, choices=[1, 2, 4, 8], default=8)
+    p.add_argument(
+        "--workload",
+        action="append",
+        choices=["query", "passage", "batch3"],
+        help="Optional workload subset, e.g. query-only thread scaling",
+    )
     p.add_argument("--model-root", type=Path, required=True)
     p.add_argument("--graph-dir", type=Path, required=True)
     p.add_argument("--plan-dir", type=Path, required=True)
     p.add_argument("--parity-report", type=Path, required=True)
+    p.add_argument("--contract-report", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
     a = p.parse_args()
+    if a.output.exists():
+        raise ValueError("benchmark_output_already_exists")
     plan = json.loads((a.plan_dir / "plan.json").read_text())
     report = json.loads(a.parity_report.read_text())
     if not report["pass"] or report["plan_sha256"] != sha(a.plan_dir / "plan.json"):
@@ -43,6 +54,11 @@ def main():
     context = json.loads((a.parity_report.parent / "onnx-context.json").read_text())
     if context["graph_manifest_sha256"] != sha(a.graph_dir / "manifest.json"):
         raise ValueError("untested_graph")
+    contract = json.loads(a.contract_report.read_text())
+    if contract.get("pass") is not True or contract.get("manifest_sha256") != sha(
+        a.graph_dir / "manifest.json"
+    ):
+        raise ValueError("contract_gate_not_passed")
     cpus = sorted(os.sched_getaffinity(0))
     if len(cpus) < 8:
         raise ValueError("eight_cpus_required")
@@ -119,6 +135,9 @@ def main():
     first = time.perf_counter() - start
     result = {
         "schema": "jina-v5-runtime-performance-v1",
+        "observed_at_utc": datetime.now(UTC).isoformat(),
+        "versions": {p: version(p) for p in ("torch", "transformers", "peft", "onnxruntime")},
+        "runner_sha256": sha(Path(__file__)),
         "backend": a.backend,
         "threads": a.threads,
         "inter_op_threads": 1,
@@ -128,6 +147,7 @@ def main():
         "load_seconds": load_seconds,
         "first_inference_seconds": first,
         "parity_report_sha256": sha(a.parity_report),
+        "contract_report_sha256": sha(a.contract_report),
         "plan_sha256": sha(a.plan_dir / "plan.json"),
         "manifest_sha256": sha(a.graph_dir / "manifest.json"),
         "workloads": {},
@@ -138,6 +158,8 @@ def main():
         "native_batching": "existing one-text-per-forward; ONNX uses padded batch",
     }
     for kind, batches in workloads.items():
+        if a.workload and kind not in a.workload:
+            continue
         for i in range(plan["performance"]["warmup_per_workload"]):
             embed(batches[i])
         samples = []

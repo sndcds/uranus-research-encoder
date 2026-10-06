@@ -175,3 +175,21 @@ def test_native_wrapper_and_dynamic_onnx(v5_tiny, tmp_path):
             None, {"input_ids": batch_ids.numpy(), "attention_mask": batch_mask.numpy()}
         )[0]
         np.testing.assert_allclose(output, expected, atol=1e-5, rtol=1e-5)
+
+
+def test_corrupt_peft_merge_stops_export(v5_tiny, monkeypatch):
+    import torch
+    from peft.tuners.lora.layer import Linear
+
+    from uranus_research_encoder.v5_onnx_export import merge_retrieval
+
+    original = Linear.merge
+
+    def corrupt(self, *args, **kwargs):
+        original(self, *args, **kwargs)
+        with torch.no_grad():
+            self.base_layer.weight[0, 0] += 0.125
+
+    monkeypatch.setattr(Linear, "merge", corrupt)
+    with pytest.raises(ValueError, match="merged_weight_mismatch"):
+        merge_retrieval(v5_tiny)

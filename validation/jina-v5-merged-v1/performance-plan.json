@@ -1,0 +1,68 @@
+{
+  "schema": "jina-v5-performance-execution-plan-v1",
+  "parity_plan_sha256": "95ba5f3f56b18fb2de59635ab183aa4555a320caa42c33c2243488db46c1e226",
+  "status": "registered_before_first_performance_run",
+  "gate": "all frozen merge/vector/batch/ranking gates and real HTTP contract smoke must pass for the same graph",
+  "primary": {
+    "cpus": 8,
+    "threads": 8,
+    "inter_op_threads": 1,
+    "workloads": [
+      "query",
+      "passage",
+      "batch3"
+    ],
+    "samples_each": 120,
+    "warmups_each": 5,
+    "memory_gib": 6,
+    "memory_plus_swap_gib": 8
+  },
+  "secondary": {
+    "threads": [
+      1,
+      2,
+      4
+    ],
+    "workloads": [
+      "query"
+    ],
+    "samples_each": 120,
+    "warmups_each": 5
+  },
+  "run_order": [
+    [
+      "native",
+      8
+    ],
+    [
+      "onnx",
+      8
+    ],
+    [
+      "onnx",
+      1
+    ],
+    [
+      "native",
+      1
+    ],
+    [
+      "native",
+      2
+    ],
+    [
+      "onnx",
+      2
+    ],
+    [
+      "onnx",
+      4
+    ],
+    [
+      "native",
+      4
+    ]
+  ],
+  "scope": "Embedding-call latency including tokenization, excluding HTTP/Qdrant and token-count preflight. Native serializes batch3; ONNX batch3 is direct padded graph inference. Public ONNX HTTP backend retains one-text-per-forward, so graph batch3 is not an HTTP batch speed claim. Hash verification precedes the separately timed model initialization.",
+  "limitation": "Shared host, sequential processes, one run per profile; no production forecast."
+}
