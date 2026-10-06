@@ -1,0 +1,73 @@
+{
+  "schema": "jina-v5-parity-plan-v1",
+  "selection_sha256": "60cc25ee55ccdfd9bec1cf88561d4446fcc3e425dcc9dd1c83ec45469bfa6e42",
+  "native_provenance_sha256": "7c3369f3368da729911f206c9f92a93f5202f4df9fdb94a6ee7350da73e98a90",
+  "tolerances": {
+    "max_absolute_difference": 1e-05,
+    "mean_absolute_difference": 1e-06,
+    "min_cosine_similarity": 0.999999,
+    "norm_absolute_error": 1e-05
+  },
+  "rationale": "FP32 execution changes reduction order and fuses the algebraic LoRA expression. Absolute errors on normalized 1024D vectors are tightly bounded; cosine computed in float64 avoids FP32 comparison cancellation. Same thresholds for native/merged/wrapper/ORT and single/batch. No post-hoc tolerance changes.",
+  "merge": {
+    "targets": 196,
+    "adapter_tensors": 392,
+    "exact_weight_match": true,
+    "max_difference": 0
+  },
+  "ranking": {
+    "full_order_identical": true,
+    "top10_set_identical": true,
+    "top10_order_identical": true,
+    "chunk_winners_identical": true,
+    "max_score_difference": 1e-05,
+    "tie_break": "chunk winner: (-score, point_id); events: (-score, event_id); exact ties only, no rounding"
+  },
+  "batch": {
+    "size": 3,
+    "padding_sides": [
+      "right",
+      "left"
+    ],
+    "all_inputs": true
+  },
+  "export": {
+    "dtype": "float32",
+    "design": "B",
+    "dynamic": [
+      "batch",
+      "sequence"
+    ],
+    "ort_optimization": "disabled",
+    "opset": 18
+  },
+  "performance": {
+    "only_after_all_gates_pass": true,
+    "threads": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "primary_threads": 8,
+    "inter_op_threads": 1,
+    "cpu_affinity_count": 8,
+    "warmup_per_workload": 5,
+    "samples_per_workload": 120,
+    "workloads": [
+      "query",
+      "passage",
+      "batch3"
+    ],
+    "p99_min_samples": 100
+  },
+  "gate_order": [
+    "merge",
+    "vector",
+    "batch",
+    "ranking",
+    "contract",
+    "performance"
+  ],
+  "status": "preregistered_before_any_onnx_evaluation"
+}
