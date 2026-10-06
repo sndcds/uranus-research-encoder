@@ -1,0 +1,23 @@
+{
+  "schema": "jina-v5-performance-verification-v1",
+  "pass": true,
+  "reports_checked": 8,
+  "measured_samples": 1440,
+  "checks": [
+    "same graph, parity, HTTP report, frozen plan and runner hashes",
+    "8 CPUs, fixed inter-op=1, preregistered intra-op profiles",
+    "120 samples and 5 warmups per workload",
+    "same ordered inputs per matching runtime profile",
+    "means, medians, p95, p99 and throughput recomputed from raw samples"
+  ],
+  "report_sha256": {
+    "performance-native-1.json": "ad33fad39b2e219c8dfda399660a7af34ab26e22261411034e3a39d2af7a8341",
+    "performance-native-2.json": "013f44650a9134f68944367475e84effe64979694c10b45ada9e79515c1ddaec",
+    "performance-native-4.json": "4426e051bc94e72b09206bf61a549aadeafd0ac2ea2f008f54d524c9302f9260",
+    "performance-native-8.json": "6f5f758e469d9d6db6071861c498ed6e69a5b4f1e6b7627a6422aef7d7b3bdf5",
+    "performance-onnx-1.json": "9516f065a3bcb42ed6b52139c83b2ff7ee6f15d30c2b91d9c0d3e08e87d6690b",
+    "performance-onnx-2.json": "b816247138ef6df706b4fa7da397c2524120195a524b7e73c1be8ad01c6cb09a",
+    "performance-onnx-4.json": "f8706b789be8f166b766b1ece5a04944c05676a881ff99e67ca3758450be28eb",
+    "performance-onnx-8.json": "d03e1464d94af31ab2a259e23025d05bfcb6afff1be169169ba580835a062424"
+  }
+}

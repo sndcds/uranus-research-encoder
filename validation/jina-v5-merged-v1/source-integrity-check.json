@@ -1,0 +1,54 @@
+{
+  "schema": "jina-v5-source-integrity-check-v1",
+  "pass": true,
+  "checks": [
+    {
+      "source": "query-proposals-v1.json",
+      "expected_sha256": "6cf266259b3c07d92d991cc4bd760406bba8d0e62ff78c87d78d48795f1854f2",
+      "observed_sha256": "6cf266259b3c07d92d991cc4bd760406bba8d0e62ff78c87d78d48795f1854f2",
+      "pass": true
+    },
+    {
+      "source": "results/chunks-v5-20261006_8cpu_001.json",
+      "expected_sha256": "cfcfdfaa9c2ed30400f86affe16036b6967a66b19055737de133d07665885ce4",
+      "observed_sha256": "cfcfdfaa9c2ed30400f86affe16036b6967a66b19055737de133d07665885ce4",
+      "pass": true
+    },
+    {
+      "source": "results/v5-20261006_8cpu_001.json",
+      "expected_sha256": "e0ef32e5dba8d51d3a8086d73557e2f2b3418ee729b6e4863cf1c0a9f9f2760b",
+      "observed_sha256": "e0ef32e5dba8d51d3a8086d73557e2f2b3418ee729b6e4863cf1c0a9f9f2760b",
+      "pass": true
+    },
+    {
+      "source": "diagnostics/20261006-regression-plan.json",
+      "expected_sha256": "67b4170b0cc735ca961ed83dd4dffd4320b860d3176003b53dc195fc8f63028e",
+      "observed_sha256": "67b4170b0cc735ca961ed83dd4dffd4320b860d3176003b53dc195fc8f63028e",
+      "pass": true
+    },
+    {
+      "source": "snapshots/public-events-20261005/manifest.json",
+      "expected_sha256": "45b8d6c0ed0220d678f8027b5258674d2585d71122c14d7f9488ad94abb116e1",
+      "observed_sha256": "45b8d6c0ed0220d678f8027b5258674d2585d71122c14d7f9488ad94abb116e1",
+      "pass": true
+    },
+    {
+      "source": "src/uranus_research_encoder/model.py",
+      "expected_sha256": "84791df7e936f69ea61ccbdd974be8f6ad6e00217acd5969f709ef1cfc6e4ca8",
+      "observed_sha256": "84791df7e936f69ea61ccbdd974be8f6ad6e00217acd5969f709ef1cfc6e4ca8",
+      "pass": true
+    },
+    {
+      "source": "pyproject.toml",
+      "expected_sha256": "639c9895a5b5b3b92c8abfb6e19532bbc3b5c86ad5c80e4ecc63dcf1cb35c0ea",
+      "observed_sha256": "639c9895a5b5b3b92c8abfb6e19532bbc3b5c86ad5c80e4ecc63dcf1cb35c0ea",
+      "pass": true
+    },
+    {
+      "source": "uv.lock",
+      "expected_sha256": "c41107a82bac5e632c5dbf59b25f68b1ce8b277735e1b3abd907de0f0cf0ef53",
+      "observed_sha256": "c41107a82bac5e632c5dbf59b25f68b1ce8b277735e1b3abd907de0f0cf0ef53",
+      "pass": true
+    }
+  ]
+}

@@ -12,5 +12,7 @@
   "min_vector_cosine": 0.9999999999988904,
   "max_batch_difference": 4.991888999938965e-07,
   "max_score_difference": 4.953770566529236e-07,
-  "scope": "Native AI-host reference vs initial local ONNX export; all original queries plus two supplemental queries, frozen candidate subset only."
+  "scope": "Native AI-host reference vs initial local ONNX export; all original queries plus two supplemental queries, frozen candidate subset only.",
+  "full_report_sha256": "5833084ec2300c7b2f4c3e8e326f2a73e4f43fc6dbfbad1737c5b66ae2c9dbbe",
+  "manifest_sha256": "8005c590e63bd27467b269e8b6fc15e08a26cdf292fb6ca22f8d7881978115a9"
 }

@@ -14,7 +14,8 @@
   "queries_match_original_benchmark_texts": true,
   "source_bundles": {
     "native_reference_initial_tar_sha256": "b9fc508a77a1ba6a278a18b04534365fed6aaf01b56bc56184201937bbd3e018",
-    "host_export_c5277c5_tar_sha256": "3c49899bd59520b717662890c34123b3c70d223358b7ecc2e4f2c326bc20cd56"
+    "host_export_c5277c5_tar_sha256": "3c49899bd59520b717662890c34123b3c70d223358b7ecc2e4f2c326bc20cd56",
+    "host_runtime_7704b0c_tar_sha256": "9e65c988feed261564046b9123fa6cdd73d4481f14af80f7a3464d3e84548878"
   },
   "host_experiment_root": "/home/awendelk/v5-merged-onnx-20261006",
   "container_image": "sha256:6834c50c52bd7e60f6a6d25772102198dd9638b3dc33859e6bf05df9a67b2c1b",
@@ -30,5 +31,23 @@
     "v3_onnx_mean_retrieval_ms_approx": 115,
     "native_v5_mean_retrieval_ms_approx": 504
   },
-  "transfer_note": "SFTP and rsync transfers of the large local graph were stopped after slow/stalled transfer; no partial transfer is used. The AI host re-exports from its hash-verified offline snapshot."
+  "transfer_note": "SFTP and rsync transfers of the large local graph were stopped after slow/stalled transfer; no partial transfer is used. The AI host re-exports from its hash-verified offline snapshot.",
+  "ai_host": "awendelk@89.58.44.151",
+  "physical_host_hostname": "v2202609108978518517",
+  "performance_json_host_field": "Ephemeral container hostname from platform.node(), not a different physical host per run",
+  "optional_full_corpus": {
+    "executed": false,
+    "frozen_events": 611,
+    "frozen_chunks": 2080,
+    "unique_chunk_texts": 1094
+  },
+  "runtime_implementation_commit": "7704b0cb20e705cf5221b54991ee49643df4afda",
+  "performance_container_limits": {
+    "nanocpus": 8000000000,
+    "memory_bytes": 6442450944,
+    "memory_plus_swap_bytes": 8589934592,
+    "network": "none",
+    "read_only_root": true,
+    "same_limits_both_backends": true
+  }
 }

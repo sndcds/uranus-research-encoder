@@ -93,6 +93,8 @@ def test_only_runtime_dependencies_are_imported():
     script = """
 import sys
 from uranus_research_encoder.v5_onnx_artifacts import verify_manifest
+from uranus_research_encoder.v5_onnx_backend import V5MergedOnnxBackend
+from uranus_research_encoder.app import create_app
 assert 'torch' not in sys.modules
 assert 'peft' not in sys.modules
 assert 'onnx' not in sys.modules

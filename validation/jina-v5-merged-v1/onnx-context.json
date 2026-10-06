@@ -1,0 +1,16 @@
+{
+  "cpu_affinity": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "threads": 8,
+  "inter_op_threads": 1,
+  "graph_manifest_sha256": "ae61e7c440f358691bace2f080f5ebe08dcf4f44a778f9066e1b335e03200f6a",
+  "plan_sha256": "95ba5f3f56b18fb2de59635ab183aa4555a320caa42c33c2243488db46c1e226"
+}
