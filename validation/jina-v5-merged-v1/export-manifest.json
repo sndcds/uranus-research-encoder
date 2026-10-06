@@ -1,0 +1,41 @@
+{
+  "schema": "jina-v5-merged-onnx-v1",
+  "backend": "v5-onnx-merged",
+  "model_repository": "jinaai/jina-embeddings-v5-text-small",
+  "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+  "contract": {
+    "query_prefix": "Query: ",
+    "passage_prefix": "Document: ",
+    "pooling": "last_non_padding_token",
+    "normalization": "l2_once_dim1_eps1e-12",
+    "dimensions": 1024,
+    "dtype": "float32",
+    "padding_side": "right",
+    "max_tokens": 32768,
+    "attention": "native Qwen3 causal eager",
+    "native_inference_batching": "one text per forward",
+    "native_loader_threads": 1
+  },
+  "export_commit": "9d09839a48e24ed6093a8ce66ee16a8dc885c7ea",
+  "plan_sha256": "95ba5f3f56b18fb2de59635ab183aa4555a320caa42c33c2243488db46c1e226",
+  "design": "B",
+  "opset": 18,
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "transformers": "5.17.0",
+    "peft": "0.21.1",
+    "onnx": "1.23.1",
+    "onnxruntime": "1.30.0",
+    "onnxscript": "0.6.2"
+  },
+  "optimization": "disabled",
+  "artifacts": {
+    "config.json": "1af1e1269488c83d8b2332e42099f0d2201d687fbe074d1ed096c6201f283546",
+    "merge-audit.json": "e6d4a7c87ded2be318a1c93ce04a651f606f2325d73061dfa79d203d325bd8ab",
+    "model.onnx": "fcc2f6d8a28486602fe7e689df9536acfb56cf7be6a8c257ee68918782735f99",
+    "model.onnx.data": "9a2b0d3826f8ec01e10bac152eea6a4d99e78cabff4c09b20ae86a2f257b51a0",
+    "native-provenance.json": "7c3369f3368da729911f206c9f92a93f5202f4df9fdb94a6ee7350da73e98a90",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101"
+  }
+}
