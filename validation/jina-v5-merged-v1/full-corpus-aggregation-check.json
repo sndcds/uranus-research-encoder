@@ -1,0 +1,9 @@
+{
+  "schema": "jina-v5-full-corpus-original-aggregation-check-v1",
+  "source_sha256": "eb4325cb9a2a1f0a147af390dca3463c2678f21bdaa624eec86aad8783d9b77c",
+  "method": "Execute the unchanged AST bodies of original require and aggregate only, without importing or invoking any relevance evaluator",
+  "rankings_checked": 240,
+  "winner_maps_checked": 240,
+  "pass": true,
+  "parity_report_sha256": "97784ecba1a69c6284716103259ac451c61f8b67b2e9f12a29507db8a29c7b5d"
+}

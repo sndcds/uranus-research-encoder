@@ -1,0 +1,20 @@
+{
+  "schema": "jina-v5-full-corpus-host-context-v1",
+  "preregistration_commit": "f88cf459ffa205bf11fb21a72baaef0e24236a50",
+  "source_archive_sha256": "d551c8a3dfa7ff0caeecba2502ac84bbebe00987fb9a1b40dcf8f8d756089d05",
+  "source_archive_hash_confirmed_on_host": true,
+  "host": "awendelk@89.58.44.151",
+  "experiment_directory": "/home/awendelk/v5-merged-onnx-20261006/full-corpus-f88cf45",
+  "container_image": "sha256:6834c50c52bd7e60f6a6d25772102198dd9638b3dc33859e6bf05df9a67b2c1b",
+  "cpu_count": 8,
+  "intra_op_threads": 8,
+  "inter_op_threads": 1,
+  "memory_bytes": 6442450944,
+  "memory_plus_swap_bytes": 8589934592,
+  "network": "none",
+  "root_filesystem": "read_only",
+  "model_and_source_mounts": "read_only",
+  "backends": "sequential native then onnx",
+  "historical_reports_unchanged": true,
+  "performance_measurement": false
+}

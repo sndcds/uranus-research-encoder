@@ -1,0 +1,62 @@
+{
+  "schema": "jina-v5-native-provenance-v1",
+  "model_repository": "jinaai/jina-embeddings-v5-text-small",
+  "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+  "adapter": "adapters/retrieval",
+  "artifacts": [
+    {
+      "path": "config.json",
+      "bytes": 991,
+      "sha256": "1af1e1269488c83d8b2332e42099f0d2201d687fbe074d1ed096c6201f283546"
+    },
+    {
+      "path": "tokenizer.json",
+      "bytes": 11422654,
+      "sha256": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4"
+    },
+    {
+      "path": "tokenizer_config.json",
+      "bytes": 9732,
+      "sha256": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101"
+    },
+    {
+      "path": "model.safetensors",
+      "bytes": 1192133208,
+      "sha256": "045fa75ff963a528cda2589fb1ca0a9ad848b53511780ed4f08f6fe10f6167c3"
+    },
+    {
+      "path": "adapters/retrieval/adapter_config.json",
+      "bytes": 883,
+      "sha256": "f37c5d6dd368e2675e54e01b685252d4d44eed042c773a48f56ebe1565cd0320"
+    },
+    {
+      "path": "adapters/retrieval/adapter_model.safetensors",
+      "bytes": 40420176,
+      "sha256": "2bc6ab71895eb04664e4d995ee29e1620603f3a3fc4dfc573bc2383dfc85bb94"
+    }
+  ],
+  "encoder_commit": "ae0f9a66d6fb6c7da18cfa999da046c77f22dedc",
+  "model_py_sha256": "84791df7e936f69ea61ccbdd974be8f6ad6e00217acd5969f709ef1cfc6e4ca8",
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "transformers": "5.17.0",
+    "peft": "0.21.1",
+    "onnx": "1.23.1",
+    "onnxruntime": "1.30.0",
+    "onnxscript": "0.6.2"
+  },
+  "contract": {
+    "query_prefix": "Query: ",
+    "passage_prefix": "Document: ",
+    "pooling": "last_non_padding_token",
+    "normalization": "l2_once_dim1_eps1e-12",
+    "dimensions": 1024,
+    "dtype": "float32",
+    "padding_side": "right",
+    "max_tokens": 32768,
+    "attention": "native Qwen3 causal eager",
+    "native_inference_batching": "one text per forward",
+    "native_loader_threads": 1
+  },
+  "status": "verified_local_files_before_export"
+}

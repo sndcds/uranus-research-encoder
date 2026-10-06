@@ -1,0 +1,1281 @@
+{
+  "schema": "jina-v5-parity-selection-v1",
+  "source_hashes": {
+    "query-proposals-v1.json": "6cf266259b3c07d92d991cc4bd760406bba8d0e62ff78c87d78d48795f1854f2",
+    "results/chunks-v5-20261006_8cpu_001.json": "cfcfdfaa9c2ed30400f86affe16036b6967a66b19055737de133d07665885ce4",
+    "results/v5-20261006_8cpu_001.json": "e0ef32e5dba8d51d3a8086d73557e2f2b3418ee729b6e4863cf1c0a9f9f2760b",
+    "diagnostics/20261006-regression-plan.json": "67b4170b0cc735ca961ed83dd4dffd4320b860d3176003b53dc195fc8f63028e",
+    "snapshots/public-events-20261005/manifest.json": "45b8d6c0ed0220d678f8027b5258674d2585d71122c14d7f9488ad94abb116e1"
+  },
+  "selection_rule": "All 120 original query proposals; v5 top5 chunks for four regression cases and five documented improvement controls; all v5 diagnostic case candidates; shortest/longest chunk of each chunk kind. Supplemental deterministic short/long inputs. No judgments copied.",
+  "problem_cases": [
+    "historical-q29",
+    "wheelchair-da",
+    "dance-en",
+    "concerts-en"
+  ],
+  "improvement_controls": [
+    "historical-q02",
+    "quiet-da",
+    "creative-da",
+    "nordic-en",
+    "songwriters-en"
+  ],
+  "full_611_event_benchmark": false,
+  "scope": "Frozen candidate subset; no claim of full corpus or original eligibility reproduction. Near maximum chunk length refers to existing 480-token chunk contract; model 32768 boundary is separately resource-limited.",
+  "inputs": [
+    {
+      "id": "historical-q01",
+      "kind": "query",
+      "text": "kostenlose Veranstaltungen für Familien",
+      "language": "de",
+      "category": "family"
+    },
+    {
+      "id": "historical-q02",
+      "kind": "query",
+      "text": "Angebote zur kulturellen Bildung",
+      "language": "de",
+      "category": "cultural_style"
+    },
+    {
+      "id": "historical-q03",
+      "kind": "query",
+      "text": "barrierefreie Veranstaltungen",
+      "language": "de",
+      "category": "accessibility"
+    },
+    {
+      "id": "historical-q04",
+      "kind": "query",
+      "text": "Veranstaltungen mit Anmeldung",
+      "language": "de",
+      "category": "combined"
+    },
+    {
+      "id": "historical-q05",
+      "kind": "query",
+      "text": "Sprachkurse",
+      "language": "de",
+      "category": "workshops"
+    },
+    {
+      "id": "historical-q06",
+      "kind": "query",
+      "text": "Veranstaltungen zum Thema Nachhaltigkeit",
+      "language": "de",
+      "category": "cultural_style"
+    },
+    {
+      "id": "historical-q07",
+      "kind": "query",
+      "text": "Angebote für Kinder",
+      "language": "de",
+      "category": "family"
+    },
+    {
+      "id": "historical-q08",
+      "kind": "query",
+      "text": "Veranstaltungen für Seniorinnen und Senioren",
+      "language": "de",
+      "category": "family"
+    },
+    {
+      "id": "historical-q09",
+      "kind": "query",
+      "text": "Veranstaltungen mit Treffpunkt",
+      "language": "de",
+      "category": "location"
+    },
+    {
+      "id": "historical-q10",
+      "kind": "query",
+      "text": "Veranstaltungen mit ermäßigtem Eintritt",
+      "language": "de",
+      "category": "paraphrase"
+    },
+    {
+      "id": "historical-q11",
+      "kind": "query",
+      "text": "Veranstaltungen im Freien",
+      "language": "de",
+      "category": "outdoor"
+    },
+    {
+      "id": "historical-q12",
+      "kind": "query",
+      "text": "Integration und Migration",
+      "language": "de",
+      "category": "cultural_style"
+    },
+    {
+      "id": "historical-q13",
+      "kind": "query",
+      "text": "queere Kultur",
+      "language": "de",
+      "category": "cultural_style"
+    },
+    {
+      "id": "historical-q14",
+      "kind": "query",
+      "text": "lokale Geschichte",
+      "language": "de",
+      "category": "readings"
+    },
+    {
+      "id": "historical-q15",
+      "kind": "query",
+      "text": "Kunst zum Mitmachen",
+      "language": "de",
+      "category": "exhibition"
+    },
+    {
+      "id": "historical-q16",
+      "kind": "query",
+      "text": "soziale Teilhabe",
+      "language": "de",
+      "category": "multiple_results"
+    },
+    {
+      "id": "historical-q17",
+      "kind": "query",
+      "text": "Musikveranstaltungen draußen",
+      "language": "de",
+      "category": "music"
+    },
+    {
+      "id": "historical-q18",
+      "kind": "query",
+      "text": "Veranstaltungen für Jugendliche",
+      "language": "de",
+      "category": "family"
+    },
+    {
+      "id": "historical-q19",
+      "kind": "query",
+      "text": "Dänische Kultur und Begegnungen in Dänemark",
+      "language": "de",
+      "category": "location"
+    },
+    {
+      "id": "historical-q20",
+      "kind": "query",
+      "text": "Workshops für gemeinsames kreatives Arbeiten",
+      "language": "de",
+      "category": "workshops"
+    },
+    {
+      "id": "historical-q21",
+      "kind": "query",
+      "text": "Gratis arrangementer for familier",
+      "language": "da",
+      "category": "family"
+    },
+    {
+      "id": "historical-q22",
+      "kind": "query",
+      "text": "Sprogkurser i Tyskland",
+      "language": "da",
+      "category": "location"
+    },
+    {
+      "id": "historical-q23",
+      "kind": "query",
+      "text": "Tilgængelige kulturarrangementer",
+      "language": "da",
+      "category": "accessibility"
+    },
+    {
+      "id": "historical-q24",
+      "kind": "query",
+      "text": "Arrangementer om bæredygtighed",
+      "language": "da",
+      "category": "cultural_style"
+    },
+    {
+      "id": "historical-q25",
+      "kind": "query",
+      "text": "Musik under åben himmel",
+      "language": "da",
+      "category": "music"
+    },
+    {
+      "id": "historical-q26",
+      "kind": "query",
+      "text": "Free family activities in Germany and Denmark",
+      "language": "en",
+      "category": "family"
+    },
+    {
+      "id": "historical-q27",
+      "kind": "query",
+      "text": "Accessible events requiring registration",
+      "language": "en",
+      "category": "accessibility"
+    },
+    {
+      "id": "historical-q28",
+      "kind": "query",
+      "text": "Language classes and cultural education",
+      "language": "en",
+      "category": "workshops"
+    },
+    {
+      "id": "historical-q29",
+      "kind": "query",
+      "text": "Participatory art workshops for young people",
+      "language": "en",
+      "category": "exhibition"
+    },
+    {
+      "id": "historical-q30",
+      "kind": "query",
+      "text": "Local history and social inclusion",
+      "language": "en",
+      "category": "readings"
+    },
+    {
+      "id": "stepfree-de",
+      "kind": "query",
+      "text": "Konzerte mit stufenlosem Zugang",
+      "language": "de",
+      "category": "accessibility"
+    },
+    {
+      "id": "stepfree-da",
+      "kind": "query",
+      "text": "Koncerter med trinfri adgang",
+      "language": "da",
+      "category": "accessibility"
+    },
+    {
+      "id": "stepfree-en",
+      "kind": "query",
+      "text": "Concerts with step-free access",
+      "language": "en",
+      "category": "accessibility"
+    },
+    {
+      "id": "wheelchair-de",
+      "kind": "query",
+      "text": "Kulturangebote mit ausdrücklich beschriebenem Rollstuhlzugang",
+      "language": "de",
+      "category": "accessibility"
+    },
+    {
+      "id": "wheelchair-da",
+      "kind": "query",
+      "text": "Kulturtilbud med dokumenteret adgang for kørestole",
+      "language": "da",
+      "category": "accessibility"
+    },
+    {
+      "id": "wheelchair-en",
+      "kind": "query",
+      "text": "Cultural events with explicitly documented wheelchair access",
+      "language": "en",
+      "category": "accessibility"
+    },
+    {
+      "id": "quiet-de",
+      "kind": "query",
+      "text": "Ruhige Livemusik in gemütlicher Atmosphäre",
+      "language": "de",
+      "category": "atmosphere"
+    },
+    {
+      "id": "quiet-da",
+      "kind": "query",
+      "text": "Rolig livemusik i hyggelige omgivelser",
+      "language": "da",
+      "category": "atmosphere"
+    },
+    {
+      "id": "quiet-en",
+      "kind": "query",
+      "text": "Quiet live music in a cosy atmosphere",
+      "language": "en",
+      "category": "atmosphere"
+    },
+    {
+      "id": "dance-de",
+      "kind": "query",
+      "text": "Ein ausgelassener Abend zum Tanzen",
+      "language": "de",
+      "category": "atmosphere"
+    },
+    {
+      "id": "dance-da",
+      "kind": "query",
+      "text": "En festlig aften med dans",
+      "language": "da",
+      "category": "atmosphere"
+    },
+    {
+      "id": "dance-en",
+      "kind": "query",
+      "text": "A lively evening for dancing",
+      "language": "en",
+      "category": "atmosphere"
+    },
+    {
+      "id": "jazz-de",
+      "kind": "query",
+      "text": "Jazz live erleben",
+      "language": "de",
+      "category": "music"
+    },
+    {
+      "id": "jazz-da",
+      "kind": "query",
+      "text": "Oplev levende jazzmusik",
+      "language": "da",
+      "category": "music"
+    },
+    {
+      "id": "jazz-en",
+      "kind": "query",
+      "text": "Experience live jazz",
+      "language": "en",
+      "category": "music"
+    },
+    {
+      "id": "chamber-de",
+      "kind": "query",
+      "text": "Kleine Ensembles und Kammermusik",
+      "language": "de",
+      "category": "music"
+    },
+    {
+      "id": "chamber-da",
+      "kind": "query",
+      "text": "Små ensembler og kammermusik",
+      "language": "da",
+      "category": "music"
+    },
+    {
+      "id": "chamber-en",
+      "kind": "query",
+      "text": "Small ensembles and chamber music",
+      "language": "en",
+      "category": "music"
+    },
+    {
+      "id": "puppet-de",
+      "kind": "query",
+      "text": "Puppentheater für Kinder",
+      "language": "de",
+      "category": "theatre"
+    },
+    {
+      "id": "puppet-da",
+      "kind": "query",
+      "text": "Dukketeater for børn",
+      "language": "da",
+      "category": "theatre"
+    },
+    {
+      "id": "puppet-en",
+      "kind": "query",
+      "text": "Puppet theatre for children",
+      "language": "en",
+      "category": "theatre"
+    },
+    {
+      "id": "stage-de",
+      "kind": "query",
+      "text": "Eine szenische Aufführung auf der Bühne",
+      "language": "de",
+      "category": "theatre"
+    },
+    {
+      "id": "stage-da",
+      "kind": "query",
+      "text": "En scenisk forestilling på en scene",
+      "language": "da",
+      "category": "theatre"
+    },
+    {
+      "id": "stage-en",
+      "kind": "query",
+      "text": "A staged theatrical performance",
+      "language": "en",
+      "category": "theatre"
+    },
+    {
+      "id": "painting-de",
+      "kind": "query",
+      "text": "Ausstellungen mit Malerei",
+      "language": "de",
+      "category": "exhibition"
+    },
+    {
+      "id": "painting-da",
+      "kind": "query",
+      "text": "Udstillinger med maleri",
+      "language": "da",
+      "category": "exhibition"
+    },
+    {
+      "id": "painting-en",
+      "kind": "query",
+      "text": "Exhibitions of paintings",
+      "language": "en",
+      "category": "exhibition"
+    },
+    {
+      "id": "curator-de",
+      "kind": "query",
+      "text": "Kunst mit einer Kuratorenführung entdecken",
+      "language": "de",
+      "category": "exhibition"
+    },
+    {
+      "id": "curator-da",
+      "kind": "query",
+      "text": "Oplev kunst på en kuratorrundvisning",
+      "language": "da",
+      "category": "exhibition"
+    },
+    {
+      "id": "curator-en",
+      "kind": "query",
+      "text": "Explore art on a curator-led tour",
+      "language": "en",
+      "category": "exhibition"
+    },
+    {
+      "id": "children-de",
+      "kind": "query",
+      "text": "Musik zum Entdecken für Kinder",
+      "language": "de",
+      "category": "family"
+    },
+    {
+      "id": "children-da",
+      "kind": "query",
+      "text": "Musikoplevelser for børn",
+      "language": "da",
+      "category": "family"
+    },
+    {
+      "id": "children-en",
+      "kind": "query",
+      "text": "Music for children to discover",
+      "language": "en",
+      "category": "family"
+    },
+    {
+      "id": "together-de",
+      "kind": "query",
+      "text": "Als Familie gemeinsam kreativ werden",
+      "language": "de",
+      "category": "family"
+    },
+    {
+      "id": "together-da",
+      "kind": "query",
+      "text": "Vær kreative sammen som familie",
+      "language": "da",
+      "category": "family"
+    },
+    {
+      "id": "together-en",
+      "kind": "query",
+      "text": "Creative activities to do together as a family",
+      "language": "en",
+      "category": "family"
+    },
+    {
+      "id": "kuehlhaus-de",
+      "kind": "query",
+      "text": "Livemusik im Kühlhaus",
+      "language": "de",
+      "category": "venue"
+    },
+    {
+      "id": "kuehlhaus-da",
+      "kind": "query",
+      "text": "Livemusik på Kühlhaus",
+      "language": "da",
+      "category": "venue"
+    },
+    {
+      "id": "kuehlhaus-en",
+      "kind": "query",
+      "text": "Live music at Kühlhaus",
+      "language": "en",
+      "category": "venue"
+    },
+    {
+      "id": "museumsberg-de",
+      "kind": "query",
+      "text": "Kunst auf dem Museumsberg",
+      "language": "de",
+      "category": "venue"
+    },
+    {
+      "id": "museumsberg-da",
+      "kind": "query",
+      "text": "Kunst på Museumsberg",
+      "language": "da",
+      "category": "venue"
+    },
+    {
+      "id": "museumsberg-en",
+      "kind": "query",
+      "text": "Art at Museumsberg",
+      "language": "en",
+      "category": "venue"
+    },
+    {
+      "id": "flensburg-de",
+      "kind": "query",
+      "text": "Kulturelle Begegnungen in Flensburg",
+      "language": "de",
+      "category": "location"
+    },
+    {
+      "id": "flensburg-da",
+      "kind": "query",
+      "text": "Kulturelle møder i Flensborg",
+      "language": "da",
+      "category": "location"
+    },
+    {
+      "id": "flensburg-en",
+      "kind": "query",
+      "text": "Cultural encounters in Flensburg",
+      "language": "en",
+      "category": "location"
+    },
+    {
+      "id": "gluecksburg-de",
+      "kind": "query",
+      "text": "Kultur erleben in Glücksburg",
+      "language": "de",
+      "category": "location"
+    },
+    {
+      "id": "gluecksburg-da",
+      "kind": "query",
+      "text": "Oplev kultur i Lyksborg",
+      "language": "da",
+      "category": "location"
+    },
+    {
+      "id": "gluecksburg-en",
+      "kind": "query",
+      "text": "Experience culture in Glücksburg",
+      "language": "en",
+      "category": "location"
+    },
+    {
+      "id": "folk-de",
+      "kind": "query",
+      "text": "Folk und traditionelle Musik",
+      "language": "de",
+      "category": "genre"
+    },
+    {
+      "id": "folk-da",
+      "kind": "query",
+      "text": "Folk og traditionel musik",
+      "language": "da",
+      "category": "genre"
+    },
+    {
+      "id": "folk-en",
+      "kind": "query",
+      "text": "Folk and traditional music",
+      "language": "en",
+      "category": "genre"
+    },
+    {
+      "id": "punk-de",
+      "kind": "query",
+      "text": "Punkmusik und laute Gitarren",
+      "language": "de",
+      "category": "genre"
+    },
+    {
+      "id": "punk-da",
+      "kind": "query",
+      "text": "Punkmusik og høje guitarer",
+      "language": "da",
+      "category": "genre"
+    },
+    {
+      "id": "punk-en",
+      "kind": "query",
+      "text": "Punk music and loud guitars",
+      "language": "en",
+      "category": "genre"
+    },
+    {
+      "id": "nordic-de",
+      "kind": "query",
+      "text": "Nordische Klänge und skandinavische Musik",
+      "language": "de",
+      "category": "cultural_style"
+    },
+    {
+      "id": "nordic-da",
+      "kind": "query",
+      "text": "Nordiske klange og skandinavisk musik",
+      "language": "da",
+      "category": "cultural_style"
+    },
+    {
+      "id": "nordic-en",
+      "kind": "query",
+      "text": "Nordic sounds and Scandinavian music",
+      "language": "en",
+      "category": "cultural_style"
+    },
+    {
+      "id": "experimental-de",
+      "kind": "query",
+      "text": "Experimentelle Kunst und ungewöhnliche Ausdrucksformen",
+      "language": "de",
+      "category": "cultural_style"
+    },
+    {
+      "id": "experimental-da",
+      "kind": "query",
+      "text": "Eksperimenterende kunst og usædvanlige udtryksformer",
+      "language": "da",
+      "category": "cultural_style"
+    },
+    {
+      "id": "experimental-en",
+      "kind": "query",
+      "text": "Experimental art and unusual forms of expression",
+      "language": "en",
+      "category": "cultural_style"
+    },
+    {
+      "id": "saturday-de",
+      "kind": "query",
+      "text": "Jazz am Samstag, 10. Oktober 2026, in Flensburg",
+      "language": "de",
+      "category": "combined"
+    },
+    {
+      "id": "saturday-da",
+      "kind": "query",
+      "text": "Jazz lørdag den 10. oktober 2026 i Flensborg",
+      "language": "da",
+      "category": "combined"
+    },
+    {
+      "id": "saturday-en",
+      "kind": "query",
+      "text": "Jazz in Flensburg on Saturday 10 October 2026",
+      "language": "en",
+      "category": "combined"
+    },
+    {
+      "id": "cityart-de",
+      "kind": "query",
+      "text": "Kunstausstellungen in Glücksburg",
+      "language": "de",
+      "category": "combined"
+    },
+    {
+      "id": "cityart-da",
+      "kind": "query",
+      "text": "Kunstudstillinger i Lyksborg",
+      "language": "da",
+      "category": "combined"
+    },
+    {
+      "id": "cityart-en",
+      "kind": "query",
+      "text": "Art exhibitions in Glücksburg",
+      "language": "en",
+      "category": "combined"
+    },
+    {
+      "id": "songwriters-de",
+      "kind": "query",
+      "text": "Selbstgeschriebene Lieder und persönliche Geschichten",
+      "language": "de",
+      "category": "paraphrase"
+    },
+    {
+      "id": "songwriters-da",
+      "kind": "query",
+      "text": "Egne sange og personlige fortællinger",
+      "language": "da",
+      "category": "paraphrase"
+    },
+    {
+      "id": "songwriters-en",
+      "kind": "query",
+      "text": "Original songs and personal stories",
+      "language": "en",
+      "category": "paraphrase"
+    },
+    {
+      "id": "creative-de",
+      "kind": "query",
+      "text": "Mit den eigenen Händen etwas gestalten",
+      "language": "de",
+      "category": "paraphrase"
+    },
+    {
+      "id": "creative-da",
+      "kind": "query",
+      "text": "Skab noget med dine egne hænder",
+      "language": "da",
+      "category": "paraphrase"
+    },
+    {
+      "id": "creative-en",
+      "kind": "query",
+      "text": "Make something with your own hands",
+      "language": "en",
+      "category": "paraphrase"
+    },
+    {
+      "id": "open-de",
+      "kind": "query",
+      "text": "Offene Bühne",
+      "language": "de",
+      "category": "ambiguous"
+    },
+    {
+      "id": "open-da",
+      "kind": "query",
+      "text": "Åben scene",
+      "language": "da",
+      "category": "ambiguous"
+    },
+    {
+      "id": "open-en",
+      "kind": "query",
+      "text": "Open stage",
+      "language": "en",
+      "category": "ambiguous"
+    },
+    {
+      "id": "colourful-de",
+      "kind": "query",
+      "text": "Ein bunter Kulturabend",
+      "language": "de",
+      "category": "ambiguous"
+    },
+    {
+      "id": "colourful-da",
+      "kind": "query",
+      "text": "En farverig kulturaften",
+      "language": "da",
+      "category": "ambiguous"
+    },
+    {
+      "id": "colourful-en",
+      "kind": "query",
+      "text": "A colourful cultural evening",
+      "language": "en",
+      "category": "ambiguous"
+    },
+    {
+      "id": "concerts-de",
+      "kind": "query",
+      "text": "Konzerte mit unterschiedlichen Musikrichtungen",
+      "language": "de",
+      "category": "multiple_results"
+    },
+    {
+      "id": "concerts-da",
+      "kind": "query",
+      "text": "Koncerter med forskellige musikgenrer",
+      "language": "da",
+      "category": "multiple_results"
+    },
+    {
+      "id": "concerts-en",
+      "kind": "query",
+      "text": "Concerts spanning different musical genres",
+      "language": "en",
+      "category": "multiple_results"
+    },
+    {
+      "id": "artoptions-de",
+      "kind": "query",
+      "text": "Verschiedene Ausstellungen zum Entdecken",
+      "language": "de",
+      "category": "multiple_results"
+    },
+    {
+      "id": "artoptions-da",
+      "kind": "query",
+      "text": "Forskellige udstillinger at gå på opdagelse i",
+      "language": "da",
+      "category": "multiple_results"
+    },
+    {
+      "id": "artoptions-en",
+      "kind": "query",
+      "text": "Different exhibitions to explore",
+      "language": "en",
+      "category": "multiple_results"
+    },
+    {
+      "id": "koreanopera-de",
+      "kind": "query",
+      "text": "Oper mit koreanischen Übertiteln",
+      "language": "de",
+      "category": "no_hit"
+    },
+    {
+      "id": "koreanopera-da",
+      "kind": "query",
+      "text": "Opera med koreanske overtekster",
+      "language": "da",
+      "category": "no_hit"
+    },
+    {
+      "id": "koreanopera-en",
+      "kind": "query",
+      "text": "Opera with Korean surtitles",
+      "language": "en",
+      "category": "no_hit"
+    },
+    {
+      "id": "harpsichord-de",
+      "kind": "query",
+      "text": "Workshop zum Bau eines Cembalos",
+      "language": "de",
+      "category": "no_hit"
+    },
+    {
+      "id": "harpsichord-da",
+      "kind": "query",
+      "text": "Workshop i at bygge et cembalo",
+      "language": "da",
+      "category": "no_hit"
+    },
+    {
+      "id": "harpsichord-en",
+      "kind": "query",
+      "text": "Workshop on building a harpsichord",
+      "language": "en",
+      "category": "no_hit"
+    },
+    {
+      "id": "000b3405-3351-57fc-9128-68e8084a372e",
+      "kind": "passage",
+      "text": "Preisart: kostenlos",
+      "event_id": "019fb6bf-06da-71a7-9245-8fd875101303",
+      "category": "tickets"
+    },
+    {
+      "id": "03291127-200f-567a-be0f-981141ea4295",
+      "kind": "passage",
+      "text": "Vinyl Stories\n\nby Silvia Feuersenger\n\nSkurile Geschichten, Anekdoten und vor allem viel Hintergrundwissen erwarten euch an diesem launigen Abend mit DJ und Musikkennerin Silvia Feuersenger. In unserem neuen Format \"Vinyl Stories\" wird euch zu immer anderen Themen und Musikríchtungen Wissenswertes und Amüsantes erzählt, abwechslungsreich und unterhaltsam. Ein Song - eine Story!\nHinter jedem Knistern einer Schallplatte steckt mehr als nur Musik, da sind auch Erinnerungen, Epochen und persönliche Geschichten. Ihr seid herzlich zu diesem besonderen Abend eingeladen: VINYL STORIES - Sounds und die Geschichten drumherum -> - musikbegeisterte, neugierige Menschen - Plattenspieler und leckeres Vinyl - Getränke, Sofas, Sessel, Beistell-Tischchen zum gemütlich Einkuscheln und Lauschen, genau rtichtig für den Herbst!\nSilvia Feuersenger legt seit vielen Jahren zu verschiedensten Anlässen auf und ist über die Stadtgrenzen hinaus für die \"tanzBar\" in der Walzenmühle und im Sommer für ihre \"After Work Party\" auf der Harniskaispitze bekannt.",
+      "event_id": "01a0679b-6b3a-7451-bfd4-b6af84d9cbf3",
+      "category": "content"
+    },
+    {
+      "id": "03c35d8a-ed67-514f-8c73-dcabd221d134",
+      "kind": "passage",
+      "text": "Cacao & Dance am Strand\n\nCacao & Dance am Strand — ein Abend, den du so schnell nicht vergisst!\n\nCacao & Dance am Strand — ein Abend, den du so schnell nicht vergisst!\nStell dir vor: Die Sonne hängt tief über dem Meer, du stehst barfuß im Sand, um dich herum Menschen, die genauso offen sind wie du — und der Abend hat gerade erst begonnen.\nGenau das erwartet dich am 4. Juli an der Surfschule Holnis.\nWir starten mit einer Cacao Zeremonie. Echter, reiner Rohcacao — bewusst getrunken, in Stille, als Einladung anzukommen. Bei dir selbst, bei der Gemeinschaft und in der Natur direkt am Wasser.\nDanach bewegen wir uns. Frei, ohne Choreografie, ohne Richtig oder Falsch. Nur du, organische Musik, der Sand unter deinen Füßen und das Meer. Kein Tanzkurs, kein Performen — einfach Bewegung mit allem, was gerade in dir da ist.\nUnd wenn die Musik leiser wird, lassen wir den Abend gemeinsam ausklingen — mit dem Sonnenuntergang über der Ostsee.\nDas ist für dich, wenn du…\neinfach mal raus möchtest, etwas Besonderes suchst, neugierig bist oder einfach Lust hast, einen unvergesslichen Sommerabend am Meer zu erleben.\nPraktisches:\n•⁠ ⁠Bring gerne eine Decke oder ein Sitzkissen mit, falls du es zu Beginn oder am Ende lieber weich magst. Für den Rest brauchst du nichts außer dich.\n•⁠ ⁠Bei Allergien gegen Gewürze im Cacao schick uns gerne vorab eine Nachricht.\n45 € pro Person · 40 € zu zweit",
+      "event_id": "019ed14b-7eb0-7da0-8ee3-3321c9588b9d",
+      "category": "content"
+    },
+    {
+      "id": "045ccd4e-2be8-57bf-babf-2b2304965ebb",
+      "kind": "passage",
+      "text": "Basco\n\nNordic Folk auf höchstem Niveau\n\nDie dänische Band Basco zählt seit über einem Jahrzehnt zu den aufregendsten Gruppen der nordischen Folk-Szene. Mit ihrem neuen Album „Three Times Something Wild“ (November 2025) kommen sie nun nach Flensburg – ein Werk, das eindrucksvoll zeigt, wie facettenreich moderner Nordic Folk klingen kann. Ihre Musik ist kraftvoll und feinfühlig zugleich: mal wild und tanzbar, mal melancholisch und zart. Neben virtuosen Instrumentalstücken überrascht.\n\nDie dänische Band Basco zählt seit über einem Jahrzehnt zu den aufregendsten Gruppen der nordischen Folk-Szene. Mit ihrem neuen Album „Three Times Something Wild“ (November 2025) kommen sie nun nach Flensburg – ein Werk, das eindrucksvoll zeigt, wie facettenreich moderner Nordic Folk klingen kann. Ihre Musik ist kraftvoll und feinfühlig zugleich: mal wild und tanzbar, mal melancholisch und zart. Neben virtuosen Instrumentalstücken überrascht.\nBasco immer wieder mit warmem, ausdrucksstarkem Gesang, der den Geschichten zusätzliche Tiefe verleiht. Mit Geige, Mandoline, Zither, Akkordeon und Posaune erschaffen die vier Musiker farbenreiche Klangwelten. Sie graben tief in der skandinavischen Folklore und formen daraus ihren eigenen, modernen Sound. Eine Band, die sich ständig neu erfindet – und live besonders mitreißt.\n\nVeranstaltungsarten / Genres: Folk, Konzert\n\nSchlagworte: flensburger hofkultur, gesang, skandinavien",
+      "event_id": "019f1723-85a3-7c19-9b3b-c99b0cd33295",
+      "category": "content"
+    },
+    {
+      "id": "052227ee-fc3e-5abb-a8fa-b39410f3845e",
+      "kind": "passage",
+      "text": "spirieren, kleine Geschichten zu erzählen, gibt Anknüpfungspunkte, mit denen gespielt werden kann, schafft eine Emotionalität, die agieren lässt und fördert Vielfalt durch eine Variation von unterschiedlichen Stilen und Energie-Niveaus.\nSusanne von Tobien\n**Musik**\nTrüby Trio „Donaueschingen“ (Peter Kruder’s Donaudampfschifffahrtsgesellschaftskapitänskajütenremix)\nRobot Koch „Movement III“\nTango „Spellbound“ mixed\nFabian Ziegler / Jon Psathas aus: „RealBadNow“ „Prepare for Defiant Acts of Radical Imagination“\nAdam Ben Ezra „Cosmic Nomad“\nKaada „Farewell“\nMeute „Sail“\n**Choreografie:** Emil Wedervang Bruland, Ballettcompagnie\n**Künstlerische Leitung:** Emil Wedervang Bruland\n**Kostüme:** Emil Wedervang Bruland\n**Dramaturgie:** Susanne von Tobien\n**Mit:** Ben Silas Beppler, Chu-En Chiu, William Gustavo De Barros, Perla Gallo, Laura Elizalde García, Yi-Han Hsiao, Yun-Cheng Lin, Kyoko Oku, Emanuele Senese, Gijs Machiel Stenger, Risa Tero, Meng-Ting Wu\n\nVeranstaltungsarten / Genres: Modern Dance / Zeitgenössischer Tanz, Tanz",
+      "event_id": "019f1cc7-18f1-778d-89c5-5d6bd29717f4",
+      "category": "content"
+    },
+    {
+      "id": "05886cdb-1017-587f-82a9-60e9c15ebc23",
+      "kind": "passage",
+      "text": "Naturkosmetik und Kräuter\n\nPflegend und nachhaltig\n\n**Natürliche Pflege selbst herstellen**\nWie einfach nachhaltige und hochwertige Pflegeprodukte selbst hergestellt werden können, zeigen die Workshops von Cristina da Cruz Nogueira Seidel. Mit natürlichen Zutaten entstehen individuelle Cremes, Lotionen und Haarpflegeprodukte – frei von unnötigen Zusätzen und ganz auf die eigenen Bedürfnisse abgestimmt. Gleichzeitig vermitteln die Kurse wertvolles Wissen über pflanzliche Wirkstoffe und deren Anwendung.\n**Am Samstag, den 15.08.26 werden drei Workshops angeboten: Das Wohlfühl-Trio (10-12 h), Von Kopf bis Fuß (14-17 h) und Rund ums Haar (18-20 h).**\nAlle Materialien werden von der Kursleiterin gestellt. Die Teilnahmegebühren betragen je nach Workshop 20 bzw. 30 Euro, hinzu kommen Materialkosten von etwa 10 Euro. Nachhaltig, kreativ und gesund – am Ende nimmt jeder seine selbst hergestellten Pflegeprodukte mit nach Hause.\n**Anmeldung gerne per WhatsApp, Telefon oder E-Mail**\n📞 · ✉️ []()",
+      "event_id": "019f9a39-9cd8-717c-9369-300e01a33082",
+      "category": "content"
+    },
+    {
+      "id": "08bf953d-5a04-5906-a306-4809334d0d26",
+      "kind": "passage",
+      "text": "6 Stufen bis Eingang",
+      "event_id": "01a08d89-d6b6-789f-a175-65ff2d2a8268",
+      "category": "accessibility"
+    },
+    {
+      "id": "193680a4-96fb-5d58-b251-c03f448df198",
+      "kind": "passage",
+      "text": "Kultur_Seminar: Digitale und Analoge Sichtbarkeit\n\n**Zielgruppe:** Kulturschaffende, Kulturvereine & Kultureinrichtungen\n**Inhalt:**\nIn diesem Kultur\\_Seminar gibt es praktische Impulse von Nadine Iben, freischaffender Künstlerin und Inhaberin des Ateliers Kreativecke in Glücksburg und Roald Christesen, dem Entwickler von kulturbytes.\nSie gehen auf folgende Fragen ein:\n- Wie werden Kulturangebote sichtbar und erreichen ihre Zielgruppen?\n- Welche digitalen und klassischen Wege der Öffentlichkeitsarbeit sind heute wirkungsvoll?\n- Und wie lässt sich kulturbytes für die Region Rendsburg nutzen?\nIm Anschluss ist Raum für Fragen und Austausch.\nFür Snacks & Getränke ist gesorgt.\nEine Kooperationsveranstaltung des Kulturknotenpunkts Nordost und der Kulturkoordinatorin der Region Rendsburg\nGefördert vom Ministerium für Allgemeine und Berufliche Bildung, Wissenschaft, Forschung und Kultur\n\nVeranstaltungsarten / Genres: Bildung, Gespräch, Diskussion, Vortrag, Weiterbildung",
+      "event_id": "01a042a6-7817-7f0e-acaa-671052605969",
+      "category": "content"
+    },
+    {
+      "id": "1f0a6d0f-1e1a-576a-8965-9b40c2361b47",
+      "kind": "passage",
+      "text": "Kulturtag im Atelier Kreativecke\n\nPapierzauber, Heimatwand & Holzwerkstatt\n\nAm Kulturtag Glücksburg lädt das Atelier Kreativecke Menschen jeden Alters zum Gestalten, Erzählen und Entdecken ein. Verewige deine Gedanken zu Glücksburg auf der interaktiven **Heimatwand**, gestalte in der **Holzwerkstatt** mit Volker Schildger einen eigenen Holzmagneten oder erlebe den „Papierzauber“ mit **Märchenerzählerin** Anja Altmeppen-Höhler. Komm einfach vorbei und mach mit!\n\nWas macht deinen Heimatort besonders? Welche Erinnerung an Glücksburg möchtest du bewahren, welchen Ort zeigst du besonders gern und welche Idee hast du für die Zukunft?\nBeim Kulturtag Glücksburg öffnet das Atelier Kreativecke seine Türen für einen kreativen Nachmittag für Menschen jeden Alters. Im Rahmen einer interaktiven Karte, die in Zusammenarbeit mit dem Stadtarchiv Glücksburg entsteht, kannst du schreiben oder zeichnen, was du an Glücksburg magst, erinnerst oder bewahren möchtest. Deine Gedanken, Bilder und Ideen können anschließend an der gemeinsamen Heimatwand aufgehängt werden. So entsteht im Laufe des Tages ein lebendiges und persönliches Bild unserer Stadt.\nAuch die **Holzwerkstatt ist durchgehend geöffnet**: Gemeinsam mit Volker Schildger können Kinder eigene Holzmagnete gestalten. Besonders für jüngere Kinder wird die Begleitung durch eine erwachsene Person empfohlen. Weitere Informationen zur Teilnahme an der Holzwerkstatt gibt es vor Ort.\nUm **13:00 Uhr und um 16:00 Uhr** lädt **Märchenerzählerin** Anja Altmeppen-Höhler zu „Papierzauber – Märchenhelden erwachen“ ein.",
+      "event_id": "01a08aea-d3d8-7113-b313-3c8f7b6609d9",
+      "category": "content"
+    },
+    {
+      "id": "20af1897-5045-5e5d-9ca5-d561b75983ee",
+      "kind": "passage",
+      "text": "Ort: Tanzclub Rot-Gold-Casino Neumünster e.V. - Vereinsheim der Gartenkolonie West\nStadt: Neumünster",
+      "event_id": "01a0cd8c-e45f-75d2-945c-630009ae1d28",
+      "category": "location_context"
+    },
+    {
+      "id": "259fa1c9-f95b-510f-9c33-544d23a0b8a0",
+      "kind": "passage",
+      "text": "Die Pädagogikecke ist barrierearm über eine Rampe oder den ebenerdigen Eingang des Kulturzentrums erreichbar.",
+      "event_id": "01a01444-7520-7624-839c-046df141eeae",
+      "category": "accessibility"
+    },
+    {
+      "id": "27812780-9bed-5757-9bef-b4eebd2b0fbf",
+      "kind": "passage",
+      "text": "er-Jahre mit ihren schweren Duftnoten. Die elf Klangskulpturen, die Bohren in harter, disziplinierter Arbeit von ihrer Redundanz befreit hat, bieten reichlich Stoff für akustische Entdeckungsreisen. Nun ist es an der Zeit, die Stücke für die kommenden Live-Auftritte zu proben, denn am 10.10. geht's in's Volksbad!\n\nVeranstaltungsarten / Genres: Konzert",
+      "event_id": "019daf44-f841-7694-bee2-c5f2fa02d0e2",
+      "category": "content"
+    },
+    {
+      "id": "2c5b6a35-9666-5a0f-b386-debfdaa6f706",
+      "kind": "passage",
+      "text": "Ort: ex-Sultanmarkt",
+      "event_id": "01a05225-82b4-7f6a-84d8-dbe5b6c488b7",
+      "category": "location_context"
+    },
+    {
+      "id": "2f20b974-de77-5a1c-b174-385f5adc81df",
+      "kind": "passage",
+      "text": "TANGOSOMMER\n\nTangotanzen im Rosarium\n\nTangotanzen für alle im Rosarium Glücksburg\n\n**Am 11. Oktober endet für dieses Jahr unsere beliebte Veranstaltungsreihe \"Tangosommer.\" Zu dieser öffentlichen Mitmachaktion sind alle herzliche eingeladen: Von 14 -15 Uhr Tango Schnupperstunde und von 15-18 Uhr Milonga. Mit Lukas & Diana und DJ Norbert.**\n\nVeranstaltungsarten / Genres: Tanz",
+      "event_id": "01a0f815-fe30-7f63-833d-c71c997c08ee",
+      "category": "content"
+    },
+    {
+      "id": "2f2cf141-2f03-56f3-adef-2507c8deaa8c",
+      "kind": "passage",
+      "text": "dann bekommst du immerhin einen Refrain, der mehr Trost spendet als 1000 Umarmungen.” Maybe words can help you / Maybe lines that care I can sense your trouble / And I feel you there Aus jeder Zeile spricht aufrichtiges Mitgefühl.\nZusammen mit dem Produzenten Helgi Helgasson hat Sönke es geschafft, einen unausweichbaren Text in warme und facettenreiche Musik zu übersetzen. Soundtechnisch schwebt das **low key orchestra** – vor allem hierzulande - sehr eigenständig in einer Klang- und Gefühlswelt, die von Bands wie Bright Eyes, Whitney und den Flaming Lips geprägt wurde. Im Songwriting hingegen fnden sich Parallelen zu frühen Alben von Coldplay oder Keane. Sönke sagt über sich selbst, er habe die Musik für eine lange Zeit verloren. Zu unserem Glück hat er sie – oder vielleicht auch sie ihn – wiederentdeckt.",
+      "event_id": "019f54e6-4a37-72e7-8164-3c5fc8f06af3",
+      "category": "content"
+    },
+    {
+      "id": "33e5e623-b6d4-5d16-b221-d9908e7a1234",
+      "kind": "passage",
+      "text": "Discofox Workshop\n\nDer klassische Partytanz wird in den Fokus gestellt!\nMacht euch bereit für verschiedene Figuren für Anfänger und Fortgeschrittene, die ihr vielleicht noch nicht kennt.\nAnmeldung bitte an:\n[]()\n\nDer klassische Partytanz wird in den Fokus gestellt!\nMacht euch bereit für verschiedene Figuren für Anfänger und Fortgeschrittene, die ihr vielleicht noch nicht kennt.\nAnmeldung bitte an:\n[]()\n\nVeranstaltungsarten / Genres: Tanz",
+      "event_id": "01a0e780-af00-718b-93d2-77c25c6a43e5",
+      "category": "content"
+    },
+    {
+      "id": "41c69740-e8d9-5370-9d00-ecc217920788",
+      "kind": "passage",
+      "text": "Lia L. Shoshann\n\nthe meadows Tour\n\nLia L. Shoshann ist ein Kind der 90er Jahre und wuchs mit dem Bild auf, dass Singer-Songwriter Männer mit Gitarren sind, die am Lagerfeuer sitzen. Dank Dota Kehr und KT Tunstall erkannte Lia jedoch schnell, dass Singer-Songwriter nicht unbedingt Männer sein oder am Lagerfeuer sitzen müssen. Lia L. Shoshann lässt sich heute von starken Frauen\\*, ehrlicher Wut, der Dämmerung von Reisetagen und dem Chaos zwischenmenschlicher Beziehungen inspirieren.\n\n**Rastloser Fusion-Folk-Pop von deinem neuen Lieblingstyp am Lagerfeuer.**\nZwischen Indie-Folk, Blues und einer Prise Punk erzählt Lia Geschichten von Rastlosigkeit, Nähe und der Suche nach einem Ort, an dem man sich zu Hause fühlt.\nLia L. Shoshann ist ein Kind der 90er Jahre und wuchs mit dem Bild auf, dass Singer-Songwriter Männer mit Gitarren sind, die am Lagerfeuer sitzen. Dank Dota Kehr und KT Tunstall erkannte Lia jedoch schnell, dass Singer-Songwriter nicht unbedingt Männer sein oder am Lagerfeuer sitzen müssen. Lia L. Shoshann lässt sich heute von starken Frauen\\*, ehrlicher Wut, der Dämmerung von Reisetagen und dem Chaos zwischenmenschlicher Beziehungen inspirieren.\nGeschichten bilden immer die Grundlage für Lia L. Shoshanns Musik. Sie handeln von Themen wie rastlosem Reisen und der Hoffnung auf Ankunft. Lias Texte sind oft metaphorische Bilder, doch das Gefühl dahinter ist immer greifbar und es fällt schwer, sich nicht sehr direkt angesprochen zu fühlen.\nAber wie klingen diese Geschichten? Lia L. Shoshanns Stimme verleiht der Musik einen warmen, klaren Indie-Folk-Charakter. Zusammen mit den Texten manifestiert sich darin ein weiterer roter Faden, der sich durch die Musik zieht.",
+      "event_id": "019ddf0a-df3f-7ec6-a866-b639b90b8710",
+      "category": "content"
+    },
+    {
+      "id": "470b169f-d073-502b-9a62-73f6eb4a6029",
+      "kind": "passage",
+      "text": "Live-Musikerin unterwegs ist, auf der Tour vorstellen, in der sie von sehr persönlichen Themen wie Identität, Erinnerung an verlorene Freundschaften, Selbstvergebung in schwierigen Momenten und dem Versuch des Loslassens erzählt.\nAuf ihrer vielbeachteten letzten Kammerpop-EP „Nordic Coastline“ (2024) zeigte sie bereits die Tiefe und Präzision ihres künstlerischen Ausdrucks. _„Es sind feinfühlige Kompositionen, die ihre Musik ausmachen. Kraftvoll und ausdrucksstark. Magische Momente. Das könnte der Beginn einer großen Karriere sein\"_, feierte ARTE sie in einem Porträt. Nun treten weitere Facetten hinzu, die mit nicht weniger musikalischer Meisterschaft auch in poppigere Gefilde führen.\n\nVeranstaltungsarten / Genres: Konzert",
+      "event_id": "019e03a7-5221-7c54-b035-1762dc067c16",
+      "category": "content"
+    },
+    {
+      "id": "47d8b11d-b5d6-51fe-8db2-3c415be0c61a",
+      "kind": "passage",
+      "text": "Förde Vibes mit Lucie Glang\n\nMit Lucie Glang erwartet euch bei den Förde Vibes moderner Folk-Pop mit nordischen Einflüssen und einer ganz besonderen Atmosphäre. Ihre Songs sind ruhig, ehrlich und gleichzeitig voller Tiefe – getragen von einer warmen, intimen Stimme und eingängigen Melodien. Perfekt für einen entspannten Sommerabend direkt am Wasser.\n\nMit Lucie Glang erwartet euch bei den Förde Vibes moderner Folk-Pop mit nordischen Einflüssen und einer ganz besonderen Atmosphäre. Ihre Songs sind ruhig, ehrlich und gleichzeitig voller Tiefe – getragen von einer warmen, intimen Stimme und eingängigen Melodien. Perfekt für einen entspannten Sommerabend direkt am Wasser. Lucie Glang nimmt ihr Publikum mit auf eine musikalische Reise zwischen Leichtigkeit und Nachdenklichkeit. Internationale Einflüsse, persönliche Texte und ein klarer, moderner Sound sorgen für Gänsehautmomente und echte Sommer-Vibes.\nFreut euch auf entspannte Klänge, Meerblick und einen besonderen Freitagabend in [Wassersleben](https://maps.app.goo.gl/rzfddLn9ppoePt169) – die perfekte Kulisse für die Förde Vibes.\n\nVeranstaltungsarten / Genres: Konzert, Singer-Songwriter\n\nSchlagworte: Flensburger Sommer, Förde Vibes",
+      "event_id": "019e1dce-5351-7ee6-85b9-fc262bf42e59",
+      "category": "content"
+    },
+    {
+      "id": "4a0dbc8b-155d-577f-98df-b39ef4b5cc2f",
+      "kind": "passage",
+      "text": "Women Artists Film Festival\n\nFilme, Gespräche, Ausstellung, Essen, Trinken, Gespräche, Pop Up Vorträge (10 Min)\n\nEine Kooperation von Kulturlücke und NORDER147 !\nFilm 1 um 16 Uhr / Mary Bauermeister (in der NORDER147)\nZWISCHENAKT (in der Kulturlücke, Norderstraße 151)\nEssen, Trinken, Gespräche, Pop Up Vorträge = couragiert statt kuratiert! Podeste, die Geröll Lava Regen heißen, von denen aus gesprochen wird, Ausstellung der in den vorangegangenen Workshops (10.09./ 24.09./ 08.10. jeweils 10 - 13 Uhr) entstandenen Kunstwerke.\nFilm 2 um 20:30 Uhr / Maria Lassnig (in der NORDER147)\nPartizipativ 1: Sammlung gelber Objekte - oder: Bringt eure Lieblingsente mit, zieht euer grellgelbes Shirt an, malt euch gelb an, lasst eurer Fantasie freien Raum! Partizipativ 2: EURE freie Interpretation von FIK (statt unserem \"Frauen In Kunst\"). Es geht um die Sichtbarkeit von Frauen im Stadtraum und generell um die Sichtbarkeit von Frauen in der Kunst. Objektsammlung: Frauen mit gelben Shirts, Brillen, gelbe Hand",
+      "event_id": "01a06711-4848-7f8b-99fb-2347527dcac0",
+      "category": "content"
+    },
+    {
+      "id": "5614177b-d07f-5a2d-9b5b-acc220a106ac",
+      "kind": "passage",
+      "text": "lan\n- Gestaltung mit Porzellanfarben und Pinseln\n- Freie Wahl deines persönlichen Motivs\n- Porzellan ab 10 Euro oder Verwendung eines eigenen Stücks\n- Ein selbst gestaltetes Unikat für dich oder zum Verschenken\n\nVeranstaltungsarten / Genres: Familienveranstaltung, Handwerk, Kunst, Workshop",
+      "event_id": "01a08d89-d6b6-789f-a175-65ff2d2a8268",
+      "category": "content"
+    },
+    {
+      "id": "5b678553-af90-5b30-8843-a9a58411c5e2",
+      "kind": "passage",
+      "text": "lönschnack op Petuh“ ein. Auch für Kinder gibt es viel zu entdecken: Das Spielmobil der Stadt Flensburg ist den ganzen Tag vor Ort.\nDie Besucher\\*innen können einfach vorbeikommen und fortlaufend bei den Angeboten mitmachen. Die Flensburger Petuhs beschließen den Tag mit ihrer Theateraufführung „Dinner for One – nu auf Petuh“.\n**Ein gemeinsames Projekt des Kulturbüros Flensburg und des Kulturbüro Sonderburg.**\n---\n## **Participativ dansk-tysk workshopdag i Kulturh(a)us Utopia**\nEn dag fyldt med musik, kunst og møder venter den 25. april 2026 alle kulturinteresserede i Kulturh(a)us Utopia, den gamle Kobbermølle Danske Skole ved den tysk-danske grænse i Wassersleben 32, 24955 Harrislee.\nUnder mottoet „Kulturh(a)us Utopia“ inviterer et grænseoverskridende projekt mennesker fra Tyskland og Danmark til at være kreative sammen, udveksle ideer og opdage nye perspektiver for samlivet i grænseregionen. Projektet »Kulturh(a)us Utopia« støttes af Kulturbüro Flensburg og Sonderburg Kommune og ønsker at skabe et åbent rum, hvor kultur og fællesskab kan opleves og blive synligt – aktivt, farverigt og med mulighed for at deltage. Projektet støttes af Borgerprojektfonds (Interreg Tyskland-Danmark).\nI flere tidligere workshops er borgernes ønsker til udformningen af fremtidens grænseregion og til Kulturh(a)us Utopia blevet indsamlet på en deltagende måde, og nu bliver Utopia en realitet for en dag: Fra kl.",
+      "event_id": "019da011-1802-7924-8a24-821066242bba",
+      "category": "content"
+    },
+    {
+      "id": "5bb0297f-3b4c-590b-8f4d-131df3dc0cf0",
+      "kind": "passage",
+      "text": "Kreativ im Skizzenbuch - Collagen kleben\n\nBeim Kreativsein im Skizzenbuch ist gute Laune vorprogrammiert, denn es gibt kein Richtig oder Falsch. Das Skizzenbuch ist wie ein buntes, fröhliches Tagebuch, das mit ganz verschiedenen Techniken und Materialien selbstgestaltet wird. Collagen, Zeichnungen und Malerei, alles findet in so einem Buch seinen Platz. Es geht darum, seiner Kreativität freien Lauf zu lassen und Spaß mit dem Material zu haben. Und ganz nebenbei lernst etwas Neues zum jeweiligen Thema.\nHeute schauen wir uns verschiedene Arten von Collagen an und besprechen, wie man sie aufbaut. Dann geht es direkt los mit dem Kreativsein: Du suchst dir eine Art aus, lässt dich von deinem Material inspirieren und schon wird gerissen, geschnitten und geklebt.\nVorkenntnisse sind nicht erforderlich. Der Workshop kostet 18 Euro.\n**Anmeldung gerne per WhatsApp, Telefon oder E-Mail**\n📞 · ✉️ []()",
+      "event_id": "01a01964-a134-71de-92af-419fdb24348a",
+      "category": "content"
+    },
+    {
+      "id": "5dd1ebcf-a4dd-5a20-b743-815e6ff85017",
+      "kind": "passage",
+      "text": "shops er borgernes ønsker til udformningen af fremtidens grænseregion og til Kulturh(a)us Utopia blevet indsamlet på en deltagende måde, og nu bliver Utopia en realitet for en dag: Fra kl. 11.00 til 18.00 kan besøgende nyde et alsidigt program:\n- Fællessang med musikeren Jule Sösemann Lav\n- Visionboards med kunstneren Christiane Limper\n- Lyd og interview: »Sounds of Utopia« med kulturaktørerne Juliane Hanssen og Matthias Runge\n- Storytelling-workshop med workshoplederen Eva Ritter\n- Urban Sketching med illustratoren Ulrike König\n- Lego-trykworkshop med kunstneren Sarah Kürzinger\nKl. 15.00 inviterer Hilke Rudolph til „Klönschnack op Petuh“. Også for børn er der meget at opdage: Flensborgs „Spielmobil” er på stedet hele dagen.\nDer er særlig fokus på aktiv deltagelse: Alle gæster er inviteret til at prøve kræfter, være med til at forme arrangementet og blive en del af en grænseoverskridende fællesskabso\\[1\\]plevelse. De besøgende kan blot komme forbi og løbende deltage i tilbuddene. Flensburger Petuhs afslutter dagen med deres teaterforestilling: „Dinner for One – nu på Petuh“. Der er sørget for drikkevarer, snacks og endda en dansk-tysk kagekreation.\n**Et fælles projekt mellem Kulturbüro Flensburg og Sønderborg Kommune.**\n\nVeranstaltungsarten / Genres: Community Event, Workshop\n\nSchlagworte: europa, interreg, kulturhausutopia, madewithinterreg, zukunftgestalten",
+      "event_id": "019da011-1802-7924-8a24-821066242bba",
+      "category": "content"
+    },
+    {
+      "id": "63f6e218-75ff-56a0-ab4b-7eca145aea71",
+      "kind": "passage",
+      "text": "brauchen. Im Titelsong seines Albums „Wo der Mond die Erde küsst ‟ singt David mit sachter Stimme über die sensible Magie zwischen Tag und Nacht, zwischen Alltag und Träumerei. Ein Song wie ein sofortiger Lagerfeuerklassiker. Schwingen da Vibes von Hannes Wader und Reinhard Mey mit? Klar, warum nicht. Denn es geht um das Einfache, das Erhabene, um universelle Gefühle.\nWichtig ist die Wahrnehmung. Im Persönlichen wie im Politischen. Etwa wenn David in „Hans und Sophie ‟ die Geschichte der Geschwister Scholl erzählt. Oder wenn er mit „Mein eignes Glück ‟ eine Art „We Shall Overcome‟ anstimmt, dass sich bei Konzerten hervorragend im Kollektiv singen lässt. Eine innere Wärme überträgt sich da auf das Publikum. Zu seinen Auftritten kommen auch viele, die er auf seiner Liedermacher- Walz kennengelernt hat. Und David wandert weiter. Mit seiner Gitarre, die er spielt und pickt und zupft. „Dieser Klang trägt bereits so eine Bewegung von Unterwegssein in sich. Und dann denke ich: Okay, gleich fängt jemand an, eine richtig gute Geschichte zu erzählen. ‟\n\nVeranstaltungsarten / Genres: Konzert",
+      "event_id": "019fa7e6-5064-7310-9df2-2890f29e1497",
+      "category": "content"
+    },
+    {
+      "id": "753558dc-52e0-5178-b4dc-efd975974789",
+      "kind": "passage",
+      "text": "Gangar (N)\n\nFolkBaltica Tanzt!\n\n- **Mattias Truell Thedens:** Hardangerfiedel\n- **Oskar Goedvriend Lindberget:** Saxophon\n- **Richard Max :** Gitarre\n- **Jonas Thrana Jensen:** Bass\n- **Henrik Dullum:** Schlagzeug\nDie norwegische Band Gangar steht für eine neue Generation von Musiker\\*innen, die traditionelle Klänge mit modernem Sound und unbändiger Spielfreude verbindet. Die fünfköpfige Gruppe aus Oslo entdeckt alte Melodien aus Norwegens reichhaltiger Volksmusiktradition neu. Mit Einflüssen aus Rock, Folk-Metal und Jazz-Improvisation bringt Gangar diese Musik in sehr unerwartetem Gewand auf die Bühne. Im Mittelpunkt ihres kraftvollen Sounds steht die Hardangerfiedel, Norwegens traditionsreiches Nationalinstrument. Einst als „Teufelsinstrument“ verschrien, sorgt sie – zusammen mit Saxophon, E-Gitarre, Bass und Schlagzeug – für mitreißende Rhythmen und einen unverwechselbaren Klang. Gangars Musik ist dabei mehr als ein Experiment: Sie ist tanzbar, zugänglich und voller Energie – ohne den Respekt vor der Tradition zu verlieren.\nSeit ihrem Debüt im Jahr 2021 hat sich Gangar einen festen Platz auf internationalen Festivalbühnen erspielt. Ob beim Rudolstadt Festival, dem Sziget Festival, Celtic Connections oder dem Port Fairy Folk Festival – die Band begeistert mit leidenschaftlichen Live-Auftritten, viel Publikumskontakt und musikalischer Präzision. Wo Gangar spielt, bleibt selten jemand sitzen.\nGangar bringt norwegische Volksmusik zum Glühen – roh, rhythmisch und mitreißend. Ein Muss für alle, die ihren musikalischen Horizont erweitern wollen. Packt eure Tanzschuhe ein, zusammen werden wir den alten Dielen des Volksbads einen neuen Schliff verpassen!",
+      "event_id": "019da560-7ee8-7bdf-82ac-3441a39057ef",
+      "category": "content"
+    },
+    {
+      "id": "75afd687-93fe-5fce-bc90-f2cdb2d88d6d",
+      "kind": "passage",
+      "text": "Skandinavische Folkmusik\n\nKonzert von Flach/Østerby, einem dänischen Contemporary Folk Duo.\n\nAm Sonntag, den 11. Oktober 2026, um 17 Uhr lädt Popkantor Patrick Zindorf in der Auferstehungskirche Glücksburg zu einem besonderen Konzerterlebnis ein: Das skandinavische Duo Flach & Østerby entführt sein Publikum in eine faszinierende nordische Klangwelt, in der sich Melodien, Harmonien, Rhythmen und Obertöne in musikalische Geschichten verweben.\nMit Akkordeon, Nyckelharpa (Schlüsselharfe) und Hardangerfiedel erschaffen Henriette Flach und Anna Østerby in ihren Eigenkompositionen atmosphärische Klanglandschaften zwischen traditioneller und moderner skandinavischer Folkmusik. So verbinden die beiden Musikerinnen Virtuosität mit spürbarer Spielfreude und einer besonderen musikalischen Nähe, die aus ihrer langjährigen Freundschaft gewachsen ist.\nDaraus entstehen Konzerte voller feiner Klangfarben, berührender Melodien und mitreißender Rhythmen. Von ruhig und träumerisch, bis zu lebhaft und tanzbar.\n2024 erschien ihr Debütalbum „Ude af mine hænder“, das für den Danish Music Award Roots 2025 nominiert wurde.\nDer Eintritt ist frei. Um eine Spende wird gebeten.\n\nVeranstaltungsarten / Genres: Folk, Konzert\n\nSchlagworte: Akkordeon, Folk, Folkkonzert, Geige, Konzert, Musik, Nyckelharpa",
+      "event_id": "019eb0b0-a31f-7afe-b318-91619b308052",
+      "category": "content"
+    },
+    {
+      "id": "77729138-a96f-501f-9c5c-d4db7c786dc2",
+      "kind": "passage",
+      "text": "Die kleine Hausapotheke\n\nDo it yourself\n\nSchon wieder von einer Mücke erwischt worden? Mach doch dein eigenes Mückenstich-Gel einfach mal selbst. Ebenfalls kannst du eine Notfallsalbe gegen Prellungen herstellen und sogar eine kleine Erkältung und Kopfschmerzen sanft mit eigenen Mitteln behandeln. Du lernst in unseren Workshops dieses und noch viel mehr.\nKursleiterin ist Cristina da Cruz Nogueira. Der Workshop findet im Seminarraum der vhs Glücksburg statt, Schulweg 1.\nAnmeldungen []()\nTeilnahmegebühr 30 €: VR Bank DE06 2176 3542",
+      "event_id": "019f9a1c-4f5d-74fd-ae85-7b347a278631",
+      "category": "content"
+    },
+    {
+      "id": "82615c85-ba12-5e24-957c-326cf812199f",
+      "kind": "passage",
+      "text": "rytmisk spændstige forløb med nordiske danserytmer som understrøm.\nUdtrykket udspringer af en fælles fascination af nordisk musiktraditionens blanding af melankoli, klarhed og mystik. Her mødes folkemusikkens enkle melodiske kraft med jazzens frihed, hvilket giver musikken en organisk og levende karakter.\nDebutalbummet \"Noget blåt\" (2022) har fået en varm modtagelse og er blevet spillet på både P2 og P8 Jazz. Albummet trækker tråde til den ny nordiske jazzscene og referencer som Jan Johansson samt skandinaviske folk- og jazzgrupper som Väsen og Gjermund Larsen Trio.\nKernen i Azur Azurs musik er fascinationen af folkemusikkens \"blå toner\" og ønsket om at skabe en moderne nordisk lyd med respekt for traditionen, men med plads til fri improvisation.\n**Line-up:**\nFrederik Mensink - kontrabas\nRasmus Brinck - nyckelharpe\nJonathan Fjord Bredholt - piano\n**Billetter:**\n[www.ssf-billetten.de](http://www.ssf-billetten.de), , SSFs sekretariater ([https://syfo.de/regional](https://syfo.de/regional)), Aktivitetshuset, Norderstr. 49, Flensborg, sh:z Ticketcenter, Nikolaistr. 7, Flensborg, Reisebüro Peelwatt, Marie-Curie-Ring 39, Flensborg og ved indgangen.\n**Arrangør:**\nSydslesvigsk Forening (SSF), Sydslesvigs danske Ungdomsforeninger (SdU), Dansk Centralbibliotek, Norder147, Café Isa og Norder Craft Beer Bar & Shop\n\nVeranstaltungsarten / Genres: Jazz, Konzert\n\nSchlagworte: norder jazz festival",
+      "event_id": "019f5ba8-0c66-7232-86d4-cbace3ce6b44",
+      "category": "content"
+    },
+    {
+      "id": "8e131d3e-fe5f-5134-b397-ea5fd5aada81",
+      "kind": "passage",
+      "text": "ds as a prolific artist catalogue of musical experimentation and creative variety.\nReflecting the absurdity of the modern world and celebrating artistic freedom of expression is what the flying circus is.\n**Support: Krachym**\nKrachym creates an Experimental Noise Pop Symphony with some synthesizers and a wireless Midi Guitar. The Leipzig (Germany) based basement crooner’s influences varies from 80s japanese electronics over psych pop and rock music which get interrupted by spontaneous actions and improvisations resulting in ambient moments or an overall diy punk spirit. Influenced by acts like Animal Collective, David Bowie, LCD Soundsystem, Yapoos, Envy and various other stuff…\n\nVeranstaltungsarten / Genres: Konzert, Pop, Punk, Rock",
+      "event_id": "019e4022-4f8d-72c6-9f8f-00ec7cc065dd",
+      "category": "content"
+    },
+    {
+      "id": "924bf45b-4150-55c5-bb92-b978eef991b2",
+      "kind": "passage",
+      "text": "ofimusikern musizieren, hat Christian Gayed.\nIm Vorverkauf sind Karten zu 18,- Euro (5,- für Schüler ab 13 Jahren / Studenten) erhältlich bei Büro Albers, der Buchhandlung Goeser und der Rendsburg Information.\n\nVeranstaltungsarten / Genres: Crossover, Geschichte, Jazz, Klassik, Konzert\n\nSchlagworte: Aaron Copland, Antonin Dvorak, Beach Boys, Country, Crossover, George Gershwin, Jazz, Klassik, Miles Davis, Musik made in SH, Orchesterwerkstatt, Pop, USA, norddeutsche sinfonietta",
+      "event_id": "01a06428-51b5-70cf-a0e3-61205e7074fc",
+      "category": "content"
+    },
+    {
+      "id": "94ac4173-7ca2-520d-9939-bbd6a6ed1695",
+      "kind": "passage",
+      "text": "Kinderatelier\n\nKleine Hände, große Ideen\n\nIm Kinder-Atelier können Kinder ab sechs Jahren zeichnen, malen und mit verschiedenen Materialien kreativ gestalten. Spielerische Techniken, verständliche Anleitung und viel Raum für eigene Ideen machen jeden Termin zu einer bunten Entdeckungsreise. Alle benötigten Materialien sind inklusive. Das Kinder-Atelier findet wöchentlich montags und mittwochs statt eine vorherige Anmeldung ist erforderlich.\n\nIm Kinder-Atelier dürfen Farben, Fantasie und eigene Ideen den Ton angeben. Kinder ab sechs Jahren lernen unterschiedliche Mal- und Gestaltungstechniken sowie abwechslungsreiche Materialien kennen und können daraus ihre ganz persönlichen Kunstwerke entwickeln.\nAnders als im klassischen Kunstunterricht steht hier nicht ein festes Ergebnis im Mittelpunkt. Jedes Kind darf sich frei entfalten, eigene Motive entdecken und in seinem individuellen Tempo arbeiten. Spielerische Kreativtechniken unterstützen den Gestaltungsprozess und laden dazu ein, Neues auszuprobieren. Dabei werden die Kinder verständlich angeleitet und in ihren eigenen Ideen bestärkt.\nOb Zeichnen, Malen oder kreatives Gestalten: Jeder Termin bietet neue Möglichkeiten, mit Farben, Formen und Materialien zu experimentieren. Farben, Pinsel, Malgründe, Anleitung und weitere benötigte Materialien sind im monatlichen Preis enthalten.\nDas Kinder-Atelier findet wöchentlich montags und mittwochs im Atelier Kreativecke in Glücksburg statt. Eine vorherige Anmeldung ist erforderlich.\nDas erwartet dich:\n- Zeichnen, Malen und kreatives Gestalten\n- Kennenlernen unterschiedlicher Techniken und Materialien\n- Spielerisches Experimentieren mit Farben und Formen\n- Raum für eigene Ideen und ein individuelles Arbeitstempo\n- Sämtliche benötigten Materialien und Anleitung inklusive\n\nVeranstaltungsarten / Genres: Bildung, Handwerk, Kunst, Kursus",
+      "event_id": "01a0a8e7-94ad-7c44-9fcc-d782a8c28ede",
+      "category": "content"
+    },
+    {
+      "id": "9511ddf7-964b-58bd-91db-50f771da6063",
+      "kind": "passage",
+      "text": "Schule trifft Kultur: Kulturelle Bildung in der Region Rendsburg stärken\n\nFachveranstaltung für Lehrkräfte, Kulturakteur/-innen und Kulturschaffende aller Sparten sowie Kulturvermittler/-innen zum Thema Kulturelle Bildung\n\n**Zielgruppe der Fachveranstaltung:** Lehrkräfte, Kulturakteur/-innen und Kulturschaffende aller Sparten sowie Kulturvermittler/-innen\n**Inhalte:**\n- Input zum Thema Kulturelle Bildung\n- Praxisbeispiele für Kulturelle Bildungsprojekte\n- Führung durch das Eisenkunstguss Museum\n- Raum für Austausch und Vernetzung\n- Informationen zu Fördermöglichkeiten für Kulturelle Bildungsprojekte an Schulen\nDiese Veranstaltung wird als Fortbildung für Lehrkräfte in Schleswig-Holstein anerkannt (Formix KBS0123).\nFür Snacks und Getränke ist gesorgt.\n**Veranstalterinnen:**\nJohanna Schmidt, Regionale Kulturkoordinatorin, Stadt Rendsburg, []()\nBrigitta Ahrens, Fachberaterin Kulturelle Bildung, Kreis Rendsburg-Eckernförde, brigitta.ahrens-rd@kfk[b-sh.de](http://b-sh.de)\n\nVeranstaltungsarten / Genres: Bildung, Gespräch, Diskussion, Konferenz, Weiterbildung, Workshop",
+      "event_id": "01a00ef9-aa7e-7d6e-b7d6-ca7fb23d0b1e",
+      "category": "content"
+    },
+    {
+      "id": "9602b0a4-dd6d-524d-bbc9-822b21f43633",
+      "kind": "passage",
+      "text": "USSTELLUNG Kulturhof\n09.06. 18:30 Uhr KOCHWORKSHOP Campelle\n10.06. 19:00 Uhr SPIELEABEND Spielezeit-Café\n**PROGRAMM**\n11.06.\n10:00 Uhr VORTRAGSREIHE Campelle (Campus)\n11:45 Uhr POP-UP KONZERT Helsinki (Campus)\n15:00 Uhr LESUNG Ossietzky Buchhandlung\n17:00 Uhr FESTIVALERÖFFNUNG Volksbad\n17:15 Uhr FILMPREMIERE + Q&A Volksbad\n21:00 Uhr KONZERT Tableau Kulturcafé\n12.06.\n09:00 Uhr KINDERPROGRAMM Kulturlücke\n11:45 Uhr POP-UP KONZERT Helsinki (Campus)\n12:00 Uhr KINDERFILM Kulturlücke\n13:00 Uhr WANDMALEREI Jetzt Café\n14:00 Uhr TEXTILWORKSHOP Färbe Atelier\n14:00 Uhr KINDERPROGRAMM II Kulturlücke\n16:00 Uhr PERFORMANCE Kulturhof\n17:00 Uhr CAPOEIRAWORKSHOP Ex-Sultanmarkt\n18:30 Uhr CAPOEIRASHOW Ex-Sultanmarkt\n21:00 Uhr KONZERT Volksbad\n13.06.\n10:00 Uhr KOCHWORKSHOP Amy's Weinbar\n13:00 Uhr BASEBALL Baltics Ballpark\n14:00 Uhr QUECHUA SPRACHKURS Kulturhof\n16:00 Uhr TANZKURS Kulturhof\n18:00 Uhr FOODMARKET Momo Naturbutik\n22:00 Uhr FIESTA LA.TINA Location TBA\n**Alle Veranstaltungen sind KOSTENFREI**\n\nVeranstaltungsarten / Genres: Festival, Konzert, Kunst, Lesung, Tanz",
+      "event_id": "019e6df1-b798-7db1-bd65-ca7bd04e91bc",
+      "category": "content"
+    },
+    {
+      "id": "962defad-7b84-5135-a435-2ef3e13505eb",
+      "kind": "passage",
+      "text": "ne Tanz-Vorerfahrung)\n- Alle die nicht nur den klassischen Disco-Fox auf Partys tanzen wollen\n- Alle die am Sonntag den 27.9. Zeit haben!\n**Die Inhalte** werden vorerst der Grundschritt und Basis-Figuren sein. Dabei wird auf die Grundlagen des Boogie Woogies eingegangen: Was ist eigentlich Boogie Woogie und zu welcher Musik kann ich Boogie Woogie tanzen?\nWir freuen uns auf einen erfolgreichen Tag!\nWir bitten um rechtzeitige Anmeldung! (Siehe Flyer/Ende dieser Seite)\nBei zu geringer Anmeldezahl wird der Termin leider abgesagt/verschoben.\nTermin: 27. September 2026; 15:30-17:00 Uhr\nOrt: TC Rot Gold Casino Neumünster\nBaumschulenweg 2\n24537 Neumünster\nTeilnahmegebühr 7,50€/Person; 5€/Mitglied\nEuer Ansprechpartner für Fragen und Anmeldungen ist:\nChristopher Hagen\n[]()\n(Auch per WhatsApp)\n\nVeranstaltungsarten / Genres: Tanz",
+      "event_id": "01a0cd8c-e45f-75d2-945c-630009ae1d28",
+      "category": "content"
+    },
+    {
+      "id": "a0852bff-823b-5663-997c-4afb3e01de34",
+      "kind": "passage",
+      "text": "Der Maschinensaal kann barrierearm über den Eingang des Kulturzentrums erreicht werden.",
+      "event_id": "01a01417-2b98-729d-a402-e884196139a5",
+      "category": "accessibility"
+    },
+    {
+      "id": "a1a4b3d6-a734-58ae-b01d-217b5cce93e5",
+      "kind": "passage",
+      "text": "Der Maschinensaal kann barrierearm über den Eingang des Kulturzentrums erreicht werden.",
+      "event_id": "01a013db-afe2-7c3a-a2c2-dd9c3bdde3ce",
+      "category": "accessibility"
+    },
+    {
+      "id": "a1b2e024-cc7d-57f1-9127-8b81f9c21165",
+      "kind": "passage",
+      "text": "midt blandt publikum og åbner for en intens, kropslig lytteoplevelse, hvor grænsen mellem scene og sal opløses.\nGennem flere år har Anja Jacobsen udviklet sin egen kompositionsmetode. De såkaldte “diamant-rytmer” er visuelle, intuitive strukturer af farvede prikker arrangeret i mønstre, der kan fortolkes fra flere retninger. Resultatet er musik i konstant bevægelse, hvor gentagelser forskydes, brydes og opstår på ny. Indimellem træder hendes stemme frem – fløjtelignende, let og svævende – som små poetiske og glimt af noget uhåndgribeligt og sanseligt. Vi ser frem til endnu en uforglemmelig koncertoplevelse med Anja Jacobsen på ALICE til sommer.\n**Lineup**\nLars Bech Pilgaard – guitar\nAnders Bach – percussion, objekter\nAnja Jacobsen – percussion, objekter, stemme\n\\+ special guest !\nKoncerten er en del af Copenhagen Jazz Festival 2026, der finder sted fra 3. Juli til 12. juli på over 120 venues i hele hovedstaden. Se programmet på [www.jazz.dk](http://www.jazz.dk)\n\nVeranstaltungsarten / Genres: Experimental, Konzert",
+      "event_id": "019e1fc9-166f-73bd-92f7-8e9343d9eaf4",
+      "category": "content"
+    },
+    {
+      "id": "a6533f37-8e48-512a-a1e5-872aee3c83a5",
+      "kind": "passage",
+      "text": "Liv Solveig\n\nIm Mai und September 2026 geht Liv Solveig mit ihrer Band auf Deutschlandtour.\nUnter dem Titel „Everything I Didn’t Say“ darf sich das Publikum auf Konzerte freuen, in denen cineastische Klangräume, intime Vocals, orchestrale Weite und elektrisierende Pop-Momente zu einer intensiven Live-Erfahrung verschmelzen.\n\nIm Mai und September 2026 geht Liv Solveig mit ihrer Band auf Deutschlandtour.\nUnter dem Titel „Everything I Didn’t Say“ darf sich das Publikum auf Konzerte freuen, in denen cineastische Klangräume, intime Vocals, orchestrale Weite und elektrisierende Pop-Momente zu einer intensiven Live-Erfahrung verschmelzen.\nDie deutsch-norwegische Musikerin navigiert dabei mit beeindruckender Authentizität und musikalischer Reife zwischen Genres und erschafft ein Klanguniversum, das einzigartig, groß, verletzlich und mutig zugleich ist. Ihr unverwechselbarer Stil entsteht aus einem eindrucksvollen musikalischen Hintergrund: Als klassisch ausgebildete Geigerin, Jazzsängerin mit Ausbildung in New York und Pfarrerstochter, geprägt von sakralen und nordischen Klangwelten, bewegt Liv Solveig sich selbstverständlich und spielerisch zwischen Neoklassik, Indie-Pop und symphonischen Klangflächen.\nAuch neue Musik wird die Wahlberlinerin, die auch u.a. mit _Alin Coen, Max Prosa, Annett Louisan_ oder _Tristan Brusch_ als Live-Musikerin unterwegs ist, auf der Tour vorstellen, in der sie von sehr persönlichen Themen wie Identität, Erinnerung an verlorene Freundschaften, Selbstvergebung in schwierigen Momenten und dem Versuch des Loslassens erzählt.",
+      "event_id": "019e03a7-5221-7c54-b035-1762dc067c16",
+      "category": "content"
+    },
+    {
+      "id": "ad23d3be-49af-58f8-aa35-06ec946044dc",
+      "kind": "passage",
+      "text": "Sommerhygge\n\n**Stell dir vor: eine gemütliche, herzliche Atmosphäre, überall fröhliche Gesichter, Musik in der Luft und das Gefühl, einfach gemeinsam das Leben zu genießen. Genau das ist Hygge – und genau das erwartet dich beim Sommer Hygge.**\nDich erwarten drei entspannte Tage voller Mitmach-Angebote, Flohmarkt-Schätze, Kleinkunst und Straßenmusik. Ein Fest, das dich einlädt, stehenzubleiben, mitzumachen, zu lachen und den Sommer zu feiern.\nOb groß oder klein – alle sind willkommen. Freu dich auf ein buntes Programm mit Musik, kreativen Aktionen und vielen Überraschungen rund um Mittsommer und Sommerzeit. Passend zu Flensburgs Rolle als Stadt der zwei Kulturen tauchen wir gemeinsam ein in skandinavische Sommerstimmung.\nDie meisten Angebote sind kostenlos, bei einigen freuen wir uns über einen kleinen Beitrag. Das Fest erstreckt sich vom Marienkirchhof über den Nordermarkt bis hin zum Willy-Brandt-Platz – überall gibt es etwas zu entdecken.\nKomm vorbei und lass dich treiben!\nWo: Marienkirchhof, Nordermarkt und Willy-Brandt-Platz\n\nVeranstaltungsarten / Genres: Festival, Spiel\n\nSchlagworte: hygge",
+      "event_id": "019daa5f-1b98-70fc-aaba-45c5fa4a8aa2",
+      "category": "content"
+    },
+    {
+      "id": "bb447d32-7388-5731-9433-63bb2c17c4a6",
+      "kind": "passage",
+      "text": "Jugendatelier\n\nDein Style, deine Farben, deine Leinwand\n\nIm Jugendatelier können Jugendliche ab 11 Jahren zeichnen, malen und eigene kreative Ideen verwirklichen. Unterschiedliche Techniken, individuelle Motive und viel Raum zum Experimentieren stehen im Mittelpunkt. Vorkenntnisse sind nicht erforderlich. Das Jugendatelier findet wöchentlich mittwochs statt. Eine vorherige Anmeldung ist erforderlich.\n\nDu möchtest deine eigenen Bildideen entwickeln, neue Techniken ausprobieren und gemeinsam mit anderen Jugendlichen kreativ sein? Im Jugendatelier bekommst du den Raum dafür.\nOb Zeichnung, Malerei, abstrakte Farbwelten oder ein ganz persönliches Motiv. Du entscheidest, woran du arbeiten möchtest. Dabei kannst du unterschiedliche gestalterische Möglichkeiten kennenlernen, deinen eigenen Stil entdecken und deine Projekte in deinem individuellen Tempo umsetzen. Im Mittelpunkt stehen deine Ideen, die Freude am Ausprobieren und der kreative Austausch in der Gruppe.\nDas Jugendatelier richtet sich an Jugendliche ab 11 Jahren. Vorkenntnisse sind nicht erforderlich. Wichtig sind nur Neugier und Lust am Gestalten. Alle Materialien sind mit enthalten.\nDas Jugendatelier findet wöchentlich mittwochs von 16:30 bis 18:00 Uhr im Atelier Kreativecke in Glücksburg bei Flensburg statt. Die Teilnahme kostet 72 Euro monatlich und ist nur mit vorheriger Anmeldung möglich.\nDas erwartet dich:\n- Zeichnen, Malen und kreatives Gestalten\n- Raum für eigene Motive und persönliche Projekte\n- Kennenlernen und Ausprobieren verschiedener Techniken\n- Entwicklung deines eigenen künstlerischen Ausdrucks\n- Kreativer Austausch mit anderen Jugendlichen\n\nVeranstaltungsarten / Genres: Bildung, Handwerk, Kunst, Kursus, Malen",
+      "event_id": "01a0a921-f23e-7e72-be8f-bdf44719f914",
+      "category": "content"
+    },
+    {
+      "id": "bb829a1c-e0ac-5647-9cac-0e041c5a5a64",
+      "kind": "passage",
+      "text": "LAZY SUNDAY UPCYCLING\n\nWorkshop\n\nKommt einfach längs mit euren Näh-Projekten, setzt Neues aus Altem zusammen, macht kleiner oder vergrößert, druckt via Stempel (Materialien können gegen einen Kostenbeitrag erworben werden), malt auf Kleidung oder Stoffe... lebt euch aus und habt bei lecker Kaffee einen Schnack mit den anderen.\n\nVeranstaltungsarten / Genres: Workshop",
+      "event_id": "019edfb6-351f-7553-a7f5-4543ccf4ade2",
+      "category": "content"
+    },
+    {
+      "id": "bd5bc698-ca89-517f-bed0-ccc81c824a12",
+      "kind": "passage",
+      "text": "folkelig tradition og den kreative leg, hvor idéerne får frit løb. Her opstår 12-tonemelodier, pi-polskaer og musikstykker, der gnidningsløst glider mellem dansetyper og stemninger. Resultatet er musik, der både er umiddelbart tilgængelig og fuld af detaljer: Publikum møder melodier, der kan føles som gamle bekendtskaber, men som pludselig får nye dybder i en syntese mellem tradition, autenticitet og nyskabelse. Musik man kan danse til, forsvinde ind i, og overraskes af.\nLive er Carol Supreme kendt for en markant og overbevisende performance. I 2023 modtog de Folk & Fæstivals talentpris KATAPULT, og siden har de spillet på en række danske og udenlandske festivaler og spillesteder. Trioen har derudover medvirket i masterclasses med Dreamers’ Circus, og i 2025 udgav de deres debutalbum Carol Supreme.\n**Lineup:**\nSylvester Thybo Kofoed – violin, synthesizer, ukulele\nRasmus Dahl Nielsen – piano, bouzouki, synthesizer, guitar\nLukas Hainer Kjær – piano, melodica, synthesizer\n\nVeranstaltungsarten / Genres: Folk, Konzert",
+      "event_id": "019f02fb-302a-745a-ae8f-24e7dbd35050",
+      "category": "content"
+    },
+    {
+      "id": "c213a8db-1d08-5ec8-803d-0d8401424918",
+      "kind": "passage",
+      "text": "digital aktiv, Anila Eid (nettekieler)**\nDigitale Technik ist Alltag – für Ältere aber oft eine Hürde. Im Projekt Patenenkel\\*in unterstützen junge Menschen Senior\\*innen im 1:1 beim Umgang mit Geräten und Apps.\n**12.00 – 12.45 Uhr**\n**S(ch)nackPause & Markt der Möglichkeiten**\nZum Entdecken, Mitmachen, Netzwerken\n**Digitale Teilhabe zum Anfassen mit:**\n**Stadtbücherei Kiel, nettekieler, Offener Kanal SH, mein.Kiel Stadt-App, SeniorenNet** [**mobil.digital**](http://mobil.digital)**, anna Web App**\n**12.45 – 14.00 Uhr – Themenblock: Bildung & Digitales**\n**Future Skills für alle: Wie der DLC-Lernort Förde-vhs digitale Teilhabe stärkt, Christian Vogel (DLC)**\nVorstellung des Digital Learning Campus (DLC) als landesweites Netzwerk vielfältiger Lernorte und der dahinterstehenden Mission. Im Mittelpunkt stehen niedrigschwellige Grundlagenangebote, die den digitalen Kompetenzerwerb für alle fördern.\n**Digitale Teilhabe leben: Wie Peer-Learning und zielgrup-penspezifische Ansätze Trainer\\*innen stärken, Björn Kuhlenkamp (Stiftung Digitale Chancen)**\nDie digitale Welt prägt den Alltag, ist aber oft schwer zugänglich. Das Projekt “Digitale Kompetenzen und Bildung für Menschen 60+” zeigt, wie Ehrenamtliche mit Peer Learning Medienkompetenz alltagsnah vermitteln.\n**Von den Nachbarn lernen, Christian Galonska (Landesverband der Volkshochschulen)**\nDigitale Teilhabe im internationalen Vergleich: Wie gelingt digitale Teilhabe in anderen Ländern – und was können wir davon übernehmen?",
+      "event_id": "019db91a-89d5-7c5a-90ae-7596e488a1eb",
+      "category": "content"
+    },
+    {
+      "id": "c3d6ddb9-caf5-5749-a57c-e43815c9c4d0",
+      "kind": "passage",
+      "text": "Cultural Pearl Kulturtag\n\nAm 19. September lädt die Stadt Glücksburg zum Kulturtag Glücksburg ein. Im Mittelpunkt steht die vielfältige Glücksburger Kulturszene: Lokale Kulturakteurinnen und Kulturakteure präsentieren ihre Angebote, Projekte und Ideen an verschiedenen Orten im gesamten Stadtgebiet und machen Kultur für alle erlebbar.\nDas Kulturfest bietet ein abwechslungsreiches Programm und schafft Raum für Begegnung, Austausch und gemeinsames Erleben.\n\nAm 19. September lädt die Stadt Glücksburg zum Kulturtag Glücksburg ein. Im Mittelpunkt steht die vielfältige Glücksburger Kulturszene: Lokale Kulturakteurinnen und Kulturakteure präsentieren ihre Angebote, Projekte und Ideen an verschiedenen Orten im gesamten Stadtgebiet und machen Kultur für alle erlebbar.\nDas Kulturfest bietet ein abwechslungsreiches Programm und schafft Raum für Begegnung, Austausch und gemeinsames Erleben.\nDer Eintritt sowie sämtliche Angebote sind kostenfrei zugänglich.\nWer selbst ein kulturelles Angebot beitragen und Teil des Kulturfestes werden möchte, kann sich gerne bei der Kulturverwaltung Glücksburg melden.\n\nVeranstaltungsarten / Genres: Ausstellung, Geschichte, Gespräch, Diskussion, Gesundheit, Handwerk, Happening, Kunst, Literatur, Musik, Rundgang, Soziales, Tag der offenen Tür, Tanz, Workshop",
+      "event_id": "019e63f7-ebeb-7952-9304-e496b02e3588",
+      "category": "content"
+    },
+    {
+      "id": "cd058e6b-a8ed-5b85-9ff3-506188591848",
+      "kind": "passage",
+      "text": "mal sanft und verträumt. Manche Tracks entwickeln sich fließend, andere nehmen scharfe Kurven. Auf diesen Pfaden begegnen uns finstere Riffs, rollende Drums, saftige Basslines und ungezähmter Gesang.\nFühl dich wie zu Hause in unserem wilden Geräuschgarten.\n\nVeranstaltungsarten / Genres: Konzert, Rock\n\nSchlagworte: heavy rock, psychedelic",
+      "event_id": "019fb249-fd92-73b6-ac35-861c5b8b4bdf",
+      "category": "content"
+    },
+    {
+      "id": "d1540b09-222c-54de-b6d5-d14ebcbdc2f3",
+      "kind": "passage",
+      "text": "Lav jeres eget våbenskjold\n\nOg tag det med hjem\n\nTag hele familien med til en hyggelig og kreativ oplevelse på Sønderborg Slot. I det smukke Dronning Dorothea Kapel, kan I se tre flotte våbenskjold fra hertug Hans den Yngre og hans to hustruer. Våbenskjoldene fortæller noget om hvem de var, og derfor skal jeres våbenskjold også fortælle noget om jer. Når I deltager, får I en kort introduktion til våbenskjoldene og noget inspiration til at lave jeres eget våbenskjold som kan hænges op derhjemme - ligesom hertugen og hertuginderne.\n\nTag hele familien med til en hyggelig og kreativ oplevelse på Sønderborg Slot. I det smukke Dronning Dorothea Kapel, kan I se tre flotte våbenskjold fra hertug Hans den Yngre og hans to hustruer. Våbenskjoldene fortæller noget om hvem de var, og derfor skal jeres våbenskjold også fortælle noget om jer.\nNår I deltager, får I en kort introduktion til våbenskjoldene og noget inspiration til at lave jeres eget våbenskjold som kan hænges op derhjemme - ligesom hertugen og hertuginderne.\nAktiviteten er mandag-fredag i uge 42 kl. 11-15.\nBlot mød op.\nDet koster 50 kr. pr. person at deltage i aktiviteten plus entré til museet.\nBørn og unge under 18 år har gratis entré.\nDe voksne skal kun betale for aktiviteten, hvis de gør brug af materialet til egne kreationer. Hjælper I blot børnene, skal I kun betale entré.\n\nVeranstaltungsarten / Genres: Ausstellung, Kunst",
+      "event_id": "01a0a3a8-40fb-7528-8371-bc0431487b2a",
+      "category": "content"
+    },
+    {
+      "id": "df73c7ee-1bfe-5a40-8d89-389a8b932e7c",
+      "kind": "passage",
+      "text": "grad af elektroniske elementer i produktionen. Dette giver en robotisk, futuristisk følelse af menneske og maskine, der er sammenflettet i et både manuelt styret og tekno-mekanisk musikalsk multivers. De cyborgske jazz rock-vibes cirkulerer i en musikalsk virkelighed, hvor naturlige og digitale domæner i ét væk skifter rolle og betydning - en tilgang, som gentages visuelt i det glitchy album artwork af Ana Vujovic.\nDa bandet gik i studiet, var det nye materiale mere skitsepræget end ved tidligere indspilninger, og mere var dermed overladt til tilfældighederne og improvisatoriske indfald under de to sessions med producer Jens Benz (Iceage m.fl). Nye stier blev betrådt og samarbejder iværksat med sangeren Bisse på dennes forskruede messe ‘Bøn’ og ditto Marie Eline Hansens roligt sitrende speak på albumafslutningen ‘Dødsensangst’ Som altid rammer SVIN det saftige sted mellem improvisation og struktur og bibeholder en passende mængde elastik til at lade musikken ånde, gå i stykker og skabe rum til lytteren i de sære, vederkvægende og intersektionelle lyde, der udgør ‘Introducing SVIN’\n_“Pladens vel nok bedste nummer er det perfekt betitlede ’Punklort’, en rodet, beskidt og helt vildt elskelig lille møgunge af et nummer med elefanttrompet og heftigt overstyrede trommer.”_\n\\- [Devilution.dk](http://Devilution.dk)\n_“Det har krævet, mod, udholdenhed, evner og styrke at skabe Introducing SVIN, som tungt kan anbefales til enhver med en forkærlighed for NIN, Swans",
+      "event_id": "019dcb28-a464-74bd-bd67-0fdfdfdb03a6",
+      "category": "content"
+    },
+    {
+      "id": "e188b09d-6098-5197-b372-c488624380cb",
+      "kind": "passage",
+      "text": "Rampe und Rollstuhlplätze vorhanden",
+      "event_id": "019eb0b0-a31f-7afe-b318-91619b308052",
+      "category": "accessibility"
+    },
+    {
+      "id": "e829e36a-5536-5723-a8e9-be80f490546f",
+      "kind": "passage",
+      "text": "Glühen – roh, rhythmisch und mitreißend. Ein Muss für alle, die ihren musikalischen Horizont erweitern wollen. Packt eure Tanzschuhe ein, zusammen werden wir den alten Dielen des Volksbads einen neuen Schliff verpassen!\n\nVeranstaltungsarten / Genres: Folk, Konzert\n\nSchlagworte: folkbaltica",
+      "event_id": "019da560-7ee8-7bdf-82ac-3441a39057ef",
+      "category": "content"
+    },
+    {
+      "id": "edf28555-f4c4-54e8-ab26-8e7d25bfb8ec",
+      "kind": "passage",
+      "text": "zu ein, praxisnahes Wissen zu aktuellen Trends, Fördermöglichkeiten und internationaler Projektarbeit zu gewinnen.\nKulturtræf K26 richtet sich an alle, die mit Kultur arbeiten oder sich für grenzüberschreitende Zusammenarbeit begeistern. Freuen Sie sich auf einen Tag voller Inspiration, neuer Ideen und wertvoller Begegnungen.\nAnmeldung bis zum 20. Mai unter [kulturtraef.dk](http://kulturtraef.dk).\n\nVeranstaltungsarten / Genres: Konferenz",
+      "event_id": "019dce5e-3d70-7e44-9f1e-d59ab4013fd6",
+      "category": "content"
+    },
+    {
+      "id": "f1a381a5-f895-5dca-a672-511c28c7a926",
+      "kind": "passage",
+      "text": "Konzert Wohnzimmerchor",
+      "event_id": "01a0193a-4873-7e68-ab0f-5c3341296424",
+      "category": "content"
+    },
+    {
+      "id": "f3f76296-ee14-5839-b321-f1fddc8c914e",
+      "kind": "passage",
+      "text": "und nimmt euch mit auf eine düstere, cineastische Reise durch einen Raum zwischen den Welten.\nEs geht um **Verwandlung, Dualität und das Unsichtbare** – und darum, die alltägliche Realität für einen Moment hinter sich zu lassen. Musik, Performance und bildende Kunst verschmelzen zu einem einzigen lebendigen Gesamtkunstwerk.\n\nVeranstaltungsarten / Genres: Gothic, Konzert, Performance",
+      "event_id": "01a0d816-d0af-770e-927c-6d1bf77ab522",
+      "category": "content"
+    },
+    {
+      "id": "f6e1bb3e-0797-5dfb-a74b-3b0b302789ee",
+      "kind": "passage",
+      "text": "hen Mentoren Europaweit fortzusetzen. Er ist Professor für Vokaljazz an der Hochschule für Musik & Theater Hamburg. Als gefragter Solist mit zahlreichen musikalischen Partnern tritt er auch auf zahlreichen internationalen Festivals auf. Zu seinen musikalischen Interessen gehören die improvisierte Vokalensemblearbeit, die „spontane Vokalese“, Chorarrangements, die Entwicklung von Opernlibrettos, Poesie, Textarbeit und -analyse sowie elektronische Musik.\n„Norris ist, ähnlich wie Meyer, einer der unterschätzten Musiker der Republik, aber das mag sich mit diesem Album ändern. Dieser warmen Stimme kann man einfach nicht widerstehen – an Gestaltungskraft, Dynamik und Präzision können ihm wenige das Wasser reichen“ Mauretta Heinzelmann im NDR 1.4.2026\n**Ulf Meyer** wurde in Flensburg geboren. Das melodische Folk-Element in der Musik Skandinaviens – speziell im Jazz-Kontext – hatte einen großen Einfluß auf seinen gitarristischen Stil und seine Kompositionen. Nach vielen Jahren des Reisens und Live-Spielens arbeitet Ulf heute zunehmend als Komponist, Arrangeur und Studiomusiker für Film- und TV-Musik. Er hat eine Reihe von CDs mit instrumentalen Eigenkompositionen herausgebracht. Mit dem New Yorker Bassisten Martin Wind entstanden seit 1994 insgesamt sieben CDs, zwei davon mit der dänischen Schlagzeuglegende Alex Riel, mit dem sie auch auf der Jazz Baltica 2011 vertreten waren.\nMit seinem langjährigen Gitarrenduopartner Christoph Oeding veröffentlichte er 2006 die gemeinsame CD “Early”. Aktuell besteht ein weiteres Duo mit dem E-Bassisten Lars Hansen (CD „Scenes“ 2021). Im Oktober 2022 erschien die zusammen mit Martin Wind im Oktober 2021 in Kopenhagen aufgenommene CD „Time Will Tell“ feat.",
+      "event_id": "019dc3b0-94d4-7ce6-9b7c-15ee0e19e6c8",
+      "category": "content"
+    },
+    {
+      "id": "f7bc7d67-41b3-51c9-87a8-7742d817fe6b",
+      "kind": "passage",
+      "text": "Die Theaterwerkstatt Pilkentafel ist eingeschränkt barrierefrei. Der Zugang zum Foyer und in den Theatersaal sind ebenerdig und stufenlos erreichbar. Die Eingangstüren sind ausreichend breit. Die sanitären Anlagen sind leider nicht barrierefrei mit einem Rollstuhl zu erreichen. Bei Fragen oder Hilfestellungen sind wir über unsere erreichbar.",
+      "event_id": "01a09f4a-d945-7f5b-a0c2-7d0bbfa36ff4",
+      "category": "accessibility"
+    },
+    {
+      "id": "ffb7fbfd-430e-55c1-9a25-4e66c3f4e8f0",
+      "kind": "passage",
+      "text": "Preisart: regulärer Eintritt",
+      "event_id": "01a1031f-7201-7e1e-84d0-7e4b82678c7e",
+      "category": "tickets"
+    },
+    {
+      "id": "synthetic-short",
+      "kind": "query",
+      "text": "Kunst",
+      "language": "de",
+      "category": "short"
+    },
+    {
+      "id": "synthetic-long-query",
+      "kind": "query",
+      "text": "Ich suche einen ruhigen Ort für einen gemeinsamen Abend mit Musik, gut zugänglichen Räumen und der Möglichkeit, neue Perspektiven auf das Zusammenleben zu entdecken. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. Auch Menschen mit unterschiedlichen Interessen sollen teilnehmen können. ",
+      "language": "de",
+      "category": "long"
+    },
+    {
+      "id": "synthetic-long-passage",
+      "kind": "passage",
+      "text": "Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. Musik, Kunst und Begegnung. Music and art in an accessible venue. Musik og kunst for alle. ",
+      "category": "long_multilingual",
+      "event_id": "synthetic-long"
+    }
+  ]
+}

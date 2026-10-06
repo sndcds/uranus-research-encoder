@@ -1,0 +1,87 @@
+{
+  "schema": "jina-v5-onnx-http-contract-v1",
+  "manifest_sha256": "8005c590e63bd27467b269e8b6fc15e08a26cdf292fb6ca22f8d7881978115a9",
+  "reference_vectors_sha256": "0047cbfb3d8fab2a4d5c85cd0a8e8946c03a4116f6a5a904637124d8546af989",
+  "plan_sha256": "95ba5f3f56b18fb2de59635ab183aa4555a320caa42c33c2243488db46c1e226",
+  "version": {
+    "service_version": "0.2.0",
+    "contract_version": "uranus-research-encoder-v1",
+    "model": "jina-v5",
+    "model_repository": "jinaai/jina-embeddings-v5-text-small",
+    "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+    "dimensions": 1024,
+    "embedding_version": "dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2",
+    "chunk_version": "sections-480-overlap64-v2",
+    "backend": "v5-onnx-merged",
+    "runtime": "onnxruntime-1.30.0-cpu"
+  },
+  "ready": {
+    "status": "ready",
+    "model": "jina-v5",
+    "dimensions": 1024,
+    "embedding_version": "dd76d535f5447ca3897a9c893fb1e612ead98192:native-qwen3-torch2.11.0-transformers5.17.0-peft0.21.1-cpu-eager-retrieval-query-document-last-token-l2-f32-d1024:sections-480-overlap64-v2",
+    "contract_version": "uranus-research-encoder-v1",
+    "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+    "backend": "v5-onnx-merged",
+    "runtime": "onnxruntime-1.30.0-cpu"
+  },
+  "checks": [
+    {
+      "id": "historical-q01",
+      "kind": "query",
+      "max_difference": 8.195638656616211e-08,
+      "mean_difference": 1.8479802577076043e-08,
+      "cosine": 0.9999999999997886,
+      "norm": 1.0000003975390586,
+      "pass": true
+    },
+    {
+      "id": "historical-q02",
+      "kind": "query",
+      "max_difference": 9.685754776000977e-08,
+      "mean_difference": 2.2925831899556215e-08,
+      "cosine": 0.9999999999996101,
+      "norm": 0.9999996397265859,
+      "pass": true
+    },
+    {
+      "id": "historical-q03",
+      "kind": "query",
+      "max_difference": 7.450580596923828e-08,
+      "mean_difference": 1.910055047460446e-08,
+      "cosine": 0.9999999999997109,
+      "norm": 0.9999998200500226,
+      "pass": true
+    },
+    {
+      "id": "000b3405-3351-57fc-9128-68e8084a372e",
+      "kind": "passage",
+      "max_difference": 1.30385160446167e-07,
+      "mean_difference": 2.588741043751952e-08,
+      "cosine": 0.9999999999994589,
+      "norm": 0.9999997937258637,
+      "pass": true
+    },
+    {
+      "id": "03291127-200f-567a-be0f-981141ea4295",
+      "kind": "passage",
+      "max_difference": 7.450580596923828e-08,
+      "mean_difference": 1.685219430669349e-08,
+      "cosine": 0.9999999999997737,
+      "norm": 0.9999998424365115,
+      "pass": true
+    },
+    {
+      "id": "03c35d8a-ed67-514f-8c73-dcabd221d134",
+      "kind": "passage",
+      "max_difference": 8.195638656616211e-08,
+      "mean_difference": 1.7910068095261522e-08,
+      "cosine": 0.9999999999997728,
+      "norm": 0.9999997910869554,
+      "pass": true
+    }
+  ],
+  "torch_imported": false,
+  "peft_imported": false,
+  "pass": true
+}

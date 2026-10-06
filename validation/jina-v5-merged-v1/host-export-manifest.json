@@ -1,0 +1,47 @@
+{
+  "schema": "jina-v5-merged-onnx-v1",
+  "backend": "v5-onnx-merged",
+  "model_repository": "jinaai/jina-embeddings-v5-text-small",
+  "model_revision": "dd76d535f5447ca3897a9c893fb1e612ead98192",
+  "contract": {
+    "query_prefix": "Query: ",
+    "passage_prefix": "Document: ",
+    "pooling": "last_non_padding_token",
+    "normalization": "l2_once_dim1_eps1e-12",
+    "dimensions": 1024,
+    "dtype": "float32",
+    "padding_side": "right",
+    "max_tokens": 32768,
+    "attention": "native Qwen3 causal eager",
+    "native_inference_batching": "one text per forward",
+    "native_loader_threads": 1
+  },
+  "export_commit": "c5277c5",
+  "export_source_sha256": {
+    "scripts/export_v5_merged_onnx.py": "2132fd7d6bb8588200304a97b9999668beb009486a709a07b837315b2609d1ef",
+    "src/uranus_research_encoder/v5_onnx_export.py": "31177165ac2bc7d75259d1444be2410f211bc49e9ebf3473f5d5441f13b352df",
+    "src/uranus_research_encoder/merged_export.py": "b0c8da9aaf114393588bcb153c77459c2ac6950f4b1e932eaeba56e057dfca55",
+    "src/uranus_research_encoder/model.py": "84791df7e936f69ea61ccbdd974be8f6ad6e00217acd5969f709ef1cfc6e4ca8"
+  },
+  "plan_sha256": "95ba5f3f56b18fb2de59635ab183aa4555a320caa42c33c2243488db46c1e226",
+  "design": "B",
+  "opset": 18,
+  "versions": {
+    "torch": "2.11.0+cpu",
+    "transformers": "5.17.0",
+    "peft": "0.21.1",
+    "onnx": "1.23.1",
+    "onnxruntime": "1.30.0",
+    "onnxscript": "0.6.2"
+  },
+  "optimization": "disabled",
+  "artifacts": {
+    "config.json": "1af1e1269488c83d8b2332e42099f0d2201d687fbe074d1ed096c6201f283546",
+    "merge-audit.json": "94e975ef43149d5dd7aacf0d2c76548994babcf88b32d83eddea8489d6ea292c",
+    "model.onnx": "311b58d31877f149b5ff0a5ff2191e779b4455eda1b6698134df6c737d527885",
+    "model.onnx.data": "4bcf90844a46c18c175ef63a31bc6c00d51208ca12180fec65bdc6c89d79410d",
+    "native-provenance.json": "7c3369f3368da729911f206c9f92a93f5202f4df9fdb94a6ee7350da73e98a90",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "d5d09f07b48c3086c508b30d1c9114bd1189145b74e982a265350c923acd8101"
+  }
+}

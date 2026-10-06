@@ -25,6 +25,8 @@ from .errors import error, event
 from .merged_onnx_backend import MergedOnnxBackend
 from .model import Backend, TorchBackend, runtime_name
 from .onnx_backend import OnnxBackend
+from .v5_onnx_backend import V5MergedOnnxBackend
+from .v5_onnx_backend import runtime_name as v5_onnx_runtime_name
 from .version import (
     CONTRACT_VERSION,
     DIMENSIONS,
@@ -46,7 +48,14 @@ def create_app(settings: Settings | None = None, backend: Backend | None = None)
             try:
                 current_settings = app.state.settings
                 app.state.backend = backend or (
-                    OnnxBackend(
+                    V5MergedOnnxBackend(
+                        current_settings.merged_onnx_root,
+                        manifest_sha256=current_settings.v5_onnx_manifest_sha256,
+                        intra_op_threads=current_settings.onnx_intra_op_threads,
+                        inter_op_threads=current_settings.onnx_inter_op_threads,
+                    )
+                    if current_settings.backend == "v5-onnx-merged"
+                    else OnnxBackend(
                         current_settings.model_root,
                         intra_op_threads=current_settings.onnx_intra_op_threads,
                         inter_op_threads=current_settings.onnx_inter_op_threads,
@@ -139,7 +148,13 @@ def create_app(settings: Settings | None = None, backend: Backend | None = None)
         current = app.state.backend
         name = current.backend if current else app.state.settings.backend
         try:
-            runtime = current.runtime if current else runtime_name(name)
+            runtime = (
+                current.runtime
+                if current
+                else v5_onnx_runtime_name()
+                if name == "v5-onnx-merged"
+                else runtime_name(name)
+            )
         except Exception:
             runtime = "unavailable"
         return JSONResponse(metadata() | {"backend": name, "runtime": runtime})

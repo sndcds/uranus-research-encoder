@@ -1,0 +1,81 @@
+{
+  "schema": "jina-v5-graph-audit-v1",
+  "graph_sha256": "311b58d31877f149b5ff0a5ff2191e779b4455eda1b6698134df6c737d527885",
+  "scope": "Primary AI-host export",
+  "initializer_types": [
+    1
+  ],
+  "inputs": [
+    {
+      "name": "input_ids",
+      "dtype": 7,
+      "dimensions": [
+        "batch",
+        "sequence"
+      ]
+    },
+    {
+      "name": "attention_mask",
+      "dtype": 7,
+      "dimensions": [
+        "batch",
+        "sequence"
+      ]
+    }
+  ],
+  "outputs": [
+    {
+      "name": "text_embeds",
+      "dtype": 1,
+      "dimensions": [
+        "batch",
+        1024
+      ]
+    }
+  ],
+  "op_domains": [
+    ""
+  ],
+  "op_types": [
+    "Add",
+    "And",
+    "Cast",
+    "CastLike",
+    "Clip",
+    "Concat",
+    "Constant",
+    "Cos",
+    "Div",
+    "Expand",
+    "Gather",
+    "GatherND",
+    "GreaterOrEqual",
+    "Identity",
+    "MatMul",
+    "Max",
+    "Mul",
+    "Neg",
+    "Pow",
+    "Range",
+    "Reciprocal",
+    "ReduceL2",
+    "ReduceMax",
+    "ReduceMean",
+    "Reshape",
+    "Shape",
+    "Sigmoid",
+    "Sin",
+    "Slice",
+    "Softmax",
+    "Sqrt",
+    "Squeeze",
+    "Transpose",
+    "Unsqueeze",
+    "Where"
+  ],
+  "external_files": [
+    "model.onnx.data"
+  ],
+  "node_count": 6699,
+  "pass": true
+}
