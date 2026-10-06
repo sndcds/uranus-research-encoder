@@ -8,7 +8,8 @@ of this experiment.
 
 ## Executed FP32 parity result — 2026-10-06
 
-The primary AI-host export passes every preregistered parity gate. The complete
+The initial 51-event-pool evaluation of the primary AI-host export passed every
+then-preregistered parity gate. The complete
 [per-input/batch/ranking report](validation/jina-v5-merged-v1/parity.json) preserves
 all metrics, rankings, chunk winners and score differences.
 
@@ -30,17 +31,173 @@ all metrics, rankings, chunk winners and score differences.
 The rankings cover 56 real chunks from 50 real events plus one synthetic long
 passage, hence 51 candidate events per query. The 122 queries include two
 supplemental queries. This does **not** establish full 611-event Top-10 parity.
-The full snapshot contains 2080 chunks (1094 unique texts). The complete corpus
-run was not performed because the mandatory long/padded
-checks and fresh performance profiles already require sustained CPU execution;
-no smaller-pool result is presented as that optional full-corpus result.
+The full snapshot contains 2080 chunks (1094 unique texts). The separate
+full-corpus follow-up below retains this original subset report unchanged.
 
 The independently exported local graph also passed all 179/1074/122 checks against
 the host native reference; its separate manifest and summary remain recorded.
 The final host graph has a distinct fingerprint and was evaluated independently.
-The normal test suite passes 264 tests (two opt-in tests deselected), with Ruff
+At that stage, the normal test suite passed 264 tests (two opt-in tests deselected), with Ruff
 checks, formatting and whitespace validation passing. Actual model/HTTP runs are
 separate evidence from these unit tests.
+
+## Full-corpus parity
+
+This follow-up uses the **complete frozen Research corpus**, separately from the
+original 51-event candidate-pool test above. The original reports, tolerances and
+controlled performance measurements remain byte-for-byte unchanged.
+
+**FAIL under the preregistered strict full-corpus gates.** The differences below are retained without changing any tolerance, candidate, tie-break or pass criterion. PR #6 remains a draft.
+
+| Check | Result |
+| --- | --- |
+| Queries checked | 120 |
+| Frozen events / chunks | 611 / 2080 |
+| Eligible query×chunk comparisons | 238314 |
+| Top-10 identical | 120/120 |
+| Top-20 identical | 120/120 |
+| Complete event rankings identical | 116/120 |
+| Complete eligible chunk rankings identical | 107/120 |
+| All event chunk winners identical | 120/120 queries; 70080 event comparisons |
+| Maximum event / chunk rank shift | 1 / 7 |
+| Maximum eligible chunk-score difference | 5.410235495439952e-07 |
+| Vector checks passed | 2200/2200 |
+| Maximum vector component difference | 2.384185791015625e-07 |
+
+| Query with differences | Top-10 equal | Top-20 equal | Event order equal | Chunk order equal | Winners equal | Max event/chunk shift |
+| --- | --- | --- | --- | --- | --- | --- |
+| historical-q12 | True | True | True | False | True | 0/3 |
+| historical-q13 | True | True | True | False | True | 0/1 |
+| historical-q16 | True | True | True | False | True | 0/1 |
+| historical-q18 | True | True | True | False | True | 0/7 |
+| historical-q20 | True | True | False | False | True | 1/1 |
+| historical-q23 | True | True | False | False | True | 1/1 |
+| chamber-de | True | True | True | False | True | 0/5 |
+| painting-en | True | True | True | False | True | 0/1 |
+| nordic-da | True | True | False | False | True | 1/1 |
+| cityart-da | True | True | True | False | True | 0/1 |
+| songwriters-de | True | True | True | False | True | 0/1 |
+| open-de | True | True | True | False | True | 0/1 |
+| artoptions-da | True | True | False | False | True | 1/1 |
+
+Every changed rank/winner and its native/ONNX scores are in the separate JSON report, including exact tie groups involving changed IDs. No near-tie exception is applied.
+
+
+The four event-order differences are adjacent swaps at ranks 470/471 (`historical-q20`), 475/476 (`historical-q23`), 288/289 (`nordic-da`) and 116/117 (`artoptions-da`). They are **not exact numerical ties in either runtime**. All lie outside Top-20, but they still fail the registered complete-order gate.
+
+| Query | Event ID | Native rank | ONNX rank | Native score | ONNX score |
+| --- | --- | ---: | ---: | ---: | ---: |
+| historical-q20 | 019e54ca-a2f3-7f47-92d0-ab8cd8b7c4ed | 470 | 471 | 0.16413946181310082 | 0.16413946621047665 |
+| historical-q20 | 01a06bb7-c137-7a85-bd05-d1c10e037d96 | 471 | 470 | 0.16413945472556796 | 0.16413946828006801 |
+| historical-q23 | 01a0b383-105e-71e9-a207-51d49ab08fdf | 475 | 476 | 0.2094845603771808 | 0.20948455779701075 |
+| historical-q23 | 019e5ad0-e38e-79f7-9fa7-022c23074d68 | 476 | 475 | 0.20948451136218416 | 0.20948460523872983 |
+| nordic-da | 01a0201f-5f06-7983-9497-62b4745a36a4 | 288 | 289 | 0.19480071970452115 | 0.19480070612543099 |
+| nordic-da | 019eb719-75cb-749e-be9c-fab9c5b5636f | 289 | 288 | 0.19480066687113298 | 0.1948007095931274 |
+| artoptions-da | 01a05cee-868d-750d-9d3b-e82c7c9288a9 | 116 | 117 | 0.31624832362293631 | 0.31624847685850094 |
+| artoptions-da | 01a066d1-8ed7-723b-b14e-b2543ae11483 | 117 | 116 | 0.31624831654097812 | 0.31624858090303659 |
+
+There are 38 moved chunk IDs across 13 queries. In `historical-q12`, `historical-q18` and `chamber-de`, a distinct-score chunk crosses a group of exactly tied chunks; the group’s internal point-ID ordering stays deterministic. The full report preserves both scores, every moved ID/rank and the relevant exact-tie groups. These crossings are not waived as harmless ties.
+
+[The input bundle](validation/jina-v5-merged-v1/full-corpus-inputs.json) and
+[execution plan](validation/jina-v5-merged-v1/full-corpus-plan.json) were committed
+in `f88cf45` before inference. Preparation verified the original snapshot file and
+manifest, original query-set bytes, v5 chunk artifact, benchmark result and the
+relevant Research sources at documented commit `c643acb`. It independently
+reconstructed the 611 document projections and validated every existing chunk's
+text, index, context, content hash, deterministic point UUID, document hash and
+corpus digest. No chunks were regenerated. Original query and eligibility fields
+were read without consuming judgment labels or calling any relevance evaluator.
+No Phase 2D inputs are used.
+
+The corpus contains 611 public events and 2080 v5 chunks. All 120 original queries
+are included, including cases excluded from the old relevance metrics. The exact
+original candidate rules are preserved: an eligible event **and** at least one
+chunk context with event scope or an eligible occurrence ID. There are three
+profiles:
+
+| Queries | Eligible events per query | Eligible chunks per query |
+| ---: | ---: | ---: |
+| 114 | 611 | 2080 |
+| 3 | 4 | 16 |
+| 3 | 138 | 382 |
+
+Top-K compares the complete ordered prefix of up to K eligible events; the three
+four-event cases therefore compare all four events for both Top-10 and Top-20.
+
+This yields **238314 eligible query×chunk comparisons** and **70080 query×event
+comparisons**. The score artifact additionally retains all 249600 unfiltered
+scores per runtime plus the eligibility mask; ineligible chunks never enter a
+ranking or winner selection.
+
+Both unchanged public backend classes produce fresh singleton embeddings on the
+same AI host at eight intra-op threads and one inter-op thread. Before either
+runtime loads, the runner checks pinned native base/adapter/tokenizer hashes,
+revision, the trusted ONNX manifest and all graph/external-data hashes, runtime
+versions and Encoder source hashes. Exact repeated passage strings are embedded
+once (1094 distinct texts per runtime), then expanded back to all 2080 original
+point IDs. All 120 query embeddings are fresh; no prior vectors are reused. The
+expanded arrays receive 2200 vector checks under the unchanged original bounds.
+
+Scores use the benchmark's mathematical cosine contract, evaluated identically
+for both backends using fixed row-wise FP64 reductions of their FP32 outputs.
+This is an offline runtime comparison, not a replay of historical Qdrant SIMD
+rounding; no Qdrant or database process is used or modified. This scoring choice
+was registered before inference. The earlier subset's FP64-dot report is retained
+unchanged. Chunk ranking uses `(-score, point_id)`; event winners use the same
+comparator, then events sort by `(-winner_score, event_id)`. No score rounding,
+epsilon tie grouping or relaxed numerical threshold is permitted.
+
+The strict registered PASS requires all vector checks, score differences at most
+1e-5, and identical Top-10, Top-20, complete event rankings, every event's chunk
+winner **and complete eligible chunk rankings** for all 120 queries. Every moved
+ID and changed winner is reported with both scores/ranks. Exact tie groups
+involving moved IDs include their ID ordering; near ties are not silently accepted.
+
+[The full report](validation/jina-v5-merged-v1/full-corpus-parity.json) records the
+result independently of the previous subset reports. Full native/ONNX vectors
+and both complete score matrices are preserved as hash-pinned NPZ artifacts in
+`/home/awendelk/v5-merged-onnx-20261006/full-corpus-f88cf45/output` on the AI host and
+locally under `models/v5-full-corpus-f88cf45`. They contain no relevance labels.
+The input bundle records point/query ordering and every original chunk context.
+
+The [independent original-aggregation check](validation/jina-v5-merged-v1/full-corpus-aggregation-check.json) reproduces all 240 complete event rankings and winner maps with the unchanged Research function. The [integrity check](validation/jina-v5-merged-v1/full-corpus-integrity-check.json) confirms all 34 prior evidence files, six Research input files, seven relevant Research source files and 22 pinned Encoder source files remain unchanged.
+
+Validation after this run: `uv sync --locked --offline`, `uv run ruff check .`,
+`uv run ruff format --check .`, `uv run pytest -q` and `git diff --check` pass.
+The suite now has **271 passing tests**, two opt-in tests deselected and four
+existing warnings. Passing software tests do not override the failed numerical
+ordering experiment; PR #6 remains a draft.
+
+Corpus-generation durations are operational metadata only, not an additional
+controlled performance test. The existing query means (~419 ms Torch/~446 ms
+ONNX) and passage means (~1944 ms/~1761 ms) are unchanged; no general ONNX speedup
+is claimed. The maximum previously tested sequence remains 2163 tokens; real
+benchmark chunks reach 480 tokens. The 32768-token limit is still unvalidated and
+was not exercised by this follow-up.
+
+Reproduce input verification using the frozen Research environment (read-only
+source path), then use the Encoder runtime and two fresh output processes:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=/path/to/research/src \
+  /path/to/research/.venv/bin/python scripts/prepare_v5_full_corpus.py \
+  --research-root /path/to/research --output /new/full-corpus-inputs.json
+# Compare its SHA256 to the committed full-corpus-plan.json before proceeding.
+PYTHONPATH=src .venv/bin/python scripts/embed_v5_full_corpus.py native \
+  --plan-dir validation/jina-v5-merged-v1 --model-root /pinned/hub \
+  --graph-dir /verified/graph --output-dir /new/full-corpus-output
+PYTHONPATH=src .venv/bin/python scripts/embed_v5_full_corpus.py onnx \
+  --plan-dir validation/jina-v5-merged-v1 --model-root /pinned/hub \
+  --graph-dir /verified/graph --output-dir /new/full-corpus-output
+PYTHONPATH=src .venv/bin/python scripts/report_v5_full_corpus.py \
+  --plan-dir validation/jina-v5-merged-v1 --vector-dir /new/full-corpus-output \
+  --output /new/full-corpus-parity.json
+```
+
+The [executed host launcher](validation/jina-v5-merged-v1/full-corpus-host.sh)
+uses new network-disabled containers with read-only sources/model mounts, eight
+CPUs and 6/8 GiB memory/memory-plus-swap limits. Existing services are untouched.
+All output commands refuse to overwrite their result files.
 
 ## Frozen reference and gates
 
@@ -96,7 +253,8 @@ chunk kind. This covers DE/DA/EN, accessibility, venues, atmosphere, outdoor,
 multiple-result concerts, abstract queries and multilingual content. Real chunks
 reach the unchanged 480-token chunk limit; the supplemental passage is 2163 tokens.
 
-This is a candidate-pool parity experiment, **not a complete 611-event benchmark**.
+This original selection is a candidate-pool parity experiment, **not a complete
+611-event benchmark**; the full-corpus follow-up uses a separate pinned input file.
 Original event eligibility is not reconstructed for the subset. Ranking counts
 include two supplemental queries and must not be confused with full-corpus
 120/120 parity. The 32768-token model limit remains the API limit but is not

@@ -1,0 +1,25 @@
+{
+  "schema": "jina-v5-full-corpus-evidence-index-v1",
+  "full_corpus_executed": true,
+  "strict_parity_pass": false,
+  "previous_evidence_index_sha256": "268380a726f5b9f7d06df96bac3513ded6095fe3a927b607c9b6f1b3bd325399",
+  "files": {
+    "full-corpus-aggregation-check.json": "cc7a753bb0f62eb8b2fa38da537d8299a92a9c703efead64217b39fb8f0c054b",
+    "full-corpus-host-context.json": "6715be50bde6d283754ae3e9ebe729ba55f3dfa1a3a177ddce0594b1c98679e5",
+    "full-corpus-host.sh": "a4b44e4d6fb9c00de936474438cb67202f3fc926a5e61e981dda187a14a190fa",
+    "full-corpus-inputs.json": "9135ad4016c152ec8cdbb5e3cd8e7429f0da69e3dddb7cf2edc23188bc874720",
+    "full-corpus-integrity-check.json": "8e1a369e61617fa42793129a5865d58793317ff86923940f4aaac587dddc2c19",
+    "full-corpus-native-context.json": "d6a75603416121ea11fd04599acaf1a80cdb3749691ff7d4622e5364c7cb2a48",
+    "full-corpus-onnx-context.json": "44eaf1e8c3319887ecd834a14f58c2c5c0c0fe6f27afe0a57f4ca9bd86d1692c",
+    "full-corpus-parity.json": "97784ecba1a69c6284716103259ac451c61f8b67b2e9f12a29507db8a29c7b5d",
+    "full-corpus-plan.json": "9348a8d3d091975e60342161de2e32d0adb4d8f72654594679284756c692704d"
+  },
+  "source_sha256": {
+    "scripts/prepare_v5_full_corpus.py": "cc7879019c8949a684280b808f064e58ebc7b7bbaf434497739a72c4d63b2311",
+    "scripts/embed_v5_full_corpus.py": "da516821b59e56dc382c58908a0cd5cdf7f9e622a3d17dddd75203c7a1736944",
+    "scripts/report_v5_full_corpus.py": "984285ce52b83b543a49c2ad3c80792eda2a453fd14cea588df173af19a7326c",
+    "tests/test_v5_full_corpus.py": "86e59d2eb6cacd3159fd1794083b46e44297f34ba4b59041bd426e638d63e5f5"
+  },
+  "binary_artifact_directory": "awendelk@89.58.44.151:/home/awendelk/v5-merged-onnx-20261006/full-corpus-f88cf45/output",
+  "local_binary_artifact_directory": "models/v5-full-corpus-f88cf45"
+}

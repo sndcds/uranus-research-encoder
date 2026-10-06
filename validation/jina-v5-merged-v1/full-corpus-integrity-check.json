@@ -1,0 +1,13 @@
+{
+  "schema": "jina-v5-full-corpus-integrity-check-v1",
+  "pass": true,
+  "previous_evidence_files_unchanged": 34,
+  "original_research_input_files_unchanged": 6,
+  "original_research_source_files_unchanged": 7,
+  "encoder_source_files_match_preregistered_hashes": 22,
+  "all_vector_and_score_artifact_hashes_match": true,
+  "moved_event_ids": 8,
+  "moved_chunk_ids": 38,
+  "exact_tie_groups_keep_internal_id_order": true,
+  "parity_report_sha256": "97784ecba1a69c6284716103259ac451c61f8b67b2e9f12a29507db8a29c7b5d"
+}
